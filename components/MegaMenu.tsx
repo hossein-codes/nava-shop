@@ -2,20 +2,22 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { products } from "@/lib/products";
+import { cn, discountPercent, formatPrice } from "@/lib/utils";
 import { ChevronDownIcon } from "./Icons";
 
 type Col = { title: string; links: { label: string; href: string }[] };
-type Card = { title: string; text: string; href: string; image: string };
 type Mega = {
   id: string;
   label: string;
   href: string;
   mega?: boolean;
   accent?: boolean;
+  match?: (path: string, search: string) => boolean;
   columns?: Col[];
-  cards?: Card[];
+  productIds?: string[];
 };
 
 const items: Mega[] = [
@@ -24,6 +26,7 @@ const items: Mega[] = [
     label: "زنانه",
     href: "/products?category=women",
     mega: true,
+    match: (_p, s) => s.includes("category=women"),
     columns: [
       {
         title: "پوشاک",
@@ -51,26 +54,14 @@ const items: Mega[] = [
         ],
       },
     ],
-    cards: [
-      {
-        title: "کت شتری صحرا",
-        text: "کالکشن پاییز",
-        href: "/products/camel-blazer",
-        image: "/images/products/camel-blazer.jpg",
-      },
-      {
-        title: "پیراهن مهتاب",
-        text: "مجلسی",
-        href: "/products/evening-dress",
-        image: "/images/products/evening-dress.jpg",
-      },
-    ],
+    productIds: ["p2", "p1", "p3"],
   },
   {
     id: "men",
     label: "مردانه",
     href: "/products?category=men",
     mega: true,
+    match: (_p, s) => s.includes("category=men"),
     columns: [
       {
         title: "پوشاک",
@@ -98,26 +89,14 @@ const items: Mega[] = [
         ],
       },
     ],
-    cards: [
-      {
-        title: "کت‌وشلوار سلطان",
-        text: "رسمی",
-        href: "/products/navy-suit",
-        image: "/images/products/navy-suit.jpg",
-      },
-      {
-        title: "پیراهن کلاسیک",
-        text: "سفید رسمی",
-        href: "/products/white-shirt",
-        image: "/images/products/white-shirt.jpg",
-      },
-    ],
+    productIds: ["p4", "p5", "p6"],
   },
   {
     id: "kids",
     label: "بچگانه",
     href: "/products?category=kids",
     mega: true,
+    match: (_p, s) => s.includes("category=kids"),
     columns: [
       {
         title: "پوشاک",
@@ -143,27 +122,17 @@ const items: Mega[] = [
         ],
       },
     ],
-    cards: [
-      {
-        title: "کاپشن لبخند",
-        text: "گرم و سبک",
-        href: "/products/kids-jacket",
-        image: "/images/products/kids-jacket.jpg",
-      },
-      {
-        title: "ست سرهمی بازی",
-        text: "جین نرم",
-        href: "/products/kids-overall",
-        image: "/images/products/kids-overall.jpg",
-      },
-    ],
+    productIds: ["p8", "p7", "p9"],
   },
   { id: "new", label: "جدیدترین", href: "/products" },
-  { id: "best", label: "پرفروش", href: "/products?sort=best" },
-  { id: "sale", label: "تخفیف‌ها", href: "/products?discount=1", accent: true },
+  { id: "best", label: "پرفروش", href: "/products?sort=best", match: (_p, s) => s.includes("sort=best") },
+  { id: "sale", label: "تخفیف‌ها", href: "/products?discount=1", accent: true, match: (_p, s) => s.includes("discount=1") },
 ];
 
-export default function MegaMenu() {
+export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boolean) => void }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
   const [openId, setOpenId] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   const active = items.find((i) => i.id === openId && i.mega);
@@ -177,32 +146,56 @@ export default function MegaMenu() {
     timer.current = window.setTimeout(() => setOpenId(null), 140);
   };
 
+  useEffect(() => {
+    onOpenChange?.(Boolean(active));
+  }, [active, onOpenChange]);
+
+  useEffect(() => {
+    const close = () => setOpenId(null);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+
+
   return (
     <div className="relative" onMouseLeave={closeSoon}>
       <div className="container-x flex h-12 items-center gap-0.5">
-        {items.map((item) => (
-          <Link
-            key={item.id}
-            href={item.href}
-            onMouseEnter={() => open(item.mega ? item.id : null)}
-            onFocus={() => open(item.mega ? item.id : null)}
-            className={cn(
-              "flex h-9 items-center gap-1 rounded-lg px-3.5 text-[13px] font-semibold transition",
-              openId === item.id ? "bg-white text-ink shadow-sm" : "text-ink/80 hover:bg-white/90 hover:text-ink",
-              item.accent && "text-[#C45C26] hover:text-[#C45C26]"
-            )}
-          >
-            {item.label}
-            {item.mega && (
-              <ChevronDownIcon
-                width={12}
-                height={12}
-                className={cn("transition-transform duration-200", openId === item.id && "rotate-180")}
-              />
-            )}
-          </Link>
-        ))}
-        <div className="ms-auto flex items-center gap-1 text-[13px] font-medium text-ink/55">
+        {items.map((item) => {
+          const isOn = item.match
+            ? item.match(pathname, search)
+            : item.id === "new" && pathname.startsWith("/products") && !search;
+          return (
+            <Link
+              key={item.id}
+              href={item.href}
+              onMouseEnter={() => open(item.mega ? item.id : null)}
+              onFocus={() => open(item.mega ? item.id : null)}
+              className={cn(
+                "flex h-9 items-center gap-1 rounded-lg px-3.5 text-[13px] font-semibold transition",
+                openId === item.id || isOn ? "bg-white text-ink shadow-sm" : "text-ink/80 hover:bg-white/90 hover:text-ink",
+                item.accent && "text-[#C45C26] hover:text-[#C45C26]"
+              )}
+            >
+              {item.label}
+              {item.mega && (
+                <ChevronDownIcon
+                  width={12}
+                  height={12}
+                  className={cn("transition-transform duration-200", openId === item.id && "rotate-180")}
+                />
+              )}
+            </Link>
+          );
+        })}
+        <div className="ms-auto hidden items-center gap-1 text-[13px] font-medium text-ink/55 xl:flex">
           <Link href="/about" className="rounded-lg px-3 py-2 hover:text-ink">
             راهنمای خرید
           </Link>
@@ -224,8 +217,8 @@ export default function MegaMenu() {
       >
         {active?.columns && (
           <div className="border-t border-[#ece8e2] bg-white shadow-[0_28px_60px_rgb(26_24_22_/_0.12)]">
-            <div className="container-x grid grid-cols-12 gap-8 py-8">
-              <div className="col-span-5 grid grid-cols-3 gap-6">
+            <div className="container-x grid grid-cols-12 gap-8 py-7">
+              <div className="col-span-4 grid grid-cols-3 gap-5">
                 {active.columns.map((col) => (
                   <div key={col.title}>
                     <p className="mb-3 text-[11px] font-bold tracking-wide text-ink">{col.title}</p>
@@ -234,7 +227,7 @@ export default function MegaMenu() {
                         <li key={l.label}>
                           <Link
                             href={l.href}
-                            className="block rounded-lg px-0 py-1.5 text-[13px] text-ink/70 transition hover:text-ink"
+                            className="block py-1.5 text-[13px] text-ink/70 transition hover:text-ink"
                           >
                             {l.label}
                           </Link>
@@ -244,27 +237,38 @@ export default function MegaMenu() {
                   </div>
                 ))}
               </div>
-              <div className="col-span-7 grid grid-cols-2 gap-4">
-                {active.cards?.map((card) => (
-                  <Link
-                    key={card.href}
-                    href={card.href}
-                    className="group relative h-56 overflow-hidden rounded-2xl"
-                  >
-                    <Image
-                      src={card.image}
-                      alt={card.title}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-105"
-                      sizes="340px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                      <p className="text-[11px] text-white/70">{card.text}</p>
-                      <p className="mt-0.5 text-sm font-bold">{card.title}</p>
-                    </div>
-                  </Link>
-                ))}
+              <div className="col-span-8 grid grid-cols-3 gap-4">
+                {(active.productIds ?? [])
+                  .map((id) => products.find((p) => p.id === id))
+                  .filter(Boolean)
+                  .map((p) => {
+                    if (!p) return null;
+                    const off = discountPercent(p);
+                    return (
+                      <Link
+                        key={p.id}
+                        href={`/products/${p.slug}`}
+                        className="group rounded-2xl bg-[#faf8f5] p-2 transition hover:bg-[#f3efe9]"
+                      >
+                        <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-white">
+                          <Image
+                            src={p.images[0]}
+                            alt={p.name}
+                            fill
+                            className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                            sizes="220px"
+                          />
+                          {off && (
+                            <span className="absolute top-2 start-2 rounded-md bg-[#C45C26] px-2 py-0.5 text-[10px] font-bold text-white">
+                              ٪{off.toLocaleString("fa-IR")}
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-2 line-clamp-1 px-1 text-[13px] font-medium">{p.name}</p>
+                        <p className="px-1 text-[13px] font-bold text-[#C45C26]">{formatPrice(p.price)}</p>
+                      </Link>
+                    );
+                  })}
               </div>
             </div>
             <div className="border-t border-[#ece8e2] bg-[#faf8f5]">

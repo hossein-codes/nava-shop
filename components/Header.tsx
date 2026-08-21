@@ -43,8 +43,13 @@ export default function Header() {
   const { ids } = useWishlist();
   const { openCart, openSearch } = useUi();
   const { pinned, scrolled } = useSmartHide();
+  const [dim, setDim] = useState(false);
 
   return (
+    <>
+      {dim && (
+        <div className="fixed inset-0 z-[35] bg-[#1a1816]/25 backdrop-blur-[2px] transition-opacity" />
+      )}
     <header
       className={cn(
         "sticky top-0 z-40 bg-white transition-shadow duration-300",
@@ -108,7 +113,7 @@ export default function Header() {
             pinned ? "max-h-14 opacity-100" : "max-h-0 overflow-hidden opacity-0"
           )}
         >
-          <MegaMenu />
+          <MegaMenu onOpenChange={setDim} />
         </div>
       </div>
 
@@ -156,5 +161,6 @@ export default function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }

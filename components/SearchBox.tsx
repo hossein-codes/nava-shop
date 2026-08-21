@@ -305,7 +305,10 @@ export default function SearchBox() {
           value={s.query}
           onChange={(e) => s.setQuery(e.target.value)}
           onFocus={() => setActive(true)}
-          onKeyDown={(e) => e.key === "Enter" && s.doSearch(s.query, close)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") close();
+            if (e.key === "Enter") s.doSearch(s.query, close);
+          }}
           placeholder="جستجوی لباس، کت، پیراهن یا دسته…"
           className="w-full bg-transparent text-sm outline-none placeholder:text-ink/40"
         />
