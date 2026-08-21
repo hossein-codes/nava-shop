@@ -14,9 +14,10 @@ export default function QuantityPicker({
   onChange: (value: number) => void;
   min?: number;
   max?: number;
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
 }) {
-  const btnCls = size === "sm" ? "h-11 w-11" : "h-11 w-11";
+  const btnCls = size === "xs" ? "h-8 w-8" : "h-11 w-11";
+  const numCls = size === "xs" ? "min-w-6 text-xs" : "min-w-8 text-sm";
 
   return (
     <div className="inline-flex items-center overflow-hidden rounded-xl border border-sand bg-white">
@@ -31,7 +32,7 @@ export default function QuantityPicker({
       >
         <MinusIcon width={16} height={16} />
       </button>
-      <span className="min-w-8 text-center text-sm font-semibold tabular-nums">
+      <span className={cn("text-center font-semibold tabular-nums", numCls)}>
         {value.toLocaleString("fa-IR")}
       </span>
       <button

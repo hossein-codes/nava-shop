@@ -47,7 +47,7 @@ function buildSampleReviews(product: Product) {
 export default function ProductDetail({ product }: { product: Product }) {
   const router = useRouter();
   const { addItem } = useCart();
-  const { showToast } = useUi();
+  const { openCart } = useUi();
   const { has, toggle } = useWishlist();
 
   const [size, setSize] = useState("");
@@ -75,7 +75,7 @@ export default function ProductDetail({ product }: { product: Product }) {
     }
     addItem(product.id, size, color, quantity);
     if (goCheckout) router.push("/checkout");
-    else showToast("به سبد خرید اضافه شد");
+    else openCart();
     return true;
   };
 

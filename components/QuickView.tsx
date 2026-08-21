@@ -10,7 +10,7 @@ import Price from "./Price";
 import { CloseIcon } from "./Icons";
 
 export default function QuickView() {
-  const { quickViewId, closeQuickView, showToast } = useUi();
+  const { quickViewId, closeQuickView, openCart } = useUi();
   const { addItem } = useCart();
   const product = quickViewId ? getProductById(quickViewId) : undefined;
   const [size, setSize] = useState("");
@@ -30,7 +30,7 @@ export default function QuickView() {
     setError("");
     setSize("");
     closeQuickView();
-    showToast("به سبد خرید اضافه شد");
+    openCart();
   };
 
   return (
