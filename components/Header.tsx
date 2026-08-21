@@ -1,28 +1,72 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/lib/store/cart-context";
 import { useWishlist } from "@/lib/store/wishlist-context";
 import { useUi } from "@/lib/store/ui-context";
+import { cn } from "@/lib/utils";
 import Logo from "./Logo";
 import SearchBox from "./SearchBox";
 import AccountDropdown from "./AccountDropdown";
 import MegaMenu from "./MegaMenu";
 import { CartIcon, HeartIcon, SearchIcon } from "./Icons";
 
+function useSmartHide() {
+  const [pinned, setPinned] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const lastY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (y < 72) {
+        setPinned(true);
+        lastY.current = y;
+        return;
+      }
+      if (y > lastY.current + 8) setPinned(false);
+      else if (y < lastY.current - 8) setPinned(true);
+      lastY.current = y;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return { pinned, scrolled };
+}
+
 export default function Header() {
   const { count } = useCart();
   const { ids } = useWishlist();
   const { openCart, openSearch } = useUi();
+  const { pinned, scrolled } = useSmartHide();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#ece8e2] bg-white">
-      <div className="hidden bg-[#1a1816] lg:block">
+    <header
+      className={cn(
+        "sticky top-0 z-40 bg-white transition-shadow duration-300",
+        scrolled ? "shadow-[0_8px_24px_rgb(26_24_22_/_0.06)]" : "border-b border-[#ece8e2]"
+      )}
+    >
+      <div
+        className={cn(
+          "hidden overflow-hidden bg-[#1a1816] transition-[max-height,opacity] duration-300 lg:block",
+          scrolled ? "max-h-0 opacity-0" : "max-h-8 opacity-100"
+        )}
+      >
         <div className="container-x flex h-8 items-center justify-between text-[11px] text-white/80">
           <p>ارسال رایگان سفارش‌های بالای ۲ میلیون تومان</p>
-          <a href="tel:02191000000" className="hover:text-white">
-            پشتیبانی ۰۲۱-۹۱۰۰۰۰۰۰
-          </a>
+          <div className="flex items-center gap-5">
+            <Link href="/account" className="hover:text-white">
+              پیگیری سفارش
+            </Link>
+            <a href="tel:02191000000" className="hover:text-white">
+              پشتیبانی ۰۲۱-۹۱۰۰۰۰۰۰
+            </a>
+          </div>
         </div>
       </div>
 
@@ -57,9 +101,15 @@ export default function Header() {
             </button>
           </div>
         </div>
-        <nav className="border-t border-[#ece8e2] bg-[#faf8f5]">
+
+        <div
+          className={cn(
+            "border-t border-[#ece8e2] bg-[#faf8f5] transition-[max-height,opacity] duration-300 ease-out",
+            pinned ? "max-h-14 opacity-100" : "max-h-0 overflow-hidden opacity-0"
+          )}
+        >
           <MegaMenu />
-        </nav>
+        </div>
       </div>
 
       <div className="lg:hidden">
@@ -87,15 +137,22 @@ export default function Header() {
             </button>
           </div>
         </div>
-        <div className="px-4 pb-3">
-          <button
-            type="button"
-            onClick={openSearch}
-            className="flex h-12 w-full items-center gap-3 rounded-xl border border-[#ece8e2] bg-[#f7f4ef] px-4 text-start text-sm text-ink/50"
-          >
-            <SearchIcon width={20} height={20} className="text-ink/70" />
-            جستجو در فروشگاه نوا
-          </button>
+        <div
+          className={cn(
+            "overflow-hidden transition-[max-height,opacity] duration-300 ease-out",
+            pinned ? "max-h-20 opacity-100" : "max-h-0 opacity-0"
+          )}
+        >
+          <div className="px-4 pb-3">
+            <button
+              type="button"
+              onClick={openSearch}
+              className="flex h-12 w-full items-center gap-3 rounded-xl border border-[#ece8e2] bg-[#f7f4ef] px-4 text-start text-sm text-ink/50"
+            >
+              <SearchIcon width={20} height={20} className="text-ink/70" />
+              جستجو در فروشگاه نوا
+            </button>
+          </div>
         </div>
       </div>
     </header>
