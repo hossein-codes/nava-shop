@@ -3,7 +3,6 @@ import "./globals.css";
 import Providers from "@/components/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CartDrawer from "@/components/CartDrawer";
 import BottomNav from "@/components/BottomNav";
 import ShellOverlays from "@/components/ShellOverlays";
 
@@ -27,7 +26,6 @@ export default function RootLayout({
           <Header />
           <main className="flex-1 pb-20 lg:pb-0">{children}</main>
           <Footer />
-          <CartDrawer />
           <BottomNav />
           <ShellOverlays />
         </Providers>

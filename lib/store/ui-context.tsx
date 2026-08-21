@@ -86,7 +86,7 @@ export function UiProvider({ children }: { children: ReactNode }) {
   }, [toast]);
 
   useEffect(() => {
-    const locked = cartOpen || searchOpen || categoryOpen || Boolean(quickViewId);
+    const locked = searchOpen || categoryOpen || Boolean(quickViewId);
     document.body.style.overflow = locked ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";

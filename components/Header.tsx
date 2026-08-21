@@ -10,6 +10,7 @@ import Logo from "./Logo";
 import SearchBox from "./SearchBox";
 import AccountDropdown from "./AccountDropdown";
 import MegaMenu from "./MegaMenu";
+import MiniCart from "./MiniCart";
 import { CartIcon, HeartIcon, SearchIcon } from "./Icons";
 
 function useSmartHide() {
@@ -38,10 +39,34 @@ function useSmartHide() {
   return { pinned, scrolled };
 }
 
-export default function Header() {
+function CartTrigger() {
   const { count } = useCart();
+  const { cartOpen, openCart, closeCart } = useUi();
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => (cartOpen ? closeCart() : openCart())}
+        aria-label="سبد خرید"
+        aria-expanded={cartOpen}
+        className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-[#f3efe9]"
+      >
+        <CartIcon width={22} height={22} />
+        {count > 0 && (
+          <span className="absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C45C26] px-1 text-[10px] font-bold text-white">
+            {count.toLocaleString("fa-IR")}
+          </span>
+        )}
+      </button>
+      <MiniCart />
+    </div>
+  );
+}
+
+export default function Header() {
   const { ids } = useWishlist();
-  const { openCart, openSearch } = useUi();
+  const { openSearch } = useUi();
   const { pinned, scrolled } = useSmartHide();
   const [dim, setDim] = useState(false);
 
@@ -91,19 +116,7 @@ export default function Header() {
                 <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[#C45C26]" />
               )}
             </Link>
-            <button
-              type="button"
-              onClick={openCart}
-              aria-label="سبد خرید"
-              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-[#f3efe9]"
-            >
-              <CartIcon width={22} height={22} />
-              {count > 0 && (
-                <span className="absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C45C26] px-1 text-[10px] font-bold text-white">
-                  {count.toLocaleString("fa-IR")}
-                </span>
-              )}
-            </button>
+            <CartTrigger />
           </div>
         </div>
 
@@ -127,19 +140,7 @@ export default function Header() {
                 <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[#C45C26]" />
               )}
             </Link>
-            <button
-              type="button"
-              onClick={openCart}
-              aria-label="سبد خرید"
-              className="relative flex h-11 w-11 items-center justify-center"
-            >
-              <CartIcon width={22} height={22} />
-              {count > 0 && (
-                <span className="absolute top-1 end-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C45C26] px-1 text-[10px] font-bold text-white">
-                  {count.toLocaleString("fa-IR")}
-                </span>
-              )}
-            </button>
+            <CartTrigger />
           </div>
         </div>
         <div
