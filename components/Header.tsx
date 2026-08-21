@@ -50,11 +50,11 @@ function CartTrigger() {
         onClick={() => (cartOpen ? closeCart() : openCart())}
         aria-label="سبد خرید"
         aria-expanded={cartOpen}
-        className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-[#f3efe9]"
+        className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-cream"
       >
         <CartIcon width={22} height={22} />
         {count > 0 && (
-          <span className="absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#C45C26] px-1 text-[10px] font-bold text-white">
+          <span className="absolute -top-0.5 -end-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-clay px-1 text-[10px] font-bold text-white">
             {count.toLocaleString("fa-IR")}
           </span>
         )}
@@ -73,7 +73,7 @@ export default function Header() {
   return (
     <>
       {dim && (
-        <div className="fixed inset-0 z-[35] bg-[#1a1816]/25 backdrop-blur-[2px] transition-opacity" />
+        <div className="fixed inset-0 z-[35] bg-ink/25 backdrop-blur-[2px] transition-opacity" />
       )}
     <header
       className={cn(
@@ -84,7 +84,7 @@ export default function Header() {
       <div className="brand-bar" />
       <div
         className={cn(
-          "hidden overflow-hidden bg-[#1a1816] transition-[max-height,opacity] duration-300 lg:block",
+          "hidden overflow-hidden bg-ink transition-[max-height,opacity] duration-300 lg:block",
           scrolled ? "max-h-0 opacity-0" : "max-h-8 opacity-100"
         )}
       >
@@ -110,11 +110,11 @@ export default function Header() {
             <Link
               href="/wishlist"
               aria-label="علاقه‌مندی‌ها"
-              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-[#f3efe9]"
+              className="relative flex h-11 w-11 items-center justify-center rounded-xl text-ink transition hover:bg-cream"
             >
               <HeartIcon width={22} height={22} />
               {ids.length > 0 && (
-                <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[#C45C26]" />
+                <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-clay" />
               )}
             </Link>
             <CartTrigger />
@@ -138,7 +138,7 @@ export default function Header() {
             <Link href="/wishlist" aria-label="علاقه‌مندی‌ها" className="relative flex h-11 w-11 items-center justify-center">
               <HeartIcon width={22} height={22} />
               {ids.length > 0 && (
-                <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-[#C45C26]" />
+                <span className="absolute top-1.5 end-1.5 h-2 w-2 rounded-full bg-clay" />
               )}
             </Link>
             <CartTrigger />

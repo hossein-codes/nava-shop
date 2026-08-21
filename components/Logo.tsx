@@ -16,7 +16,7 @@ export function LogoMark({
       className={cn("shrink-0", className)}
       aria-hidden
     >
-      <rect width="64" height="64" rx="10" fill="#1A1816" />
+      <rect width="64" height="64" rx="10" fill="#1C1410" />
       <g transform="matrix(0.038462,0,0,-0.038462,4.153846,40)">
         <path
           fill="#ffffff"

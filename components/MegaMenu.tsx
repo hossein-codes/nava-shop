@@ -181,7 +181,7 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
               className={cn(
                 "flex h-9 items-center gap-1 rounded-lg px-3.5 text-[13px] font-semibold transition",
                 openId === item.id || isOn ? "bg-white text-ink shadow-sm" : "text-ink/80 hover:bg-white/90 hover:text-ink",
-                item.accent && "text-[#C45C26] hover:text-[#C45C26]"
+                item.accent && "text-clay hover:text-clay"
               )}
             >
               {item.label}
@@ -216,7 +216,7 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
         onMouseEnter={() => active && open(active.id)}
       >
         {active?.columns && (
-          <div className="border-t border-[#ece8e2] bg-white shadow-[0_28px_60px_rgb(26_24_22_/_0.12)]">
+          <div className="border-t border-sand bg-ivory shadow-[0_18px_48px_rgb(28_20_16_/_0.14)]">
             <div className="container-x grid grid-cols-12 gap-8 py-7">
               <div className="col-span-4 grid grid-cols-3 gap-5">
                 {active.columns.map((col) => (
@@ -248,7 +248,7 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
                       <Link
                         key={p.id}
                         href={`/products/${p.slug}`}
-                        className="group rounded-2xl bg-[#faf8f5] p-2 transition hover:bg-[#f3efe9]"
+                        className="group rounded-2xl bg-cream p-2 transition hover:bg-cream"
                       >
                         <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-white">
                           <Image
@@ -259,22 +259,22 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
                             sizes="220px"
                           />
                           {off && (
-                            <span className="absolute top-2 start-2 rounded-md bg-[#C45C26] px-2 py-0.5 text-[10px] font-bold text-white">
+                            <span className="absolute top-2 start-2 rounded-md bg-sale px-2 py-0.5 text-[10px] font-bold text-white">
                               ٪{off.toLocaleString("fa-IR")}
                             </span>
                           )}
                         </div>
                         <p className="mt-2 line-clamp-1 px-1 text-[13px] font-medium">{p.name}</p>
-                        <p className="px-1 text-[13px] font-bold text-[#C45C26]">{formatPrice(p.price)}</p>
+                        <p className="px-1 text-[13px] font-semibold tabular-nums text-ink">{formatPrice(p.price)}</p>
                       </Link>
                     );
                   })}
               </div>
             </div>
-            <div className="border-t border-[#ece8e2] bg-[#faf8f5]">
+            <div className="border-t border-sand bg-cream">
               <div className="container-x flex items-center justify-between py-3 text-[13px]">
                 <p className="text-ink/50">ارسال رایگان بالای ۲ میلیون · ۷ روز بازگشت</p>
-                <Link href={active.href} className="font-semibold text-[#C45C26] hover:underline">
+                <Link href={active.href} className="font-semibold text-clay hover:underline">
                   مشاهده همه {active.label}
                 </Link>
               </div>

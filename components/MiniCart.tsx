@@ -28,9 +28,9 @@ export default function MiniCart() {
       <div
         role="dialog"
         aria-label="سبد خرید"
-        className="animate-dropdown absolute end-0 top-[calc(100%+0.45rem)] z-50 w-[min(21rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-[#ece8e2] bg-white shadow-[0_16px_40px_rgb(26_24_22_/_0.14)]"
+        className="animate-dropdown absolute end-0 top-[calc(100%+0.45rem)] z-50 w-[min(21rem,calc(100vw-1.25rem))] overflow-hidden rounded-2xl border border-sand bg-ivory shadow-[0_18px_48px_rgb(28_20_16_/_0.14)]"
       >
-        <div className="border-b border-[#ece8e2] px-4 py-2.5">
+        <div className="border-b border-sand px-4 py-2.5">
           <p className="text-sm font-semibold">
             سبد شما
             {items.length > 0 && (
@@ -45,13 +45,13 @@ export default function MiniCart() {
           <div className="px-4 py-7 text-center">
             <CartIcon width={22} height={22} className="mx-auto text-ink/30" />
             <p className="mt-2 text-sm">هنوز چیزی انتخاب نکرده‌اید</p>
-            <button type="button" onClick={closeCart} className="mt-3 text-xs font-semibold text-[#C45C26]">
+            <button type="button" onClick={closeCart} className="mt-3 text-xs font-semibold text-clay">
               ادامه خرید
             </button>
           </div>
         ) : (
           <>
-            <div className="border-b border-[#ece8e2] px-4 py-2">
+            <div className="border-b border-sand px-4 py-2">
               <p className="text-[11px] text-ink/55">
                 {remainingForFree > 0 ? (
                   <>
@@ -61,18 +61,18 @@ export default function MiniCart() {
                   "ارسال این سفارش رایگان است"
                 )}
               </p>
-              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-[#ece8e2]">
-                <div className="h-full bg-[#C45C26] transition-all" style={{ width: `${progress}%` }} />
+              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-sand">
+                <div className="h-full bg-clay transition-all" style={{ width: `${progress}%` }} />
               </div>
             </div>
 
-            <ul className="max-h-56 divide-y divide-[#f3efe9] overflow-y-auto">
+            <ul className="max-h-56 divide-y divide-cream overflow-y-auto">
               {items.map((item) => {
                 const product = getProductById(item.productId);
                 if (!product) return null;
                 return (
                   <li key={`${item.productId}-${item.size}-${item.color}`} className="flex gap-3 px-4 py-3">
-                    <Link href={`/products/${product.slug}`} onClick={closeCart} className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-[#f3efe9]">
+                    <Link href={`/products/${product.slug}`} onClick={closeCart} className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-cream">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={product.images[0]} alt="" className="h-full w-full object-cover" />
                     </Link>
@@ -89,7 +89,7 @@ export default function MiniCart() {
                           type="button"
                           aria-label="حذف"
                           onClick={() => removeItem(item.productId, item.size, item.color)}
-                          className="flex h-7 w-7 shrink-0 items-center justify-center text-ink/35 hover:text-[#C45C26]"
+                          className="flex h-7 w-7 shrink-0 items-center justify-center text-ink/35 hover:text-clay"
                         >
                           <TrashIcon width={14} height={14} />
                         </button>
@@ -117,7 +117,7 @@ export default function MiniCart() {
               })}
             </ul>
 
-            <div className="border-t border-[#ece8e2] px-4 py-3">
+            <div className="border-t border-sand px-4 py-3">
               <div className="mb-3 flex items-center justify-between text-sm">
                 <span className="text-ink/50">قابل پرداخت</span>
                 <span className="font-bold">{formatPrice(subtotal + shipping)}</span>

@@ -126,7 +126,7 @@ function IdlePanel({
             {history.length > 0 ? "آخرین جستجوها" : "جستجوهای محبوب"}
           </p>
           {history.length > 0 && (
-            <button type="button" onClick={onClear} className="text-xs text-[#C45C26]">
+            <button type="button" onClick={onClear} className="text-xs text-clay">
               پاک کردن
             </button>
           )}
@@ -137,7 +137,7 @@ function IdlePanel({
               key={h}
               type="button"
               onClick={() => onSearch(h)}
-              className="rounded-lg bg-[#f3efe9] px-3 py-2 text-[13px] text-ink transition hover:bg-[#e8e2d8]"
+              className="rounded-lg bg-cream px-3 py-2 text-[13px] text-ink transition hover:bg-sand"
             >
               {h}
             </button>
@@ -152,7 +152,7 @@ function IdlePanel({
                 key={c.id}
                 href={`/products?category=${c.id}`}
                 onClick={onPick}
-                className="rounded-lg px-2 py-2 text-[13px] font-medium hover:bg-[#f3efe9]"
+                className="rounded-lg px-2 py-2 text-[13px] font-medium hover:bg-cream"
               >
                 {c.name}
               </Link>
@@ -167,13 +167,13 @@ function IdlePanel({
               key={p.id}
               href={`/products/${p.slug}`}
               onClick={onPick}
-              className="flex items-center gap-3 rounded-xl p-2 hover:bg-[#f3efe9]"
+              className="flex items-center gap-3 rounded-xl p-2 hover:bg-cream"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.images[0]} alt="" className="h-[4.25rem] w-14 rounded-lg object-cover" />
               <span className="min-w-0">
                 <span className="block truncate text-[13px] font-medium">{p.name}</span>
-                <span className="mt-0.5 block text-[13px] font-semibold text-[#C45C26]">
+                <span className="mt-0.5 block text-[13px] font-semibold text-ink">
                   {formatPrice(p.price)}
                 </span>
               </span>
@@ -205,13 +205,13 @@ function TypedPanel({
   return (
     <div className="max-h-[min(32rem,72vh)] overflow-y-auto">
       {completions.length > 0 && (
-        <div className="border-b border-[#ece8e2] px-3 py-2">
+        <div className="border-b border-sand px-3 py-2">
           {completions.slice(0, 5).map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => onSearch(c)}
-              className="flex h-11 w-full items-center gap-3 rounded-lg px-3 text-start text-[13px] hover:bg-[#f3efe9]"
+              className="flex h-11 w-full items-center gap-3 rounded-lg px-3 text-start text-[13px] hover:bg-cream"
             >
               <SearchIcon width={16} height={16} className="text-ink/40" />
               <span>
@@ -224,13 +224,13 @@ function TypedPanel({
         </div>
       )}
       {relatedCats.length > 0 && (
-        <div className="flex gap-2 border-b border-[#ece8e2] px-5 py-3">
+        <div className="flex gap-2 border-b border-sand px-5 py-3">
           {relatedCats.map((c) => (
             <Link
               key={c.id}
               href={`/products?category=${c.id}`}
               onClick={onPick}
-              className="rounded-lg bg-[#f3efe9] px-3 py-1.5 text-xs font-medium"
+              className="rounded-lg bg-cream px-3 py-1.5 text-xs font-medium"
             >
               در {c.name}
             </Link>
@@ -244,7 +244,7 @@ function TypedPanel({
               key={p.id}
               href={`/products/${p.slug}`}
               onClick={onPick}
-              className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-[#f3efe9]"
+              className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-cream"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.images[0]} alt="" className="h-[4.25rem] w-14 rounded-lg object-cover" />
@@ -252,7 +252,7 @@ function TypedPanel({
                 <span className="block truncate text-[13px] font-medium">{p.name}</span>
                 <span className="text-xs text-ink/50">{getCategory(p.category).name}</span>
               </span>
-              <span className="text-[13px] font-semibold text-[#C45C26]">{formatPrice(p.price)}</span>
+              <span className="text-[13px] font-semibold text-ink">{formatPrice(p.price)}</span>
             </Link>
           ))
         ) : (
@@ -260,11 +260,11 @@ function TypedPanel({
         )}
       </div>
       {results.length > 0 && (
-        <div className="border-t border-[#ece8e2] p-3">
+        <div className="border-t border-sand p-3">
           <button
             type="button"
             onClick={onSeeAll}
-            className="flex h-11 w-full items-center justify-center rounded-xl bg-[#1a1816] text-[13px] font-semibold text-white"
+            className="flex h-11 w-full items-center justify-center rounded-xl bg-ink text-[13px] font-semibold text-white"
           >
             مشاهده همه نتایج «{q}»
           </button>
@@ -295,8 +295,8 @@ export default function SearchBox() {
         className={cn(
           "flex h-12 max-w-2xl items-center gap-3 rounded-xl border px-4 transition duration-200",
           active
-            ? "border-[#1a1816] bg-white shadow-[0_8px_30px_rgb(26_24_22_/_0.08)]"
-            : "border-[#ece8e2] bg-[#f7f4ef] hover:border-[#d9d2c8]"
+            ? "border-ink bg-ivory shadow-[0_8px_28px_rgb(28_20_16_/_0.07)]"
+            : "border-sand bg-cream hover:border-sand"
         )}
       >
         <SearchIcon width={20} height={20} className="shrink-0 text-ink/55" />
@@ -332,7 +332,7 @@ export default function SearchBox() {
       </div>
 
       {active && (
-        <div className="animate-dropdown absolute inset-x-0 top-[calc(100%+0.5rem)] z-50 max-w-2xl overflow-hidden rounded-2xl border border-[#ece8e2] bg-white shadow-[0_20px_50px_rgb(26_24_22_/_0.12)]">
+        <div className="animate-dropdown absolute inset-x-0 top-[calc(100%+0.5rem)] z-50 max-w-2xl overflow-hidden rounded-2xl border border-sand bg-ivory shadow-[0_18px_48px_rgb(28_20_16_/_0.14)]">
           {s.q ? (
             <TypedPanel
               q={s.q}
@@ -378,16 +378,16 @@ export function MobileSearchScreen({
 
   return (
     <div className="fixed inset-0 z-[65] flex flex-col bg-white lg:hidden">
-      <div className="flex items-center gap-2 border-b border-[#ece8e2] px-3 py-3">
+      <div className="flex items-center gap-2 border-b border-sand px-3 py-3">
         <button
           type="button"
           onClick={onClose}
           aria-label="بازگشت"
-          className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-[#f3efe9]"
+          className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-cream"
         >
           <ArrowIcon width={20} height={20} className="rotate-180" />
         </button>
-        <div className="flex h-12 flex-1 items-center gap-2 rounded-xl border border-[#1a1816] bg-white px-3">
+        <div className="flex h-12 flex-1 items-center gap-2 rounded-xl border border-ink bg-white px-3">
           <SearchIcon width={18} height={18} className="text-ink/50" />
           <input
             ref={inputRef}

@@ -111,7 +111,7 @@ export default function HomeHero() {
               </h1>
               <Link
                 href={slide.href}
-                className="mt-5 inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-semibold text-ink transition hover:bg-[#f7f4ef]"
+                className="mt-5 inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-semibold text-ink transition hover:bg-cream"
               >
                 {slide.cta}
               </Link>

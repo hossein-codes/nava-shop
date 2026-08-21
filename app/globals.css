@@ -54,6 +54,7 @@
   --color-clay: #c45c26;
   --color-clay-dark: #9a3f18;
   --color-clay-bright: #e08a4f;
+  --color-clay-soft: #f3e4d8;
   --color-ivory: #fbf7f1;
   --color-cream: #efe6d9;
   --color-sand: #e4d8c8;
@@ -127,16 +128,26 @@ body {
   gap: 0.5rem;
   border-radius: 0.75rem;
   font-weight: 600;
-  font-size: 0.875rem;
-  min-height: 3rem;
-  padding: 0.75rem 1.25rem;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
-    transform 0.15s ease;
+  font-size: 0.8125rem;
+  min-height: 2.75rem;
+  padding: 0.7rem 1.25rem;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
   border: 1px solid transparent;
 }
+@media (min-width: 1024px) {
+  .btn {
+    font-size: 0.875rem;
+    min-height: 3rem;
+  }
+}
 .btn:active {
   transform: scale(0.98);
+}
+@media (min-width: 1024px) {
+  .btn:active {
+    transform: none;
+  }
 }
 .btn:disabled {
   opacity: 0.45;
@@ -172,27 +183,27 @@ body {
 
 .input-base {
   width: 100%;
-  min-height: 3.25rem;
+  min-height: 2.75rem;
   border-radius: 0.75rem;
   border: 1px solid var(--color-sand);
-  background: #fff;
+  background: var(--color-ivory);
   padding: 0.7rem 1rem;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 400;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .input-base:focus {
   border-color: var(--color-ink);
-  box-shadow: 0 0 0 3px rgb(26 24 22 / 0.08);
+  box-shadow: 0 0 0 3px rgb(196 92 38 / 0.12);
 }
 .input-base::placeholder {
-  color: #9a958e;
+  color: #a3988e;
 }
 
 .label-base {
   display: block;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 500;
   margin-bottom: 0.4rem;
   color: var(--color-ink-soft);
@@ -227,15 +238,14 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   color: var(--color-clay);
-  text-transform: none;
 }
 
 .card-surface {
-  background: #fff;
+  background: var(--color-ivory);
   border: 1px solid var(--color-sand);
   border-radius: 1rem;
 }
