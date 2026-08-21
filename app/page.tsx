@@ -4,6 +4,7 @@ import { products } from "@/lib/products";
 import ProductShelf from "@/components/ProductShelf";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import HomeRail from "@/components/HomeRail";
+import HomeHero from "@/components/HomeHero";
 import {
   ArrowIcon,
   PhoneIcon,
@@ -80,62 +81,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-white">
-      {/* هیرو */}
-      <section className="container-x pt-4 lg:pt-6">
-        {/* موبایل: کارت روی عکس */}
-        <Link href="/products" className="relative block overflow-hidden rounded-2xl lg:hidden">
-          <div className="relative h-[22rem]">
-            <Image
-              src="/images/hero.jpg"
-              alt="کالکشن پاییز نوا"
-              fill
-              priority
-              className="object-cover object-[center_20%]"
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-              <p className="text-[11px] text-white/75">کالکشن پاییز و زمستان ۱۴۰۵</p>
-              <h1 className="mt-1 text-2xl font-semibold leading-snug">استایل جدید، نسخه تو</h1>
-              <p className="mt-1 text-xs text-white/80">جدیدترین‌های فصل با دوخت مشخص</p>
-              <span className="mt-4 inline-flex h-10 items-center rounded-full bg-white px-4 text-sm font-semibold text-ink">
-                مشاهده کالکشن
-              </span>
-            </div>
-          </div>
-        </Link>
-
-        {/* دسکتاپ: متن + تصویر */}
-        <div className="relative hidden overflow-hidden rounded-[1.75rem] bg-[#efe8df] lg:grid lg:grid-cols-2 lg:min-h-[28rem]">
-          <div className="flex flex-col justify-center px-10 py-14 xl:px-16">
-            <p className="text-xs font-medium text-ink-soft">کالکشن پاییز و زمستان ۱۴۰۵</p>
-            <h1 className="mt-3 max-w-[12ch] text-4xl font-semibold leading-[1.2] tracking-tight xl:text-5xl">
-              استایل جدید، نسخه تو
-            </h1>
-            <p className="mt-4 max-w-sm text-sm leading-7 text-ink-soft">
-              جدیدترین‌های فصل با پارچه مشخص، سایزبندی دقیق و ارسال سریع.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/products" className="btn min-h-11 rounded-full bg-ink px-6 text-white hover:bg-[#2c2926]">
-                مشاهده کالکشن
-              </Link>
-              <Link href="/products?discount=1" className="btn min-h-11 rounded-full border-ink/15 bg-white px-6 text-ink">
-                خرید کنید
-              </Link>
-            </div>
-          </div>
-          <div className="relative min-h-[28rem]">
-            <Image
-              src="/images/hero.jpg"
-              alt="کالکشن پاییز نوا"
-              fill
-              priority
-              className="object-cover object-[center_20%]"
-              sizes="50vw"
-            />
-          </div>
-        </div>
-      </section>
+      <HomeHero />
 
       {/* دایره‌های دسته — موبایل بالای اعتماد مثل طرح */}
       <section className="mt-6 lg:hidden">

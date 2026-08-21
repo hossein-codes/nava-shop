@@ -287,3 +287,29 @@ body {
 .home-rail::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes hero-ken {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+.hero-ken {
+  animation: hero-ken 7.5s ease-out forwards;
+}
+
+@keyframes hero-copy {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.hero-copy {
+  animation: hero-copy 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
