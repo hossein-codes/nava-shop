@@ -8,7 +8,7 @@ import Logo from "./Logo";
 import SearchBox from "./SearchBox";
 import AccountDropdown from "./AccountDropdown";
 import MegaMenu from "./MegaMenu";
-import { CartIcon, HeartIcon, PhoneIcon, SearchIcon } from "./Icons";
+import { CartIcon, HeartIcon, SearchIcon } from "./Icons";
 
 export default function Header() {
   const { count } = useCart();
@@ -17,93 +17,79 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white">
-      <div className="hidden border-b border-sand/60 bg-ink text-ivory lg:block">
-        <div className="container-x flex h-8 items-center justify-between text-[11px] font-medium">
-          <p>ارسال رایگان برای سفارش‌های بالای ۲ میلیون تومان</p>
-          <a href="tel:02191000000" className="inline-flex items-center gap-1.5 text-ivory/75 hover:text-white">
-            <PhoneIcon width={12} height={12} />
-            ۰۲۱-۹۱۰۰۰۰۰۰
-          </a>
-        </div>
-      </div>
+      <p className="hidden border-b border-[#eee] py-1.5 text-center text-[11px] tracking-wide text-ink/45 lg:block">
+        ارسال رایگان برای سفارش بالای ۲ میلیون تومان
+      </p>
 
-      {/* دسکتاپ: لوگو | سرچ جمع‌وجور | اکشن‌ها */}
-      <div className="hidden border-b border-sand/70 lg:block">
-        <div className="container-x flex h-16 items-center gap-8">
+      <div className="hidden lg:block">
+        <div className="container-x flex h-[4.5rem] items-center gap-10">
           <Logo />
           <SearchBox />
           <div className="flex-1" />
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-5">
             <AccountDropdown />
             <Link
               href="/wishlist"
               aria-label="علاقه‌مندی‌ها"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors duration-150 hover:bg-[#f6f4f0]"
+              className="relative flex h-9 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink"
             >
-              <HeartIcon width={20} height={20} />
+              <HeartIcon width={18} height={18} strokeWidth={1.6} />
               {ids.length > 0 && (
-                <span className="absolute top-1.5 end-1.5 h-1.5 w-1.5 rounded-full bg-clay" />
+                <span className="absolute top-1 end-1 h-1 w-1 rounded-full bg-ink" />
               )}
             </Link>
             <button
               type="button"
               onClick={openCart}
               aria-label="سبد خرید"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-ink transition-colors duration-150 hover:bg-[#f6f4f0]"
+              className="relative flex h-9 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink"
             >
-              <CartIcon width={20} height={20} />
+              <CartIcon width={18} height={18} strokeWidth={1.6} />
               {count > 0 && (
-                <span className="absolute top-1 end-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-semibold leading-none text-white">
+                <span className="absolute -top-0.5 -end-0.5 flex h-4 min-w-4 items-center justify-center text-[10px] font-medium leading-none">
                   {count.toLocaleString("fa-IR")}
                 </span>
               )}
             </button>
           </div>
         </div>
-        <nav className="border-t border-sand/60">
+        <nav className="border-t border-[#eee]">
           <MegaMenu />
         </nav>
       </div>
 
-      {/* موبایل: ردیف ۱ لوگو وسط + قلب و سبد — ردیف ۲ سرچ */}
-      <div className="border-b border-sand/70 lg:hidden">
-        <div className="grid h-14 grid-cols-[1fr_auto_1fr] items-center px-3">
+      <div className="lg:hidden">
+        <div className="grid h-14 grid-cols-[1fr_auto_1fr] items-center px-4">
           <span />
           <Logo />
-          <div className="flex items-center justify-end gap-0.5">
-            <Link
-              href="/wishlist"
-              aria-label="علاقه‌مندی‌ها"
-              className="relative flex h-11 w-11 items-center justify-center rounded-full"
-            >
-              <HeartIcon width={20} height={20} />
-              {ids.length > 0 && (
-                <span className="absolute top-2 end-2 h-1.5 w-1.5 rounded-full bg-clay" />
-              )}
+          <div className="flex items-center justify-end gap-1">
+            <Link href="/wishlist" aria-label="علاقه‌مندی‌ها" className="relative flex h-11 w-11 items-center justify-center">
+              <HeartIcon width={19} height={19} strokeWidth={1.6} />
+              {ids.length > 0 && <span className="absolute top-2.5 end-2.5 h-1 w-1 rounded-full bg-ink" />}
             </Link>
             <button
               type="button"
               onClick={openCart}
               aria-label="سبد خرید"
-              className="relative flex h-11 w-11 items-center justify-center rounded-full"
+              className="relative flex h-11 w-11 items-center justify-center"
             >
-              <CartIcon width={20} height={20} />
+              <CartIcon width={19} height={19} strokeWidth={1.6} />
               {count > 0 && (
-                <span className="absolute top-1.5 end-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-semibold text-white">
+                <span className="absolute top-1.5 end-1.5 text-[10px] font-medium">
                   {count.toLocaleString("fa-IR")}
                 </span>
               )}
             </button>
           </div>
         </div>
-        <div className="px-3 pb-3">
+        <div className="px-4 pb-3">
           <button
             type="button"
             onClick={openSearch}
-            className="flex h-11 w-full items-center gap-2 rounded-full bg-[#f6f4f0] px-4 text-start text-[13px] text-ink-soft"
+            className="flex h-10 w-full items-center gap-2.5 border-b border-[#d8d3cc] text-start text-[13px] text-ink/40"
           >
-            <SearchIcon width={18} height={18} />
-            جستجو در نوا…
+            <SearchIcon width={16} height={16} strokeWidth={1.6} />
+            جستجو در نوا
           </button>
         </div>
       </div>

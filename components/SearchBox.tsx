@@ -5,28 +5,25 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { categories, getCategory, products } from "@/lib/products";
 import { cn, formatPrice } from "@/lib/utils";
-import { ArrowIcon, CloseIcon, HistoryIcon, SearchIcon } from "./Icons";
+import { ArrowIcon, CloseIcon, SearchIcon } from "./Icons";
 
 const HISTORY_KEY = "nava:search-history";
 const MAX_HISTORY = 6;
-
-const POPULAR = ["لباس زنانه", "لباس مردانه", "کفش", "کیف", "تخفیف‌ها", "کالکشن جدید"];
-
+const POPULAR = ["لباس زنانه", "لباس مردانه", "کت", "پیراهن", "تخفیف‌ها", "کالکشن جدید"];
 const POPULAR_HREFS: Record<string, string> = {
   "لباس زنانه": "/products?category=women",
   "لباس مردانه": "/products?category=men",
-  کفش: "/products?q=%DA%A9%D9%81%D8%B4",
-  کیف: "/products?q=%DA%A9%DB%8C%D9%81",
+  کت: "/products?q=%DA%A9%D8%AA",
+  پیراهن: "/products?q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86",
   "تخفیف‌ها": "/products?discount=1",
   "کالکشن جدید": "/products",
 };
-
 const COMPLETIONS: { trigger: string; items: string[] }[] = [
   { trigger: "کت", items: ["کت مردانه", "کت زنانه", "کت پاییزه"] },
   { trigger: "پیراهن", items: ["پیراهن مردانه", "پیراهن مجلسی", "پیراهن رسمی"] },
   { trigger: "شلوار", items: ["شلوار جین", "شلوار بچگانه"] },
   { trigger: "سویشرت", items: ["سویشرت مردانه", "سویشرت کژوال"] },
-  { trigger: "کاپشن", items: ["کاپشن بچگانه", "کاپشن پاییزه"] },
+  { trigger: "کاپشن", items: ["کاپشن بچگانه"] },
   { trigger: "لباس", items: ["لباس زنانه", "لباس مردانه", "لباس بچگانه"] },
 ];
 
@@ -44,32 +41,29 @@ function useSearch() {
   });
 
   const q = query.trim();
-
   const completions = q
     ? COMPLETIONS.filter((c) => c.trigger.startsWith(q) || q.startsWith(c.trigger)).flatMap((c) =>
         c.items.filter((i) => i.includes(q) || q.length <= c.trigger.length)
       )
     : [];
-
   const relatedCats = q
     ? categories.filter(
         (c) =>
-          c.name.includes(q) ||
-          products.some(
-            (p) =>
-              p.category === c.id &&
-              `${p.name} ${p.tags.join(" ")}`.toLowerCase().includes(q.toLowerCase())
-          )
+          products.some((p) => p.category === c.id) &&
+          (c.name.includes(q) ||
+            products.some(
+              (p) =>
+                p.category === c.id &&
+                `${p.name} ${p.tags.join(" ")}`.toLowerCase().includes(q.toLowerCase())
+            ))
       )
     : [];
-
   const results = q
     ? products.filter((p) => {
         const hay = `${p.name} ${getCategory(p.category).name} ${p.tags.join(" ")}`.toLowerCase();
         return hay.includes(q.toLowerCase());
       })
     : [];
-
   const popularProducts = [...products].sort((a, b) => b.rating - a.rating).slice(0, 3);
 
   const doSearch = (term: string, onDone?: () => void) => {
@@ -80,12 +74,11 @@ function useSearch() {
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
     } catch {
-      // ignore
+      /* ignore */
     }
     setQuery("");
     onDone?.();
-    const mapped = POPULAR_HREFS[final];
-    router.push(mapped ?? `/products?q=${encodeURIComponent(final)}`);
+    router.push(POPULAR_HREFS[final] ?? `/products?q=${encodeURIComponent(final)}`);
   };
 
   const clearHistory = () => {
@@ -93,7 +86,7 @@ function useSearch() {
     try {
       localStorage.removeItem(HISTORY_KEY);
     } catch {
-      // ignore
+      /* ignore */
     }
   };
 
@@ -124,68 +117,50 @@ function IdlePanel({
   onClear: () => void;
   onPick: () => void;
 }) {
-  const chips = history.length > 0 ? history : POPULAR;
+  const terms = history.length > 0 ? history : POPULAR;
   return (
-    <div className="grid gap-6 p-5 sm:grid-cols-2">
+    <div className="grid gap-10 p-7 sm:grid-cols-2">
       <div>
-        <div className="mb-3 flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-[11px] font-semibold text-ink-soft">
-            <HistoryIcon width={14} height={14} />
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-[11px] font-medium tracking-[0.14em] text-ink/40">
             {history.length > 0 ? "آخرین جستجوها" : "جستجوهای محبوب"}
-          </span>
+          </p>
           {history.length > 0 && (
-            <button type="button" onClick={onClear} className="text-[11px] text-ink-soft hover:text-ink">
+            <button type="button" onClick={onClear} className="text-[11px] text-ink/40 hover:text-ink">
               پاک کردن
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          {chips.map((h) => (
-            <button
-              key={h}
-              type="button"
-              onClick={() => onSearch(h)}
-              className="rounded-full bg-[#f6f4f0] px-3.5 py-2 text-xs font-medium text-ink hover:bg-sand"
-            >
-              {h}
-            </button>
-          ))}
-        </div>
-        <p className="mb-2 mt-5 text-[11px] font-semibold text-ink-soft">دسته‌ها</p>
-        <div className="flex flex-col">
-          {categories
-            .filter((c) => products.some((p) => p.category === c.id))
-            .map((c) => (
-              <Link
-                key={c.id}
-                href={`/products?category=${c.id}`}
-                onClick={onPick}
-                className="rounded-lg px-1 py-2 text-[13px] text-ink hover:bg-[#f6f4f0]"
+        <ul>
+          {terms.map((h) => (
+            <li key={h}>
+              <button
+                type="button"
+                onClick={() => onSearch(h)}
+                className="flex h-9 w-full items-center text-[13px] text-ink/80 hover:text-ink"
               >
-                {c.name}
-              </Link>
-            ))}
-        </div>
+                {h}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
       <div>
-        <p className="mb-3 text-[11px] font-semibold text-ink-soft">محصولات محبوب</p>
-        <div className="space-y-1">
+        <p className="mb-4 text-[11px] font-medium tracking-[0.14em] text-ink/40">پیشنهادها</p>
+        <ul className="space-y-3">
           {popularProducts.map((p) => (
-            <Link
-              key={p.id}
-              href={`/products/${p.slug}`}
-              onClick={onPick}
-              className="flex items-center gap-3 rounded-xl p-2 hover:bg-[#f6f4f0]"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.images[0]} alt="" className="h-14 w-11 rounded-lg object-cover" />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px] font-medium">{p.name}</span>
-                <span className="text-xs text-ink-soft">{formatPrice(p.price)}</span>
-              </span>
-            </Link>
+            <li key={p.id}>
+              <Link href={`/products/${p.slug}`} onClick={onPick} className="flex items-center gap-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.images[0]} alt="" className="h-16 w-12 object-cover" />
+                <span className="min-w-0">
+                  <span className="block truncate text-[13px] text-ink">{p.name}</span>
+                  <span className="mt-0.5 block text-[12px] text-ink/50">{formatPrice(p.price)}</span>
+                </span>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
@@ -209,67 +184,64 @@ function TypedPanel({
   onSeeAll: () => void;
 }) {
   return (
-    <div className="max-h-[min(28rem,70vh)] overflow-y-auto">
+    <div className="max-h-[min(28rem,70vh)] overflow-y-auto py-2">
       {completions.length > 0 && (
-        <div className="border-b border-sand px-2 py-2">
+        <div className="px-6 py-2">
           {completions.slice(0, 5).map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => onSearch(c)}
-              className="flex h-11 w-full items-center gap-2 rounded-xl px-3 text-start text-[13px] hover:bg-[#f6f4f0]"
+              className="flex h-10 w-full items-center gap-3 text-start text-[13px] text-ink/80 hover:text-ink"
             >
-              <SearchIcon width={14} height={14} className="text-ink-soft" />
+              <SearchIcon width={14} height={14} className="text-ink/35" strokeWidth={1.6} />
               {c}
             </button>
           ))}
         </div>
       )}
       {relatedCats.length > 0 && (
-        <div className="border-b border-sand px-4 py-3">
-          <p className="mb-2 text-[11px] font-semibold text-ink-soft">دسته‌ها</p>
-          <div className="flex flex-wrap gap-2">
-            {relatedCats.map((c) => (
-              <Link
-                key={c.id}
-                href={`/products?category=${c.id}`}
-                onClick={onPick}
-                className="rounded-full border border-sand px-3 py-1.5 text-xs hover:border-ink"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </div>
+        <div className="px-6 py-3">
+          <p className="mb-2 text-[11px] tracking-[0.14em] text-ink/40">دسته</p>
+          {relatedCats.map((c) => (
+            <Link
+              key={c.id}
+              href={`/products?category=${c.id}`}
+              onClick={onPick}
+              className="flex h-9 items-center text-[13px] text-ink/80 hover:text-ink"
+            >
+              {c.name}
+            </Link>
+          ))}
         </div>
       )}
-      <div className="p-2">
+      <div className="px-6 py-2">
         {results.length > 0 ? (
           results.slice(0, 5).map((p) => (
             <Link
               key={p.id}
               href={`/products/${p.slug}`}
               onClick={onPick}
-              className="flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-[#f6f4f0]"
+              className="flex items-center gap-3 py-2.5"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.images[0]} alt="" className="h-14 w-11 rounded-lg object-cover" />
+              <img src={p.images[0]} alt="" className="h-16 w-12 object-cover" />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px] font-medium">{p.name}</span>
-                <span className="text-xs text-ink-soft">{getCategory(p.category).name}</span>
+                <span className="block truncate text-[13px]">{p.name}</span>
+                <span className="text-[12px] text-ink/50">{formatPrice(p.price)}</span>
               </span>
-              <span className="text-xs font-semibold tabular-nums">{formatPrice(p.price)}</span>
             </Link>
           ))
         ) : (
-          <p className="px-3 py-8 text-center text-sm text-ink-soft">نتیجه‌ای برای «{q}» نیست</p>
+          <p className="py-10 text-center text-[13px] text-ink/50">نتیجه‌ای برای «{q}» نیست</p>
         )}
       </div>
       {results.length > 0 && (
-        <div className="border-t border-sand p-2">
+        <div className="border-t border-[#eee] px-6">
           <button
             type="button"
             onClick={onSeeAll}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[13px] font-medium hover:bg-[#f6f4f0]"
+            className="flex h-12 w-full items-center text-[13px] font-medium"
           >
             مشاهده همه نتایج «{q}»
           </button>
@@ -299,21 +271,19 @@ export default function SearchBox() {
     <div ref={rootRef} className="relative hidden lg:block">
       <div
         className={cn(
-          "flex h-10 items-center gap-2 rounded-full border bg-[#f6f4f0] px-3.5 transition-[width,background-color,border-color,box-shadow] duration-200 ease-out",
-          active
-            ? "w-[28rem] border-sand bg-white shadow-[0_8px_24px_rgb(26_24_22_/_0.06)]"
-            : "w-48 border-transparent hover:bg-[#efece6]"
+          "flex h-9 items-center gap-2.5 border-b bg-transparent transition-[width,border-color] duration-200 ease-out",
+          active ? "w-[26rem] border-ink" : "w-[13.5rem] border-[#d8d3cc] hover:border-ink/50"
         )}
       >
-        <SearchIcon width={16} height={16} className="shrink-0 text-ink-soft" />
+        <SearchIcon width={15} height={15} className="shrink-0 text-ink/45" strokeWidth={1.6} />
         <input
           ref={inputRef}
           value={s.query}
           onChange={(e) => s.setQuery(e.target.value)}
           onFocus={() => setActive(true)}
           onKeyDown={(e) => e.key === "Enter" && s.doSearch(s.query, close)}
-          placeholder="جستجو در نوا…"
-          className="w-full bg-transparent text-[13px] outline-none placeholder:text-ink-soft/70"
+          placeholder="جستجو در نوا"
+          className="w-full bg-transparent text-[13px] tracking-wide outline-none placeholder:text-ink/35"
         />
         {s.query && (
           <button
@@ -323,7 +293,7 @@ export default function SearchBox() {
               inputRef.current?.focus();
             }}
             aria-label="پاک کردن"
-            className="text-ink-soft hover:text-ink"
+            className="text-ink/40 hover:text-ink"
           >
             <CloseIcon width={14} height={14} />
           </button>
@@ -331,7 +301,7 @@ export default function SearchBox() {
       </div>
 
       {active && (
-        <div className="animate-dropdown absolute start-0 top-[calc(100%+0.6rem)] z-50 w-[36rem] overflow-hidden rounded-2xl border border-sand bg-white shadow-[0_16px_48px_rgb(26_24_22_/_0.12)]">
+        <div className="animate-dropdown absolute start-0 top-[calc(100%+1rem)] z-50 w-[34rem] border border-[#eee] bg-white shadow-[0_20px_50px_rgb(26_24_22_/_0.08)]">
           {s.q ? (
             <TypedPanel
               q={s.q}
@@ -377,27 +347,27 @@ export function MobileSearchScreen({
 
   return (
     <div className="fixed inset-0 z-[65] flex flex-col bg-white lg:hidden">
-      <div className="flex items-center gap-1 border-b border-sand px-2 py-2">
+      <div className="flex items-center gap-1 border-b border-[#eee] px-2 py-2">
         <button
           type="button"
           onClick={onClose}
           aria-label="بازگشت"
-          className="flex h-11 w-11 items-center justify-center rounded-full text-ink"
+          className="flex h-11 w-11 items-center justify-center"
         >
-          <ArrowIcon width={20} height={20} className="rotate-180" />
+          <ArrowIcon width={18} height={18} className="rotate-180" strokeWidth={1.6} />
         </button>
-        <div className="flex h-11 flex-1 items-center gap-2 rounded-full bg-[#f6f4f0] px-3.5">
-          <SearchIcon width={18} height={18} className="text-ink-soft" />
+        <div className="flex h-11 flex-1 items-center gap-2 border-b border-ink">
+          <SearchIcon width={16} height={16} className="text-ink/40" strokeWidth={1.6} />
           <input
             ref={inputRef}
             value={s.query}
             onChange={(e) => s.setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && s.doSearch(s.query, onClose)}
-            placeholder="جستجو در نوا…"
-            className="w-full bg-transparent text-sm outline-none"
+            placeholder="جستجو در نوا"
+            className="w-full bg-transparent text-[15px] outline-none"
           />
           {s.query && (
-            <button type="button" onClick={() => s.setQuery("")} aria-label="پاک کردن" className="text-ink-soft">
+            <button type="button" onClick={() => s.setQuery("")} aria-label="پاک کردن">
               <CloseIcon width={16} height={16} />
             </button>
           )}

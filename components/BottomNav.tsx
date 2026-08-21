@@ -17,50 +17,42 @@ export default function BottomNav() {
   if (hide) return null;
 
   const itemCls =
-    "flex flex-1 flex-col items-center justify-center gap-0.5 py-1 text-[10px] font-medium transition-colors duration-150";
+    "relative flex flex-1 flex-col items-center justify-center gap-0.5 py-1 text-[10px] tracking-wide transition-colors duration-150";
+
+  const active = "text-ink";
+  const idle = "text-ink/40";
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-sand bg-white/95 backdrop-blur-md lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#eee] bg-white lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="flex h-14 items-stretch">
-        <Link href="/" className={cn(itemCls, pathname === "/" && !searchOpen && !categoryOpen ? "text-ink" : "text-ink-soft")}>
-          <HomeIcon width={22} height={22} />
+      <div className="flex h-[3.25rem] items-stretch">
+        <Link href="/" className={cn(itemCls, pathname === "/" && !searchOpen && !categoryOpen ? active : idle)}>
+          <HomeIcon width={20} height={20} strokeWidth={1.6} />
           خانه
         </Link>
-        <button
-          type="button"
-          onClick={openCategory}
-          className={cn(itemCls, categoryOpen ? "text-ink" : "text-ink-soft")}
-        >
-          <GridIcon width={22} height={22} />
-          دسته‌بندی
+        <button type="button" onClick={openCategory} className={cn(itemCls, categoryOpen ? active : idle)}>
+          <GridIcon width={20} height={20} strokeWidth={1.6} />
+          دسته‌ها
         </button>
-        <button
-          type="button"
-          onClick={openSearch}
-          className={cn(itemCls, searchOpen ? "text-ink" : "text-ink-soft")}
-        >
-          <SearchIcon width={22} height={22} />
+        <button type="button" onClick={openSearch} className={cn(itemCls, searchOpen ? active : idle)}>
+          <SearchIcon width={20} height={20} strokeWidth={1.6} />
           جستجو
         </button>
-        <Link
-          href="/wishlist"
-          className={cn(itemCls, pathname.startsWith("/wishlist") ? "text-ink" : "text-ink-soft")}
-        >
-          <HeartIcon width={22} height={22} />
+        <Link href="/wishlist" className={cn(itemCls, pathname.startsWith("/wishlist") ? active : idle)}>
+          <HeartIcon width={20} height={20} strokeWidth={1.6} />
           علاقه‌مندی
         </Link>
         <Link
           href={user ? "/account" : "/login"}
           className={cn(
             itemCls,
-            pathname.startsWith("/account") || pathname.startsWith("/login") ? "text-ink" : "text-ink-soft"
+            pathname.startsWith("/account") || pathname.startsWith("/login") ? active : idle
           )}
         >
-          <UserIcon width={22} height={22} />
-          حساب کاربری
+          <UserIcon width={20} height={20} strokeWidth={1.6} />
+          حساب
         </Link>
       </div>
     </nav>
