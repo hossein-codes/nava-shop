@@ -4,6 +4,8 @@ import Providers from "@/components/Providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import BottomNav from "@/components/BottomNav";
+import ShellOverlays from "@/components/ShellOverlays";
 
 export const metadata: Metadata = {
   title: {
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | نوا",
   },
   description:
-    "فروشگاه آنلاین پوشاک نوا؛ جدیدترین کالکشن‌های پوشاک زنانه، مردانه و بچگانه با ضمانت اصالت و ارسال سریع.",
+    "فروشگاه آنلاین پوشاک نوا؛ کالکشن زنانه، مردانه و بچگانه با ضمانت اصالت و ارسال سریع.",
   keywords: ["فروشگاه پوشاک", "لباس", "خرید آنلاین", "پوشاک زنانه", "پوشاک مردانه"],
 };
 
@@ -20,12 +22,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="flex min-h-screen flex-col">
+      <body className="flex min-h-screen flex-col bg-white">
         <Providers>
           <Header />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pb-20 lg:pb-0">{children}</main>
           <Footer />
           <CartDrawer />
+          <BottomNav />
+          <ShellOverlays />
         </Providers>
       </body>
     </html>

@@ -1,263 +1,226 @@
 import Image from "next/image";
 import Link from "next/link";
-import { categories, products } from "@/lib/products";
-import type { Product } from "@/lib/types";
-import ProductCard from "@/components/ProductCard";
-import ProductTabs from "@/components/ProductTabs";
-import Newsletter from "@/components/Newsletter";
+import { products } from "@/lib/products";
+import ProductShelf from "@/components/ProductShelf";
+import RecentlyViewed from "@/components/RecentlyViewed";
+import HomeRail from "@/components/HomeRail";
 import {
   ArrowIcon,
-  CheckIcon,
-  ClockIcon,
-  QuoteIcon,
+  PhoneIcon,
   RefreshIcon,
   ShieldIcon,
-  SparkleIcon,
-  StarIcon,
-  TagIcon,
   TruckIcon,
   WalletIcon,
 } from "@/components/Icons";
 
-/* ---------- نوار امکانات ---------- */
 const features = [
+  { icon: TruckIcon, title: "ارسال سریع", text: "تهران ۲۴ ساعته" },
+  { icon: ShieldIcon, title: "ضمانت اصالت", text: "کنترل کیفیت پیش از ارسال" },
+  { icon: RefreshIcon, title: "۷ روز بازگشت", text: "بدون قید اگر سایز نخورد" },
+  { icon: WalletIcon, title: "پرداخت امن", text: "آنلاین یا در محل" },
+  { icon: PhoneIcon, title: "پشتیبانی", text: "شنبه تا پنجشنبه ۹ تا ۱۸" },
+];
+
+const circles = [
+  { label: "زنانه", href: "/products?category=women", image: "/images/home/look-women.jpg" },
+  { label: "مردانه", href: "/products?category=men", image: "/images/home/look-formal.jpg" },
+  { label: "بچگانه", href: "/products?category=kids", image: "/images/products/kids-jacket.jpg" },
+  { label: "کت", href: "/products?q=%D8%A9%D8%AA", image: "/images/products/camel-blazer.jpg" },
+  { label: "پیراهن", href: "/products?q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86", image: "/images/products/white-shirt.jpg" },
+  { label: "سویشرت", href: "/products?q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA", image: "/images/products/grey-hoodie.jpg" },
+  { label: "مجلسی", href: "/products?q=%D9%85%D8%AC%D9%84%D8%B3%DB%8C", image: "/images/products/evening-dress.jpg" },
+  { label: "روزمره", href: "/products?q=%DA%A9%DA%98%D9%88%D8%A7%D9%84", image: "/images/home/look-daily.jpg" },
+];
+
+const banners = [
   {
-    icon: TruckIcon,
-    title: "ارسال سریع",
-    text: "ارسال رایگان برای خرید بالای ۲ میلیون تومان",
+    href: "/products?discount=1",
+    image: "/images/home/banner-sale.jpg",
+    kicker: "فرصت محدود",
+    title: "تخفیف‌های ویژه",
+    text: "تا ۲۰٪ روی کالکشن منتخب",
+    cta: "مشاهده تخفیف",
   },
   {
-    icon: ShieldIcon,
-    title: "ضمانت اصالت",
-    text: "تضمین کیفیت و اصالت تمامی کالاها",
+    href: "/products",
+    image: "/images/home/banner-collection.jpg",
+    kicker: "پاییز ۱۴۰۵",
+    title: "کالکشن جدید",
+    text: "New Collection",
+    cta: "مشاهده کالکشن",
   },
   {
-    icon: RefreshIcon,
-    title: "۷ روز بازگشت",
-    text: "امکان بازگشت کالا بدون قید و شرط",
-  },
-  {
-    icon: WalletIcon,
-    title: "پرداخت امن",
-    text: "پرداخت آنلاین امن یا در محل",
+    href: "/products?q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA",
+    image: "/images/home/banner-casual.jpg",
+    kicker: "راحت و روزمره",
+    title: "استایل کژوال",
+    text: "سویشرت و پوشش آسان",
+    cta: "خرید کژوال",
   },
 ];
 
-/* ---------- آیتم‌های نوار متحرک ---------- */
-const marqueeItems = [
-  "ارسال رایگان بالای ۲ میلیون تومان",
-  "ضمانت اصالت کالا",
-  "۷ روز ضمانت بازگشت",
-  "پرداخت امن آنلاین",
-  "ارسال به سراسر ایران",
-  "جدیدترین کالکشن پاییز",
+const looks = [
+  { href: "/products?category=men", image: "/images/home/look-daily.jpg", title: "استایل روزمره", text: "کژوال مردانه" },
+  { href: "/products?category=men", image: "/images/home/look-formal.jpg", title: "رسمی", text: "کت‌وشلوار و پیراهن" },
+  { href: "/products?category=women", image: "/images/home/look-women.jpg", title: "نگاه زنانه", text: "کت و مجلسی" },
+  { href: "/products?q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA", image: "/images/home/look-street.jpg", title: "کژوال ترند", text: "سویشرت و راحتی" },
 ];
 
-/* ---------- نظرات مشتریان ---------- */
-const testimonials = [
-  {
-    name: "مریم احمدی",
-    city: "تهران",
-    text: "کیفیت پارچه‌ها واقعاً بالاست و ارسالش خیلی سریع بود. کت شتری که خریدم دقیقاً مثل عکس‌هاست. حتماً دوباره خرید می‌کنم!",
-    rating: 5,
-  },
-  {
-    name: "امیر رضایی",
-    city: "اصفهان",
-    text: "کت‌وشلوار رو برای مراسم عروسی سفارش دادم. دوخت و پارچه عالی بود و سایزبندی هم دقیق. تجربه‌ی خرید خیلی راحتی داشتم.",
-    rating: 5,
-  },
-  {
-    name: "سارا کریمی",
-    city: "شیراز",
-    text: "برای بچه‌ها لباس سفارش دادم؛ نرم و راحت بود و بعد از چند بار شست‌وشو هم رنگش نرفت. پیگیری سفارش هم از حساب کاربری راحت بود.",
-    rating: 4,
-  },
+const insta = [
+  "/images/home/look-women.jpg",
+  "/images/home/look-formal.jpg",
+  "/images/products/camel-blazer.jpg",
+  "/images/home/look-daily.jpg",
+  "/images/products/evening-dress.jpg",
+  "/images/home/look-street.jpg",
 ];
 
 export default function HomePage() {
-  const availableCategories = categories.filter((c) =>
-    products.some((p) => p.category === c.id)
-  );
-  const featured = products.filter((p) => p.featured);
+  const best = [...products].sort((a, b) => b.rating - a.rating).slice(0, 6);
 
   return (
-    <>
-      {/* ---------- هیرو ---------- */}
-      <section className="relative overflow-hidden">
-        {/* تزئینات پس‌زمینه */}
-        <div className="pointer-events-none absolute -top-32 -end-32 h-[28rem] w-[28rem] rounded-full bg-clay/15 blur-3xl" />
-        <div className="pointer-events-none absolute top-1/2 -start-40 h-80 w-80 -translate-y-1/2 rounded-full bg-sky-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 start-1/3 h-40 w-40 rounded-full bg-clay/10 blur-2xl" />
-
-        <div className="container-x relative grid items-center gap-14 pb-16 pt-10 lg:grid-cols-2 lg:pb-24 lg:pt-16">
-          {/* ---------- متن ---------- */}
-          <div className="animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full border border-clay/25 bg-clay/10 px-4 py-1.5 text-xs font-black text-clay">
-              <SparkleIcon width={14} height={14} />
-              کالکشن جدید پاییز ۱۴۰۵
-            </span>
-
-            <h1 className="mt-6 text-[2.6rem] font-black leading-[1.25] tracking-tight sm:text-6xl">
-              استایل تو،
-              <br />
-              با{" "}
-              <span className="bg-gradient-to-l from-clay via-clay-bright to-clay-dark bg-clip-text text-transparent">
-                نوا
-              </span>{" "}
-              می‌درخشه ✨
-            </h1>
-
-            <p className="mt-6 max-w-lg text-base font-medium leading-8 text-ink-soft">
-              از کالکشن‌های جدید پاییزی تا استایل‌های کلاسیک؛ پوشاک باکیفیت و به‌روز را با
-              ضمانت اصالت و ارسال سریع، مستقیم تا درِ خونه‌ات می‌آوریم.
-            </p>
-
-            {/* دکمه‌ها */}
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/products" className="btn btn-primary px-7 text-base">
-                مشاهده محصولات
-                <ArrowIcon width={18} height={18} />
-              </Link>
-              <Link
-                href="/products?discount=1"
-                className="btn border-2 border-ink/15 bg-white text-ink hover:border-clay hover:text-clay"
-              >
-                <TagIcon width={17} height={17} />
-                تخفیف‌های ویژه
-              </Link>
-            </div>
-
-            {/* آمار */}
-            <div className="mt-11 grid max-w-md grid-cols-3 divide-x divide-x-reverse divide-sand rounded-2xl border border-sand/70 bg-white/80 py-4 shadow-sm backdrop-blur">
-              {[
-                { value: "+۱۲هزار", label: "مشتری راضی" },
-                { value: "۴.۸", label: "امتیاز خرید" },
-                { value: "۲۴ساعته", label: "ارسال تهران" },
-              ].map((s, i) => (
-                <div key={i} className="px-3 text-center">
-                  <p className="text-xl font-black text-ink">{s.value}</p>
-                  <p className="mt-0.5 text-[11px] font-bold text-ink-soft">{s.label}</p>
-                </div>
-              ))}
+    <div className="bg-white">
+      {/* هیرو */}
+      <section className="container-x pt-4 lg:pt-6">
+        {/* موبایل: کارت روی عکس */}
+        <Link href="/products" className="relative block overflow-hidden rounded-2xl lg:hidden">
+          <div className="relative h-[22rem]">
+            <Image
+              src="/images/hero.jpg"
+              alt="کالکشن پاییز نوا"
+              fill
+              priority
+              className="object-cover object-[center_20%]"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/25 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+              <p className="text-[11px] text-white/75">کالکشن پاییز و زمستان ۱۴۰۵</p>
+              <h1 className="mt-1 text-2xl font-semibold leading-snug">استایل جدید، نسخه تو</h1>
+              <p className="mt-1 text-xs text-white/80">جدیدترین‌های فصل با دوخت مشخص</p>
+              <span className="mt-4 inline-flex h-10 items-center rounded-full bg-white px-4 text-sm font-semibold text-ink">
+                مشاهده کالکشن
+              </span>
             </div>
           </div>
+        </Link>
 
-          {/* ---------- تصویر ---------- */}
-          <div className="relative animate-fade-up" style={{ animationDelay: "0.15s" }}>
-            {/* هاله نارنجی پشت تصویر */}
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-tr from-clay/40 via-clay/10 to-transparent blur-2xl" />
-
-            <div className="relative overflow-hidden rounded-[2rem] border-[5px] border-white shadow-2xl shadow-ink/20">
-              <Image
-                src="/images/hero.jpg"
-                alt="کالکشن جدید پاییز نوا"
-                width={900}
-                height={1100}
-                priority
-                className="h-full w-full object-cover"
-              />
-              {/* گرادیان پایین */}
-              <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/40 to-transparent" />
+        {/* دسکتاپ: متن + تصویر */}
+        <div className="relative hidden overflow-hidden rounded-[1.75rem] bg-[#efe8df] lg:grid lg:grid-cols-2 lg:min-h-[28rem]">
+          <div className="flex flex-col justify-center px-10 py-14 xl:px-16">
+            <p className="text-xs font-medium text-ink-soft">کالکشن پاییز و زمستان ۱۴۰۵</p>
+            <h1 className="mt-3 max-w-[12ch] text-4xl font-semibold leading-[1.2] tracking-tight xl:text-5xl">
+              استایل جدید، نسخه تو
+            </h1>
+            <p className="mt-4 max-w-sm text-sm leading-7 text-ink-soft">
+              جدیدترین‌های فصل با پارچه مشخص، سایزبندی دقیق و ارسال سریع.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/products" className="btn min-h-11 rounded-full bg-ink px-6 text-white hover:bg-[#2c2926]">
+                مشاهده کالکشن
+              </Link>
+              <Link href="/products?discount=1" className="btn min-h-11 rounded-full border-ink/15 bg-white px-6 text-ink">
+                خرید کنید
+              </Link>
             </div>
-
-            {/* کارت شناور: ضمانت */}
-            <div className="absolute -bottom-6 start-4 flex items-center gap-3 rounded-2xl border border-sand/60 bg-white/95 p-3.5 pe-5 shadow-xl backdrop-blur">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sage/15 text-sage">
-                <CheckIcon width={22} height={22} strokeWidth={2.2} />
-              </span>
-              <div>
-                <p className="text-sm font-black">ضمانت اصالت</p>
-                <p className="text-[11px] font-semibold text-ink-soft">۷ روز بازگشت بدون قید و شرط</p>
-              </div>
-            </div>
-
-            {/* کارت شناور: تخفیف */}
-            <div className="absolute -top-5 end-6 -rotate-3 rounded-2xl bg-clay px-4 py-2.5 text-white shadow-lg">
-              <p className="text-xs font-black">
-                <span className="text-2xl">٪۲۰</span> تخفیف پاییز
-              </p>
-            </div>
-
-            {/* کارت شناور: ارسال */}
-            <div className="absolute top-1/2 -end-3 hidden -translate-y-1/2 items-center gap-2 rounded-xl border border-sand/60 bg-white/95 px-4 py-2.5 shadow-lg backdrop-blur sm:flex">
-              <ClockIcon width={16} height={16} className="text-clay" />
-              <span className="text-xs font-black text-ink-soft">ارسال در ۲۴ ساعت کاری</span>
-            </div>
+          </div>
+          <div className="relative min-h-[28rem]">
+            <Image
+              src="/images/hero.jpg"
+              alt="کالکشن پاییز نوا"
+              fill
+              priority
+              className="object-cover object-[center_20%]"
+              sizes="50vw"
+            />
           </div>
         </div>
       </section>
 
-      {/* ---------- نوار متحرک (مارکی) ---------- */}
-      <div className="border-y-2 border-ink bg-navy-dark py-3.5 text-ivory">
-        <div className="overflow-hidden" dir="ltr">
-          <div className="flex w-max animate-marquee items-center">
-            {[...marqueeItems, ...marqueeItems].map((item, i) => (
-              <span
-                key={i}
-                className="flex items-center gap-6 pe-6 text-sm font-extrabold tracking-wide"
-              >
-                {item}
-                <span className="text-clay-bright">◆</span>
+      {/* دایره‌های دسته — موبایل بالای اعتماد مثل طرح */}
+      <section className="mt-6 lg:hidden">
+        <HomeRail ariaLabel="دسته‌بندی سریع">
+          {circles.slice(0, 5).map((c) => (
+            <Link key={c.label} href={c.href} className="flex w-[4.6rem] shrink-0 snap-start flex-col items-center gap-2">
+              <span className="relative h-16 w-16 overflow-hidden rounded-full bg-[#f4f1ec] ring-1 ring-sand">
+                <Image src={c.image} alt="" fill className="object-cover" sizes="64px" />
               </span>
-            ))}
-          </div>
-        </div>
-      </div>
+              <span className="text-[11px] font-medium">{c.label}</span>
+            </Link>
+          ))}
+          <Link href="/products?discount=1" className="flex w-[4.6rem] shrink-0 snap-start flex-col items-center gap-2">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-sale text-lg font-semibold text-white">
+              ٪
+            </span>
+            <span className="text-[11px] font-medium">تخفیف‌ها</span>
+          </Link>
+        </HomeRail>
+      </section>
 
-      {/* ---------- نوار امکانات ---------- */}
-      <section className="container-x mt-16">
-        <div className="grid gap-4 rounded-3xl border border-sand/60 bg-white p-6 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
+      {/* اعتماد */}
+      <section className="container-x mt-6 lg:mt-8">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
           {features.map((f) => (
-            <div key={f.title} className="flex items-start gap-3.5">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-clay/10 text-clay">
-                <f.icon width={22} height={22} />
-              </span>
+            <div
+              key={f.title}
+              className="flex items-center gap-3 rounded-2xl bg-[#f6f4f0] px-3 py-3.5 lg:flex-col lg:items-center lg:px-4 lg:py-5 lg:text-center"
+            >
+              <f.icon width={22} height={22} className="shrink-0 text-ink" />
               <div>
-                <p className="font-black">{f.title}</p>
-                <p className="mt-1 text-xs font-medium leading-6 text-ink-soft">{f.text}</p>
+                <p className="text-xs font-semibold lg:mt-2 lg:text-sm">{f.title}</p>
+                <p className="mt-0.5 text-[10px] leading-5 text-ink-soft lg:text-[11px]">{f.text}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ---------- دسته‌بندی‌ها ---------- */}
-      <section className="container-x mt-16">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <span className="kicker">خرید بر اساس دسته</span>
-            <h2 className="section-title mt-2">دسته‌بندی محصولات</h2>
-          </div>
-          <Link
-            href="/products"
-            className="hidden items-center gap-1.5 text-sm font-black text-ink transition hover:text-clay sm:flex"
-          >
-            مشاهده همه
-            <ArrowIcon width={16} height={16} />
+      {/* دایره‌ها دسکتاپ */}
+      <section className="mt-8 hidden lg:block">
+        <HomeRail ariaLabel="دسته‌بندی سریع">
+          {circles.map((c) => (
+            <Link key={c.label} href={c.href} className="flex w-24 shrink-0 snap-start flex-col items-center gap-2">
+              <span className="relative h-[4.75rem] w-[4.75rem] overflow-hidden rounded-full bg-[#f4f1ec] ring-1 ring-sand">
+                <Image src={c.image} alt="" fill className="object-cover" sizes="76px" />
+              </span>
+              <span className="text-xs font-medium">{c.label}</span>
+            </Link>
+          ))}
+          <Link href="/products?discount=1" className="flex w-24 shrink-0 snap-start flex-col items-center gap-2">
+            <span className="flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full bg-sale text-xl font-semibold text-white">
+              ٪
+            </span>
+            <span className="text-xs font-medium">تخفیف‌ها</span>
           </Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {availableCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/products?category=${cat.id}`}
-              className="group relative h-64 overflow-hidden rounded-3xl sm:h-72"
-            >
+          <Link href="/products" className="flex w-24 shrink-0 snap-start flex-col items-center gap-2">
+            <span className="flex h-[4.75rem] w-[4.75rem] items-center justify-center rounded-full bg-[#f4f1ec] text-xs font-semibold ring-1 ring-sand">
+              همه
+            </span>
+            <span className="text-xs font-medium">همه محصولات</span>
+          </Link>
+        </HomeRail>
+      </section>
+
+      {/* سه بنر */}
+      <section className="container-x mt-8 lg:mt-10">
+        <div className="grid gap-3 lg:grid-cols-3">
+          {banners.map((b) => (
+            <Link key={b.title} href={b.href} className="group relative h-44 overflow-hidden rounded-2xl lg:h-52">
               <Image
-                src={cat.image}
-                alt={cat.name}
+                src={b.image}
+                alt={b.title}
                 fill
-                sizes="(min-width: 1024px) 33vw, 100vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                sizes="(min-width:1024px) 33vw, 100vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5 text-ivory">
-                <p className="text-lg font-black">{cat.name}</p>
-                <p className="text-xs font-medium text-ivory/80">{cat.subtitle}</p>
-                <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-black text-clay-bright">
-                  خرید از این دسته
-                  <ArrowIcon width={14} height={14} />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/25 to-ink/10" />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white lg:p-5">
+                <p className="text-[11px] text-white/70">{b.kicker}</p>
+                <p className="mt-1 text-lg font-semibold">{b.title}</p>
+                <p className="text-xs text-white/80">{b.text}</p>
+                <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium">
+                  {b.cta}
+                  <ArrowIcon width={12} height={12} />
                 </span>
               </div>
             </Link>
@@ -265,105 +228,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ---------- محصولات منتخب (تب‌ها) ---------- */}
-      <ProductTabs />
+      <ProductShelf title="پرفروش‌ترین‌ها" href="/products?sort=best" products={best} />
 
-      {/* ---------- بنر تبلیغاتی ---------- */}
-      <section className="container-x mt-16">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-l from-clay to-clay-dark px-6 py-12 text-white sm:px-12">
-          <div className="pointer-events-none absolute -top-16 -start-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-20 -end-10 h-64 w-64 rounded-full bg-ink/20 blur-3xl" />
-          <div className="relative flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-start">
-            <div>
-              <p className="text-sm font-black text-amber-200">فروش ویژه‌ی پاییز</p>
-              <h2 className="mt-2 text-3xl font-black">تا ۲۰٪ تخفیف روی کالکشن جدید</h2>
-              <p className="mt-2 text-sm font-medium text-white/85">
-                فرصت محدود — فقط تا پایان هفته
-              </p>
-            </div>
-            <Link
-              href="/products?discount=1"
-              className="btn shrink-0 bg-white text-clay hover:bg-ivory"
-            >
-              مشاهده تخفیف‌ها
-              <ArrowIcon width={18} height={18} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- نظرات مشتریان ---------- */}
-      <section className="container-x mt-16">
-        <div className="mb-8 text-center">
-          <span className="kicker justify-center">بازخورد واقعی</span>
-          <h2 className="section-title mt-2">مشتری‌های ما چه می‌گویند؟</h2>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <figure
-              key={t.name}
-              className="rounded-3xl border border-sand/60 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <QuoteIcon width={28} height={28} className="mb-3 text-clay/40" />
-              <blockquote className="text-sm font-medium leading-7 text-ink-soft">
-                {t.text}
-              </blockquote>
-              <div className="mt-4 flex items-center justify-between border-t border-dashed border-sand pt-4">
-                <div>
-                  <figcaption className="text-sm font-black">{t.name}</figcaption>
-                  <p className="text-xs font-medium text-ink-soft">{t.city}</p>
-                </div>
-                <div className="flex gap-0.5 text-amber-500">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <StarIcon key={i} filled width={15} height={15} />
-                  ))}
-                </div>
+      {/* لوک‌بوک */}
+      <section className="container-x mt-10 lg:mt-14">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {looks.map((l) => (
+            <Link key={l.title} href={l.href} className="group relative h-52 overflow-hidden rounded-2xl lg:h-64">
+              <Image
+                src={l.image}
+                alt={l.title}
+                fill
+                className="object-cover transition duration-500 group-hover:scale-[1.04]"
+                sizes="(min-width:1024px) 25vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                <p className="font-semibold">{l.title}</p>
+                <p className="text-[11px] text-white/75">{l.text}</p>
               </div>
-            </figure>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* ---------- برندهای همکار ---------- */}
-      <section className="container-x mt-16">
-        <div className="rounded-3xl border border-sand/60 bg-white px-6 py-8">
-          <p className="mb-6 text-center text-xs font-black tracking-[0.25em] text-ink-soft/60">
-            برندهای در دسترس در نوا
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-60">
-            {["دنیا", "استایلینو", "مُدا", "وینتیج", "پوشا", "کژوال", "سلکشن"].map((b) => (
-              <span key={b} className="text-lg font-black text-ink">
-                {b}
-              </span>
-            ))}
-          </div>
+      {/* اینستاگرام */}
+      <section className="container-x mt-10 lg:mt-14">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-base font-semibold lg:text-xl">از اینستاگرام نوا</h2>
+          <span className="text-xs text-ink-soft">@nava.shop</span>
         </div>
-      </section>
-
-      {/* ---------- خبرنامه ---------- */}
-      <Newsletter />
-
-      {/* ---------- پیشنهاد ویژه ---------- */}
-      <section className="container-x mt-16">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <span className="kicker">پیشنهاد نوا</span>
-            <h2 className="section-title mt-2">پیشنهاد ویژه‌ی امروز</h2>
-          </div>
-          <Link
-            href="/products"
-            className="hidden items-center gap-1.5 text-sm font-black text-ink transition hover:text-clay sm:flex"
-          >
-            مشاهده همه
-            <ArrowIcon width={16} height={16} />
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {featured.slice(0, 4).map((p) => (
-            <ProductCard key={p.id} product={p} />
+        <div className="grid grid-cols-3 gap-2 lg:grid-cols-6 lg:gap-3">
+          {insta.map((src) => (
+            <div key={src} className="relative aspect-square overflow-hidden rounded-xl bg-[#f4f1ec]">
+              <Image src={src} alt="" fill className="object-cover" sizes="16vw" />
+            </div>
           ))}
         </div>
       </section>
-    </>
+
+      <RecentlyViewed />
+      <div className="h-8 lg:h-12" />
+    </div>
   );
 }

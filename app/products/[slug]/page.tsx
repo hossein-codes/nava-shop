@@ -30,19 +30,13 @@ export default async function ProductPage({ params }: Props) {
   const related = getRelatedProducts(product, 4);
 
   return (
-    <div className="container-x mt-6">
+    <div className="container-x mt-6 pb-28 lg:pb-10">
       <ProductDetail product={product} />
 
-      {/* محصولات مرتبط */}
       {related.length > 0 && (
-        <section className="mt-20">
-          <div className="mb-6">
-            <h2 className="section-title">محصولات مرتبط</h2>
-            <p className="mt-1 text-sm text-ink-soft">
-              شاید این‌ها را هم دوست داشته باشید
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <section className="mt-16">
+          <h2 className="section-title mb-6">با این محصول بپوشید</h2>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-5 lg:grid-cols-4">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}

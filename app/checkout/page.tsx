@@ -149,9 +149,8 @@ export default function CheckoutPage() {
   if (items.length === 0 && step === "form") {
     return (
       <div className="container-x mt-10 flex flex-col items-center justify-center py-20 text-center">
-        <span className="flex h-20 w-20 items-center justify-center rounded-full bg-cream text-2xl">🛒</span>
-        <h1 className="mt-5 text-2xl font-black">سبد خرید شما خالی است!</h1>
-        <p className="mt-2 text-sm text-ink-soft">برای تسویه حساب، ابتدا محصولی به سبد اضافه کنید.</p>
+        <h1 className="text-2xl font-semibold">سبد خرید خالی است</h1>
+        <p className="mt-2 text-sm text-ink-soft">برای تسویه، ابتدا محصولی اضافه کنید.</p>
         <Link href="/products" className="btn btn-primary mt-6">
           مشاهده محصولات
         </Link>
@@ -169,7 +168,29 @@ export default function CheckoutPage() {
         <span className="font-bold text-ink">تسویه حساب</span>
       </nav>
 
-      <h1 className="mb-8 text-2xl font-black sm:text-3xl">تسویه حساب</h1>
+      <h1 className="mb-6 text-2xl font-semibold sm:text-3xl">تسویه حساب</h1>
+
+      <ol className="mb-8 flex items-center gap-2 text-xs sm:text-sm">
+        {[
+          { n: "۱", label: "سبد", done: true },
+          { n: "۲", label: "اطلاعات ارسال", done: false, current: true },
+          { n: "۳", label: "پرداخت", done: false },
+        ].map((s, i) => (
+          <li key={s.label} className="flex items-center gap-2">
+            {i > 0 && <span className="mx-1 h-px w-6 bg-sand sm:w-10" />}
+            <span
+              className={
+                s.current
+                  ? "flex h-7 w-7 items-center justify-center rounded-full bg-ink text-[11px] text-white"
+                  : "flex h-7 w-7 items-center justify-center rounded-full bg-cream text-[11px] text-ink-soft"
+              }
+            >
+              {s.n}
+            </span>
+            <span className={s.current ? "font-semibold" : "text-ink-soft"}>{s.label}</span>
+          </li>
+        ))}
+      </ol>
 
       <form onSubmit={submit} className="grid gap-8 lg:grid-cols-3">
         {/* فرم اطلاعات */}
@@ -365,7 +386,7 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-clay mt-5 w-full">
+          <button type="submit" className="btn btn-primary mt-5 w-full">
             <WalletIcon width={18} height={18} />
             {payment === "online" ? "پرداخت و ثبت سفارش" : "ثبت سفارش"}
           </button>

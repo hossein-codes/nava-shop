@@ -44,23 +44,27 @@
   font-display: swap;
 }
 
-/* ---------- پالت اختصاصی برند «نوا» — مدرن و جسور ----------
-   سرمه‌ای عمیق + نارنجی زنده + سفید سرد */
+/* ---------- Nava Commerce System ----------
+   فشن: استخوانی / زغالی / terracotta خاموش
+   نام‌های clay/ink برای سازگاری با کلاس‌های موجود نگه‌داشته شده‌اند. */
 @theme {
-  --color-ink: #101b33;        /* سرمه‌ای اصلی (تیره‌ترین) */
-  --color-ink-soft: #5a6a8c;   /* خاکستری-سرمه‌ای برای متن ثانویه */
-  --color-navy-dark: #0a1122;  /* سرمه‌ای خیلی تیره (فوتر) */
-  --color-clay: #ff5a1e;       /* نارنجی زنده — رنگ اصلی برند */
-  --color-clay-dark: #e04a0c;  /* نارنجی تیره (هاور) */
-  --color-clay-bright: #ff8a3d;/* نارنجی روشن (گلویی/نشان) */
-  --color-ivory: #f5f7fb;      /* پس‌زمینه سرد روشن */
-  --color-cream: #eaeff5;      /* پنل‌های روشن */
-  --color-sand: #d5dbe7;       /* خطوط و حاشیه‌ها */
-  --color-sage: #0e9f6e;       /* سبز موفقیت */
+  --color-ink: #1a1816;
+  --color-ink-soft: #6f6a64;
+  --color-navy-dark: #1a1816;
+  --color-clay: #9a4a2e;
+  --color-clay-dark: #7a3a24;
+  --color-clay-bright: #c46a4a;
+  --color-ivory: #ffffff;
+  --color-cream: #f1ede6;
+  --color-sand: #e6e1d8;
+  --color-sage: #2f6b4f;
+  --color-sale: #b42318;
   --font-sans: "Vazirmatn", "Segoe UI", Tahoma, ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-1: 0 8px 24px rgb(26 24 22 / 0.08);
+  --shadow-2: 0 16px 48px rgb(26 24 22 / 0.16);
 }
 
-/* ---------- استایل پایه ---------- */
 html {
   scroll-behavior: smooth;
   color-scheme: light;
@@ -70,12 +74,13 @@ body {
   background-color: var(--color-ivory);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background-color: var(--color-clay);
+  background-color: var(--color-ink);
   color: #fff;
 }
 
@@ -84,10 +89,9 @@ body {
   outline-offset: 2px;
 }
 
-/* اسکرول‌بار */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-cream);
@@ -96,11 +100,7 @@ body {
   background: var(--color-sand);
   border-radius: 8px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-clay);
-}
 
-/* ---------- کلاس‌های کمکی ---------- */
 .container-x {
   margin-inline: auto;
   width: 100%;
@@ -118,30 +118,37 @@ body {
   }
 }
 
-/* دکمه‌ها — زوایای تند مدرن */
+/* دکمه‌ها */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 0.85rem;
-  font-weight: 800;
-  font-size: 0.9rem;
-  padding: 0.8rem 1.75rem;
-  transition: all 0.2s ease;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    transform 0.15s ease;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
 }
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-primary {
   background-color: var(--color-ink);
   color: #fff;
 }
-.btn-primary:hover {
-  background-color: var(--color-clay);
+.btn-primary:hover:not(:disabled) {
+  background-color: #2c2926;
 }
 
 .btn-outline {
@@ -149,7 +156,7 @@ body {
   color: var(--color-ink);
   background: transparent;
 }
-.btn-outline:hover {
+.btn-outline:hover:not(:disabled) {
   background-color: var(--color-ink);
   color: #fff;
 }
@@ -158,71 +165,71 @@ body {
   background-color: var(--color-clay);
   color: #fff;
 }
-.btn-clay:hover {
+.btn-clay:hover:not(:disabled) {
   background-color: var(--color-clay-dark);
 }
 
-/* فرم‌ها */
 .input-base {
   width: 100%;
+  min-height: 3.25rem;
   border-radius: 0.75rem;
-  border: 2px solid var(--color-sand);
+  border: 1px solid var(--color-sand);
   background: #fff;
   padding: 0.7rem 1rem;
   font-size: 0.9rem;
+  font-weight: 400;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .input-base:focus {
-  border-color: var(--color-clay);
-  box-shadow: 0 0 0 4px rgb(255 90 30 / 0.12);
+  border-color: var(--color-ink);
+  box-shadow: 0 0 0 3px rgb(26 24 22 / 0.08);
 }
 .input-base::placeholder {
-  color: #9aa5ba;
+  color: #9a958e;
 }
 
 .label-base {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.8125rem;
+  font-weight: 500;
   margin-bottom: 0.4rem;
   color: var(--color-ink-soft);
 }
 
-/* عنوان بخش‌ها */
 .section-title {
-  font-size: 1.75rem;
-  font-weight: 900;
-  line-height: 1.4;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 @media (min-width: 768px) {
   .section-title {
-    font-size: 2.15rem;
+    font-size: 1.75rem;
   }
 }
 
-/* نشان کوچک بالای عنوان‌ها */
 .kicker {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.78rem;
-  font-weight: 800;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   color: var(--color-clay);
-}
-.kicker::before {
-  content: "";
-  width: 1.6rem;
-  height: 3px;
-  border-radius: 99px;
-  background: var(--color-clay);
+  text-transform: none;
 }
 
-/* ---------- انیمیشن‌ها ---------- */
+.card-surface {
+  background: #fff;
+  border: 1px solid var(--color-sand);
+  border-radius: 1rem;
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -230,55 +237,13 @@ body {
   }
 }
 .animate-fade-up {
-  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-.animate-float {
-  animation: float-slow 5s ease-in-out infinite;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.animate-marquee {
-  animation: marquee 28s linear infinite;
-}
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
-
-@keyframes pulse-ring {
-  0% {
-    box-shadow: 0 0 0 0 rgb(255 90 30 / 0.35);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgb(255 90 30 / 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgb(255 90 30 / 0);
-  }
-}
-.animate-pulse-ring {
-  animation: pulse-ring 2.2s infinite;
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes dropdown {
   from {
     opacity: 0;
-    transform: translateY(-6px) scale(0.98);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
@@ -286,5 +251,39 @@ body {
   }
 }
 .animate-dropdown {
-  animation: dropdown 0.18s ease-out both;
+  animation: dropdown 0.16s ease-out both;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+.animate-sheet {
+  animation: sheet-up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ریل افقی موبایل — خانه و قفسه‌ها */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.home-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.25rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.home-rail::-webkit-scrollbar {
+  display: none;
 }

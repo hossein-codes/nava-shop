@@ -24,7 +24,7 @@ export default function WishlistPage() {
           <HeartIcon width={22} height={22} />
         </span>
         <div>
-          <h1 className="text-2xl font-black">علاقه‌مندی‌های من</h1>
+          <h1 className="text-2xl font-semibold">علاقه‌مندی‌های من</h1>
           <p className="text-sm text-ink-soft">
             {wished.length.toLocaleString("fa-IR")} محصول ذخیره شده
           </p>

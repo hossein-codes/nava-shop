@@ -43,7 +43,7 @@ function LoginForm() {
           <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-ivory">
             <UserIcon width={26} height={26} />
           </span>
-          <h1 className="text-2xl font-black">ورود به حساب کاربری</h1>
+          <h1 className="text-2xl font-semibold">ورود به حساب کاربری</h1>
           <p className="mt-2 text-sm text-ink-soft">
             خوش برگشتید! برای ادامه وارد شوید.
           </p>

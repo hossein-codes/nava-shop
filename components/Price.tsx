@@ -21,15 +21,15 @@ export default function Price({
 
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
-      <span className={`font-extrabold text-ink ${sizes[size]}`}>{formatPrice(price)}</span>
+      <span className={`font-semibold tabular-nums text-ink ${sizes[size]}`}>{formatPrice(price)}</span>
       {oldPrice && oldPrice > price && (
         <>
-          <span className={`text-ink-soft/60 line-through ${size === "sm" ? "text-xs" : "text-sm"}`}>
+          <span className={`text-ink-soft/70 line-through ${size === "sm" ? "text-xs" : "text-sm"}`}>
             {formatPrice(oldPrice)}
           </span>
           {percent !== null && (
-            <span className="rounded-full bg-clay/10 px-2 py-0.5 text-xs font-bold text-clay">
-              ٪{percent.toLocaleString("fa-IR")} تخفیف
+            <span className="text-xs font-semibold text-sale">
+              ٪{percent.toLocaleString("fa-IR")}
             </span>
           )}
         </>

@@ -45,7 +45,7 @@ export default function RegisterPage() {
           <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-ink text-ivory">
             <UserIcon width={26} height={26} />
           </span>
-          <h1 className="text-2xl font-black">ساخت حساب کاربری</h1>
+          <h1 className="text-2xl font-semibold">ساخت حساب کاربری</h1>
           <p className="mt-2 text-sm text-ink-soft">
             در کمتر از یک دقیقه عضو نوا شوید.
           </p>

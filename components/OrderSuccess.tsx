@@ -30,8 +30,7 @@ export default function OrderSuccess({ orderId }: { orderId: string }) {
   if (!order) {
     return (
       <div className="container-x mt-10 flex flex-col items-center justify-center py-20 text-center">
-        <span className="flex h-20 w-20 items-center justify-center rounded-full bg-cream text-3xl">📦</span>
-        <h1 className="mt-5 text-2xl font-black">سفارشی یافت نشد!</h1>
+        <h1 className="mt-5 text-2xl font-semibold">سفارشی یافت نشد</h1>
         <p className="mt-2 max-w-sm text-sm leading-7 text-ink-soft">
           امکان پیدا کردن این سفارش وجود ندارد. لطفاً از طریق حساب کاربری یا تماس با پشتیبانی،
           سفارش خود را پیگیری کنید.

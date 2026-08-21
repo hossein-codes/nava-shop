@@ -1,18 +1,15 @@
 "use client";
 
-/**
- * مرورگر محصولات: فیلتر + مرتب‌سازی + جستجو
- * فیلترها در URL ذخیره می‌شوند تا قابل اشتراک‌گذاری باشند.
- */
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { categories, products } from "@/lib/products";
 import type { CategoryId } from "@/lib/types";
-import { cn, discountPercent } from "@/lib/utils";
+import { cn, discountPercent, formatPrice } from "@/lib/utils";
 import ProductCard from "./ProductCard";
-import { ArrowIcon, CloseIcon, FilterIcon, SearchIcon } from "./Icons";
+import Sheet from "./Sheet";
+import EmptyState from "./EmptyState";
+import { CloseIcon, FilterIcon, SearchIcon, SortIcon } from "./Icons";
 
 export interface InitialFilters {
   q: string;
@@ -33,20 +30,22 @@ const sortOptions = [
   { id: "discount", label: "بیشترین تخفیف" },
 ];
 
+const pricePresets = [
+  { id: "p1", label: "تا ۱ میلیون", min: undefined, max: 1_000_000 },
+  { id: "p2", label: "۱ تا ۳ میلیون", min: 1_000_000, max: 3_000_000 },
+  { id: "p3", label: "بالای ۳ میلیون", min: 3_000_000, max: undefined },
+];
+
 const allSizes = Array.from(new Set(products.flatMap((p) => p.sizes)));
-const allColors = Array.from(
-  new Set(products.flatMap((p) => p.colors.map((c) => c.name)))
-);
-const availableCategories = categories.filter((c) =>
-  products.some((p) => p.category === c.id)
-);
+const allColors = Array.from(new Set(products.flatMap((p) => p.colors.map((c) => c.name))));
+const availableCategories = categories.filter((c) => products.some((p) => p.category === c.id));
 
 export default function ProductBrowser({ initial }: { initial: InitialFilters }) {
   const router = useRouter();
   const [filters, setFilters] = useState<InitialFilters>(initial);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
 
-  // به‌روزرسانی URL با فیلترهای جدید
   const updateUrl = (next: InitialFilters) => {
     const params = new URLSearchParams();
     if (next.q) params.set("q", next.q);
@@ -70,17 +69,10 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
   };
 
   const toggleSize = (size: string) =>
-    set({
-      sizes: filters.sizes.includes(size)
-        ? filters.sizes.filter((s) => s !== size)
-        : [...filters.sizes, size],
-    });
-
+    set({ sizes: filters.sizes.includes(size) ? filters.sizes.filter((s) => s !== size) : [...filters.sizes, size] });
   const toggleColor = (color: string) =>
     set({
-      colors: filters.colors.includes(color)
-        ? filters.colors.filter((c) => c !== color)
-        : [...filters.colors, color],
+      colors: filters.colors.includes(color) ? filters.colors.filter((c) => c !== color) : [...filters.colors, color],
     });
 
   const resetFilters = () => {
@@ -98,18 +90,30 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
     updateUrl(clean);
   };
 
-  const hasActiveFilters =
-    filters.q ||
-    filters.category !== "all" ||
-    filters.sizes.length > 0 ||
-    filters.colors.length > 0 ||
-    filters.min !== undefined ||
-    filters.max !== undefined ||
-    filters.discountOnly;
+  const chips: { key: string; label: string; clear: () => void }[] = [];
+  if (filters.q) chips.push({ key: "q", label: `جستجو: ${filters.q}`, clear: () => set({ q: "" }) });
+  if (filters.category !== "all") {
+    const name = availableCategories.find((c) => c.id === filters.category)?.name ?? filters.category;
+    chips.push({ key: "cat", label: name, clear: () => set({ category: "all" }) });
+  }
+  filters.sizes.forEach((s) =>
+    chips.push({ key: `s-${s}`, label: `سایز ${s}`, clear: () => toggleSize(s) })
+  );
+  filters.colors.forEach((c) => chips.push({ key: `c-${c}`, label: c, clear: () => toggleColor(c) }));
+  if (filters.discountOnly)
+    chips.push({ key: "d", label: "تخفیف‌دار", clear: () => set({ discountOnly: false }) });
+  if (filters.min !== undefined || filters.max !== undefined) {
+    const label =
+      filters.min && filters.max
+        ? `${formatPrice(filters.min)} تا ${formatPrice(filters.max)}`
+        : filters.min
+          ? `از ${formatPrice(filters.min)}`
+          : `تا ${formatPrice(filters.max ?? 0)}`;
+    chips.push({ key: "price", label, clear: () => set({ min: undefined, max: undefined }) });
+  }
 
   const filtered = useMemo(() => {
     let list = [...products];
-
     if (filters.q) {
       const q = filters.q.trim().toLowerCase();
       list = list.filter(
@@ -119,21 +123,12 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
           p.details.join(" ").toLowerCase().includes(q)
       );
     }
-    if (filters.category !== "all") {
-      list = list.filter((p) => p.category === (filters.category as CategoryId));
-    }
-    if (filters.sizes.length) {
-      list = list.filter((p) => p.sizes.some((s) => filters.sizes.includes(s)));
-    }
-    if (filters.colors.length) {
-      list = list.filter((p) =>
-        p.colors.some((c) => filters.colors.includes(c.name))
-      );
-    }
+    if (filters.category !== "all") list = list.filter((p) => p.category === (filters.category as CategoryId));
+    if (filters.sizes.length) list = list.filter((p) => p.sizes.some((s) => filters.sizes.includes(s)));
+    if (filters.colors.length) list = list.filter((p) => p.colors.some((c) => filters.colors.includes(c.name)));
     if (filters.min !== undefined) list = list.filter((p) => p.price >= (filters.min ?? 0));
     if (filters.max !== undefined) list = list.filter((p) => p.price <= (filters.max ?? Infinity));
     if (filters.discountOnly) list = list.filter((p) => p.oldPrice && p.oldPrice > p.price);
-
     switch (filters.sort) {
       case "cheapest":
         list.sort((a, b) => a.price - b.price);
@@ -145,58 +140,43 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
         list.sort((a, b) => b.rating - a.rating);
         break;
       case "discount":
-        list.sort(
-          (a, b) => (discountPercent(b) ?? 0) - (discountPercent(a) ?? 0)
-        );
+        list.sort((a, b) => (discountPercent(b) ?? 0) - (discountPercent(a) ?? 0));
         break;
       default:
-        break; // جدیدترین = ترتیب دیتا
+        break;
     }
     return list;
   }, [filters]);
 
-  // ---------- محتوای فیلترها (مشترک بین دسکتاپ و موبایل) ----------
-  const filterPanel = (
+  const filterBody = (
     <div className="space-y-6">
-      {/* جستجو */}
       <div>
-        <label className="label-base">جستجو</label>
+        <label className="label-base">جستجو در نتایج</label>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            const form = e.currentTarget;
-            const input = form.querySelector("input") as HTMLInputElement;
+            const input = (e.currentTarget.querySelector("input") as HTMLInputElement);
             set({ q: input.value });
           }}
         >
-          <div className="flex items-center gap-2 rounded-xl border-2 border-sand bg-white px-3 py-2">
+          <div className="flex items-center gap-2 rounded-xl border border-sand bg-white px-3 py-2">
             <SearchIcon width={16} height={16} className="text-ink-soft" />
-            <input
-              key={filters.q}
-              defaultValue={filters.q}
-              placeholder="نام محصول..."
-              className="w-full bg-transparent text-sm outline-none"
-            />
+            <input key={filters.q} defaultValue={filters.q} placeholder="نام محصول" className="w-full bg-transparent text-sm outline-none" />
           </div>
         </form>
       </div>
 
-      {/* دسته‌بندی */}
       <div>
-        <p className="label-base">دسته‌بندی</p>
+        <p className="label-base">دسته</p>
         <div className="space-y-1">
-          {[
-            { id: "all", name: "همه" },
-            ...availableCategories.map((c) => ({ id: c.id, name: c.name })),
-          ].map((cat) => (
+          {[{ id: "all", name: "همه" }, ...availableCategories.map((c) => ({ id: c.id, name: c.name }))].map((cat) => (
             <button
               key={cat.id}
+              type="button"
               onClick={() => set({ category: cat.id })}
               className={cn(
-                "block w-full rounded-xl px-3 py-2 text-start text-sm font-bold transition",
-                filters.category === cat.id
-                  ? "bg-ink text-ivory"
-                  : "text-ink-soft hover:bg-cream"
+                "block w-full rounded-xl px-3 py-2.5 text-start text-sm font-medium",
+                filters.category === cat.id ? "bg-ink text-white" : "text-ink-soft hover:bg-cream"
               )}
             >
               {cat.name}
@@ -205,19 +185,17 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
         </div>
       </div>
 
-      {/* سایز */}
       <div>
         <p className="label-base">سایز</p>
         <div className="flex flex-wrap gap-2">
           {allSizes.map((size) => (
             <button
               key={size}
+              type="button"
               onClick={() => toggleSize(size)}
               className={cn(
-                "rounded-full border-2 px-3 py-1.5 text-xs font-bold transition",
-                filters.sizes.includes(size)
-                  ? "border-clay bg-clay text-white"
-                  : "border-sand bg-white text-ink-soft hover:border-clay/50"
+                "min-h-11 rounded-xl border px-3 text-xs font-medium",
+                filters.sizes.includes(size) ? "border-ink bg-ink text-white" : "border-sand bg-white"
               )}
             >
               {size}
@@ -226,29 +204,22 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
         </div>
       </div>
 
-      {/* رنگ */}
       <div>
         <p className="label-base">رنگ</p>
         <div className="flex flex-wrap gap-2">
           {allColors.map((color) => {
-            const hex = products
-              .flatMap((p) => p.colors)
-              .find((c) => c.name === color)?.hex;
+            const hex = products.flatMap((p) => p.colors).find((c) => c.name === color)?.hex;
             return (
               <button
                 key={color}
+                type="button"
                 onClick={() => toggleColor(color)}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full border-2 px-3 py-1.5 text-xs font-bold transition",
-                  filters.colors.includes(color)
-                    ? "border-clay bg-clay/5 text-clay"
-                    : "border-sand bg-white text-ink-soft hover:border-clay/50"
+                  "flex min-h-11 items-center gap-2 rounded-xl border px-3 text-xs font-medium",
+                  filters.colors.includes(color) ? "border-ink" : "border-sand bg-white"
                 )}
               >
-                <span
-                  className="h-3.5 w-3.5 rounded-full border border-ink/10"
-                  style={{ backgroundColor: hex }}
-                />
+                <span className="h-3.5 w-3.5 rounded-full border border-ink/10" style={{ backgroundColor: hex }} />
                 {color}
               </button>
             );
@@ -256,158 +227,177 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
         </div>
       </div>
 
-      {/* قیمت */}
       <div>
-        <p className="label-base">محدوده قیمت (تومان)</p>
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            type="number"
-            inputMode="numeric"
-            placeholder="از"
-            defaultValue={filters.min ?? ""}
-            onBlur={(e) => set({ min: e.target.value ? Number(e.target.value) : undefined })}
-            className="input-base !py-2 text-sm"
-          />
-          <input
-            type="number"
-            inputMode="numeric"
-            placeholder="تا"
-            defaultValue={filters.max ?? ""}
-            onBlur={(e) => set({ max: e.target.value ? Number(e.target.value) : undefined })}
-            className="input-base !py-2 text-sm"
-          />
+        <p className="label-base">قیمت</p>
+        <div className="flex flex-col gap-2">
+          {pricePresets.map((p) => {
+            const active = filters.min === p.min && filters.max === p.max;
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => set({ min: p.min, max: p.max })}
+                className={cn(
+                  "rounded-xl border px-3 py-2.5 text-start text-sm",
+                  active ? "border-ink bg-ink text-white" : "border-sand bg-white"
+                )}
+              >
+                {p.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* فقط تخفیف‌دار */}
-      <label className="flex cursor-pointer items-center gap-3">
+      <label className="flex min-h-11 cursor-pointer items-center gap-3">
         <input
           type="checkbox"
           checked={filters.discountOnly}
           onChange={(e) => set({ discountOnly: e.target.checked })}
-          className="h-4.5 w-4.5 accent-clay"
+          className="h-4 w-4 accent-ink"
         />
-        <span className="text-sm font-bold text-ink">فقط کالاهای تخفیف‌دار</span>
+        <span className="text-sm font-medium">فقط تخفیف‌دار</span>
       </label>
 
-      <button onClick={resetFilters} className="btn btn-outline w-full text-sm">
-        حذف همه فیلترها
+      <button type="button" onClick={resetFilters} className="btn btn-outline w-full text-sm">
+        حذف فیلترها
       </button>
     </div>
   );
 
+  const title =
+    filters.category !== "all"
+      ? availableCategories.find((c) => c.id === filters.category)?.name
+      : filters.q
+        ? `نتایج «${filters.q}»`
+        : "همه محصولات";
+
   return (
     <div className="container-x mt-6">
-      {/* مسیر */}
       <nav className="mb-4 flex items-center gap-1.5 text-xs text-ink-soft">
-        <Link href="/" className="transition hover:text-clay">
-          خانه
-        </Link>
+        <Link href="/" className="hover:text-ink">خانه</Link>
         <span>/</span>
-        <span className="font-bold text-ink">محصولات</span>
-        {filters.q && (
-          <>
-            <span>/</span>
-            <span className="text-clay">جستجو: «{filters.q}»</span>
-          </>
-        )}
+        <span className="text-ink">محصولات</span>
       </nav>
 
-      {/* سربرگ */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black sm:text-3xl">
-            {filters.category !== "all"
-              ? availableCategories.find((c) => c.id === filters.category)?.name
-              : "همه محصولات"}
-          </h1>
+          <h1 className="text-xl font-semibold sm:text-2xl">{title}</h1>
           <p className="mt-1 text-sm text-ink-soft">
-            {filtered.length.toLocaleString("fa-IR")} محصول یافت شد
+            {filtered.length.toLocaleString("fa-IR")} محصول
           </p>
         </div>
-
-        <div className="flex items-center gap-2">
-          {/* دکمه فیلتر موبایل */}
-          <button
-            onClick={() => setMobileFiltersOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-full border-2 border-sand bg-white px-4 py-2 text-sm font-bold lg:hidden"
-          >
-            <FilterIcon width={16} height={16} />
-            فیلترها
-            {hasActiveFilters && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-clay text-[10px] font-bold text-white">
-                !
-              </span>
-            )}
-          </button>
-
-          {/* مرتب‌سازی */}
+        <div className="hidden lg:block">
+          <label className="sr-only">مرتب‌سازی</label>
           <select
             value={filters.sort}
             onChange={(e) => set({ sort: e.target.value })}
-            className="rounded-full border-2 border-sand bg-white px-4 py-2 text-sm font-bold outline-none transition focus:border-clay"
+            className="h-11 rounded-xl border border-sand bg-white px-3 text-sm outline-none"
           >
             {sortOptions.map((o) => (
               <option key={o.id} value={o.id}>
-                مرتب‌سازی: {o.label}
+                {o.label}
               </option>
             ))}
           </select>
         </div>
       </div>
 
+      {chips.length > 0 && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          {chips.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              onClick={c.clear}
+              className="inline-flex h-9 items-center gap-1.5 rounded-full border border-sand bg-white px-3 text-xs"
+            >
+              {c.label}
+              <CloseIcon width={12} height={12} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="sticky top-14 z-20 -mx-4 mb-4 flex gap-2 border-y border-sand bg-ivory/95 px-4 py-2 backdrop-blur lg:hidden">
+        <button
+          type="button"
+          onClick={() => setFilterOpen(true)}
+          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-sand bg-white text-sm font-medium"
+        >
+          <FilterIcon width={16} height={16} />
+          فیلتر
+          {chips.length > 0 && (
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-ink text-[10px] text-white">
+              {chips.length.toLocaleString("fa-IR")}
+            </span>
+          )}
+        </button>
+        <button
+          type="button"
+          onClick={() => setSortOpen(true)}
+          className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-sand bg-white text-sm font-medium"
+        >
+          <SortIcon width={16} height={16} />
+          {sortOptions.find((o) => o.id === filters.sort)?.label}
+        </button>
+      </div>
+
       <div className="flex gap-8">
-        {/* سایدبار فیلتر — دسکتاپ */}
         <aside className="hidden w-60 shrink-0 lg:block">
-          <div className="sticky top-32 rounded-2xl border border-sand/60 bg-white p-5">
-            {filterPanel}
-          </div>
+          <div className="sticky top-32 rounded-2xl border border-sand bg-white p-5">{filterBody}</div>
         </aside>
 
-        {/* فیلتر موبایل */}
-        {mobileFiltersOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
-            <div
-              className="absolute inset-0 bg-ink/50 backdrop-blur-sm"
-              onClick={() => setMobileFiltersOpen(false)}
-            />
-            <div className="absolute inset-y-0 start-0 w-80 max-w-[88%] overflow-y-auto bg-ivory p-5 shadow-2xl">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-lg font-black">فیلترها</p>
-                <button
-                  onClick={() => setMobileFiltersOpen(false)}
-                  aria-label="بستن"
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-cream"
-                >
-                  <CloseIcon width={18} height={18} />
-                </button>
-              </div>
-              {filterPanel}
-              <button
-                onClick={() => setMobileFiltersOpen(false)}
-                className="btn btn-primary mt-6 w-full"
-              >
-                نمایش {filtered.length.toLocaleString("fa-IR")} محصول
-              </button>
-            </div>
-          </div>
-        )}
+        <Sheet
+          open={filterOpen}
+          onClose={() => setFilterOpen(false)}
+          title="فیلترها"
+          footer={
+            <button type="button" onClick={() => setFilterOpen(false)} className="btn btn-primary w-full">
+              نمایش {filtered.length.toLocaleString("fa-IR")} محصول
+            </button>
+          }
+        >
+          {filterBody}
+        </Sheet>
 
-        {/* گرید محصولات */}
-        <div className="flex-1">
-          {filtered.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-sand bg-white py-20 text-center">
-              <p className="text-3xl">🔍</p>
-              <p className="mt-3 text-lg font-extrabold">محصولی پیدا نشد!</p>
-              <p className="mt-1 text-sm text-ink-soft">
-                فیلترها را تغییر دهید یا همه‌ی فیلترها را حذف کنید.
-              </p>
-              <button onClick={resetFilters} className="btn btn-primary mt-5">
-                حذف فیلترها
+        <Sheet open={sortOpen} onClose={() => setSortOpen(false)} title="مرتب‌سازی">
+          <div className="space-y-1">
+            {sortOptions.map((o) => (
+              <button
+                key={o.id}
+                type="button"
+                onClick={() => {
+                  set({ sort: o.id });
+                  setSortOpen(false);
+                }}
+                className={cn(
+                  "block w-full rounded-xl px-3 py-3 text-start text-sm font-medium",
+                  filters.sort === o.id ? "bg-ink text-white" : "hover:bg-cream"
+                )}
+              >
+                {o.label}
               </button>
+            ))}
+          </div>
+        </Sheet>
+
+        <div className="flex-1 pb-8">
+          {filtered.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-sand bg-white">
+              <EmptyState
+                icon={<SearchIcon width={28} height={28} />}
+                title="محصولی پیدا نشد"
+                text="فیلترها را تغییر دهید یا همه را حذف کنید."
+                action={
+                  <button type="button" onClick={resetFilters} className="btn btn-primary">
+                    حذف فیلترها
+                  </button>
+                }
+              />
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 xl:grid-cols-3">
               {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
@@ -415,16 +405,6 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
           )}
         </div>
       </div>
-
-      {/* دکمه نمایش بیشتر (نمایشی) */}
-      {filtered.length > 6 && (
-        <div className="mt-10 text-center">
-          <button className="btn btn-outline">
-            نمایش محصولات بیشتر
-            <ArrowIcon width={16} height={16} className="rotate-90" />
-          </button>
-        </div>
-      )}
     </div>
   );
 }

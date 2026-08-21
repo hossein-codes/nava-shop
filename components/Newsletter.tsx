@@ -1,9 +1,7 @@
 "use client";
 
-/** خبرنامه ایمیلی (شبیه‌سازی شده) */
 import { useState, type FormEvent } from "react";
 import { isValidEmail } from "@/lib/utils";
-import { CheckIcon, MailIcon } from "./Icons";
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -19,50 +17,39 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="container-x mt-16">
-      <div className="relative overflow-hidden rounded-3xl bg-ink px-6 py-12 text-center text-ivory sm:px-12">
-        <div className="pointer-events-none absolute -top-20 -end-20 h-64 w-64 rounded-full bg-clay/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-24 -start-16 h-64 w-64 rounded-full bg-clay/20 blur-3xl" />
-
-        <div className="relative mx-auto max-w-xl">
-          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-clay text-white">
-            <MailIcon width={22} height={22} />
-          </span>
-          <h2 className="mb-2 text-2xl font-black sm:text-3xl">از تخفیف‌ها جا نمانید!</h2>
-          <p className="mb-6 text-sm leading-7 text-ivory/70">
-            عضو خبرنامه‌ی نوا شوید تا اولین نفری باشید که از کالکشن‌های جدید و تخفیف‌های ویژه با
-            خبر می‌شوید.
-          </p>
-
-          {status === "done" ? (
-            <div className="flex items-center justify-center gap-2 rounded-full bg-sage/20 px-5 py-3.5 text-sm font-bold text-emerald-300">
-              <CheckIcon width={18} height={18} />
-              عضویت شما با موفقیت ثبت شد. به‌زودی خبرهای خوب برایتان می‌فرستیم!
-            </div>
-          ) : (
-            <form onSubmit={submit} className="flex flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                dir="ltr"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setStatus("idle");
-                }}
-                placeholder="you@example.com"
-                className="input-base !border-ivory/20 bg-ivory/10 text-ivory placeholder:text-ivory/40"
-              />
-              <button type="submit" className="btn btn-clay shrink-0">
-                عضویت در خبرنامه
-              </button>
-            </form>
-          )}
-          {status === "error" && (
-            <p className="mt-3 text-xs font-bold text-red-400">
-              لطفاً یک ایمیل معتبر وارد کنید.
-            </p>
-          )}
-        </div>
+    <section className="container-x mt-14 mb-6 lg:mt-20 lg:mb-10">
+      <div className="rounded-2xl bg-ink px-5 py-12 text-center text-ivory sm:px-12 lg:py-16">
+        <p className="text-[11px] font-medium tracking-[0.2em] text-ivory/55">NEWSLETTER</p>
+        <h2 className="mt-3 text-xl font-semibold sm:text-2xl">از کالکشن بعدی جا نمانید</h2>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-7 text-ivory/65">
+          فقط خبر ورود کالکشن و تخفیف واقعی. بدون اسپم.
+        </p>
+        {status === "done" ? (
+          <p className="mt-8 text-sm font-medium text-sage">عضویت ثبت شد.</p>
+        ) : (
+          <form
+            onSubmit={submit}
+            className="mx-auto mt-8 flex max-w-md flex-col gap-2 sm:flex-row"
+          >
+            <input
+              type="email"
+              dir="ltr"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setStatus("idle");
+              }}
+              placeholder="you@example.com"
+              className="input-base !min-h-12 border-ivory/15 bg-ivory/10 text-start text-ivory placeholder:text-ivory/40"
+            />
+            <button type="submit" className="btn min-h-12 shrink-0 bg-white text-ink hover:bg-ivory">
+              عضویت
+            </button>
+          </form>
+        )}
+        {status === "error" && (
+          <p className="mt-3 text-xs font-medium text-red-300">ایمیل معتبر وارد کنید.</p>
+        )}
       </div>
     </section>
   );
