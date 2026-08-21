@@ -21,7 +21,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className="flex min-h-screen flex-col bg-white">
+      <body className="flex min-h-screen flex-col bg-cream text-ink">
         <Providers>
           <Header />
           <main className="flex-1 pb-20 lg:pb-0">{children}</main>

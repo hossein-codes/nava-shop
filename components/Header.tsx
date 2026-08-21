@@ -77,10 +77,11 @@ export default function Header() {
       )}
     <header
       className={cn(
-        "sticky top-0 z-40 bg-white transition-shadow duration-300",
-        scrolled ? "shadow-[0_8px_24px_rgb(26_24_22_/_0.06)]" : "border-b border-[#ece8e2]"
+        "sticky top-0 z-40 bg-ivory transition-shadow duration-300",
+        scrolled ? "shadow-[0_8px_24px_rgb(28_20_16_/_0.08)]" : ""
       )}
     >
+      <div className="brand-bar" />
       <div
         className={cn(
           "hidden overflow-hidden bg-[#1a1816] transition-[max-height,opacity] duration-300 lg:block",
@@ -122,7 +123,7 @@ export default function Header() {
 
         <div
           className={cn(
-            "border-t border-[#ece8e2] bg-[#faf8f5] transition-[max-height,opacity] duration-300 ease-out",
+            "border-t border-sand bg-cream/80 transition-[max-height,opacity] duration-300 ease-out",
             pinned ? "max-h-14 opacity-100" : "max-h-0 overflow-hidden opacity-0"
           )}
         >
@@ -153,7 +154,7 @@ export default function Header() {
             <button
               type="button"
               onClick={openSearch}
-              className="flex h-12 w-full items-center gap-3 rounded-xl border border-[#ece8e2] bg-[#f7f4ef] px-4 text-start text-sm text-ink/50"
+              className="flex h-12 w-full items-center gap-3 rounded-xl border border-sand bg-cream px-4 text-start text-sm text-ink/50"
             >
               <SearchIcon width={20} height={20} className="text-ink/70" />
               جستجو در فروشگاه نوا

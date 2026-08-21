@@ -44,25 +44,26 @@
   font-display: swap;
 }
 
-/* ---------- Nava Commerce System ----------
-   فشن: استخوانی / زغالی / terracotta خاموش
-   نام‌های clay/ink برای سازگاری با کلاس‌های موجود نگه‌داشته شده‌اند. */
+/* ---------- هویت بصری نوا (Nava Atelier) ----------
+   از تصاویر کمپین: گچ گرم، پالتو شتری، مجلسی شرابی
+   Canvas استخوانی · Ink اسپرسو · Clay مسی · Wine شرابی */
 @theme {
-  --color-ink: #1a1816;
-  --color-ink-soft: #6f6a64;
-  --color-navy-dark: #1a1816;
-  --color-clay: #9a4a2e;
-  --color-clay-dark: #7a3a24;
-  --color-clay-bright: #c46a4a;
-  --color-ivory: #ffffff;
-  --color-cream: #f1ede6;
-  --color-sand: #e6e1d8;
-  --color-sage: #2f6b4f;
-  --color-sale: #b42318;
+  --color-ink: #1c1410;
+  --color-ink-soft: #6e645c;
+  --color-navy-dark: #1c1410;
+  --color-clay: #c45c26;
+  --color-clay-dark: #9a3f18;
+  --color-clay-bright: #e08a4f;
+  --color-ivory: #fbf7f1;
+  --color-cream: #efe6d9;
+  --color-sand: #e4d8c8;
+  --color-sage: #3d6b52;
+  --color-sale: #7a2430;
+  --color-brass: #c4a574;
   --font-sans: "Vazirmatn", "Segoe UI", Tahoma, ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-1: 0 8px 24px rgb(26 24 22 / 0.08);
-  --shadow-2: 0 16px 48px rgb(26 24 22 / 0.16);
+  --shadow-1: 0 8px 28px rgb(28 20 16 / 0.07);
+  --shadow-2: 0 18px 48px rgb(28 20 16 / 0.14);
 }
 
 html {
@@ -71,7 +72,7 @@ html {
 }
 
 body {
-  background-color: var(--color-ivory);
+  background-color: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-weight: 400;
@@ -80,7 +81,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-ink);
+  background-color: var(--color-clay);
   color: #fff;
 }
 
@@ -148,7 +149,7 @@ body {
   color: #fff;
 }
 .btn-primary:hover:not(:disabled) {
-  background-color: #2c2926;
+  background-color: var(--color-clay);
 }
 
 .btn-outline {
@@ -203,10 +204,23 @@ body {
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
+.section-title::before {
+  content: "";
+  display: block;
+  width: 2rem;
+  height: 2px;
+  margin-bottom: 0.65rem;
+  background: var(--color-clay);
+}
 @media (min-width: 768px) {
   .section-title {
     font-size: 1.75rem;
   }
+}
+
+.brand-bar {
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-clay) 0%, var(--color-brass) 55%, var(--color-sale) 100%);
 }
 
 .kicker {

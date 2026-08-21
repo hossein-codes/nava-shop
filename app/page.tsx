@@ -80,7 +80,7 @@ export default function HomePage() {
   const best = [...products].sort((a, b) => b.rating - a.rating).slice(0, 6);
 
   return (
-    <div className="bg-white">
+    <div>
       <HomeHero />
 
       {/* دایره‌های دسته — موبایل بالای اعتماد مثل طرح */}
@@ -109,7 +109,7 @@ export default function HomePage() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="flex items-center gap-3 rounded-2xl bg-[#f6f4f0] px-3 py-3.5 lg:flex-col lg:items-center lg:px-4 lg:py-5 lg:text-center"
+              className="flex items-center gap-3 rounded-2xl border border-sand bg-ivory px-3 py-3.5 lg:flex-col lg:items-center lg:px-4 lg:py-5 lg:text-center"
             >
               <f.icon width={22} height={22} className="shrink-0 text-ink" />
               <div>

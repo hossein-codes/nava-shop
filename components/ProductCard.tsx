@@ -23,8 +23,8 @@ export default function ProductCard({
   const wished = has(product.id);
 
   return (
-    <article className="group relative rounded-2xl border border-sand/80 bg-white p-2 transition hover:border-sand hover:shadow-[0_8px_24px_rgb(26_24_22_/_0.06)]">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#f4f1ec]">
+    <article className="group relative rounded-2xl border border-sand bg-ivory p-2 transition hover:shadow-[0_8px_24px_rgb(28_20_16_/_0.08)]">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-cream">
         <Link href={`/products/${product.slug}`} className="absolute inset-0">
           <Image
             src={product.images[0]}

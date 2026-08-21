@@ -53,6 +53,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-ink text-ivory">
+      <div className="brand-bar" />
       <div className="container-x grid gap-10 py-12 lg:grid-cols-4 lg:py-16">
         <div className="lg:col-span-1">
           <p className="text-2xl font-semibold tracking-tight">نوا</p>

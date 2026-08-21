@@ -24,7 +24,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[#eee] bg-white lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-sand bg-ivory lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="flex h-[3.25rem] items-stretch">
