@@ -119,48 +119,67 @@ function IdlePanel({
 }) {
   const terms = history.length > 0 ? history : POPULAR;
   return (
-    <div className="grid gap-10 p-7 sm:grid-cols-2">
+    <div className="grid gap-8 p-6 sm:grid-cols-2">
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <p className="text-[11px] font-medium tracking-[0.14em] text-ink/40">
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs font-semibold text-ink/50">
             {history.length > 0 ? "آخرین جستجوها" : "جستجوهای محبوب"}
           </p>
           {history.length > 0 && (
-            <button type="button" onClick={onClear} className="text-[11px] text-ink/40 hover:text-ink">
+            <button type="button" onClick={onClear} className="text-xs text-[#C45C26]">
               پاک کردن
             </button>
           )}
         </div>
-        <ul>
+        <div className="flex flex-wrap gap-2">
           {terms.map((h) => (
-            <li key={h}>
-              <button
-                type="button"
-                onClick={() => onSearch(h)}
-                className="flex h-9 w-full items-center text-[13px] text-ink/80 hover:text-ink"
-              >
-                {h}
-              </button>
-            </li>
+            <button
+              key={h}
+              type="button"
+              onClick={() => onSearch(h)}
+              className="rounded-lg bg-[#f3efe9] px-3 py-2 text-[13px] text-ink transition hover:bg-[#e8e2d8]"
+            >
+              {h}
+            </button>
           ))}
-        </ul>
+        </div>
+        <p className="mb-2 mt-5 text-xs font-semibold text-ink/50">دسته‌ها</p>
+        <div className="flex flex-col gap-0.5">
+          {categories
+            .filter((c) => products.some((p) => p.category === c.id))
+            .map((c) => (
+              <Link
+                key={c.id}
+                href={`/products?category=${c.id}`}
+                onClick={onPick}
+                className="rounded-lg px-2 py-2 text-[13px] font-medium hover:bg-[#f3efe9]"
+              >
+                {c.name}
+              </Link>
+            ))}
+        </div>
       </div>
       <div>
-        <p className="mb-4 text-[11px] font-medium tracking-[0.14em] text-ink/40">پیشنهادها</p>
-        <ul className="space-y-3">
+        <p className="mb-3 text-xs font-semibold text-ink/50">پیشنهاد نوا</p>
+        <div className="space-y-1">
           {popularProducts.map((p) => (
-            <li key={p.id}>
-              <Link href={`/products/${p.slug}`} onClick={onPick} className="flex items-center gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.images[0]} alt="" className="h-16 w-12 object-cover" />
-                <span className="min-w-0">
-                  <span className="block truncate text-[13px] text-ink">{p.name}</span>
-                  <span className="mt-0.5 block text-[12px] text-ink/50">{formatPrice(p.price)}</span>
+            <Link
+              key={p.id}
+              href={`/products/${p.slug}`}
+              onClick={onPick}
+              className="flex items-center gap-3 rounded-xl p-2 hover:bg-[#f3efe9]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.images[0]} alt="" className="h-[4.25rem] w-14 rounded-lg object-cover" />
+              <span className="min-w-0">
+                <span className="block truncate text-[13px] font-medium">{p.name}</span>
+                <span className="mt-0.5 block text-[13px] font-semibold text-[#C45C26]">
+                  {formatPrice(p.price)}
                 </span>
-              </Link>
-            </li>
+              </span>
+            </Link>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
@@ -184,64 +203,68 @@ function TypedPanel({
   onSeeAll: () => void;
 }) {
   return (
-    <div className="max-h-[min(28rem,70vh)] overflow-y-auto py-2">
+    <div className="max-h-[min(32rem,72vh)] overflow-y-auto">
       {completions.length > 0 && (
-        <div className="px-6 py-2">
+        <div className="border-b border-[#ece8e2] px-3 py-2">
           {completions.slice(0, 5).map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => onSearch(c)}
-              className="flex h-10 w-full items-center gap-3 text-start text-[13px] text-ink/80 hover:text-ink"
+              className="flex h-11 w-full items-center gap-3 rounded-lg px-3 text-start text-[13px] hover:bg-[#f3efe9]"
             >
-              <SearchIcon width={14} height={14} className="text-ink/35" strokeWidth={1.6} />
-              {c}
+              <SearchIcon width={16} height={16} className="text-ink/40" />
+              <span>
+                {c.split(q)[0]}
+                <b className="font-semibold">{q}</b>
+                {c.split(q).slice(1).join(q)}
+              </span>
             </button>
           ))}
         </div>
       )}
       {relatedCats.length > 0 && (
-        <div className="px-6 py-3">
-          <p className="mb-2 text-[11px] tracking-[0.14em] text-ink/40">دسته</p>
+        <div className="flex gap-2 border-b border-[#ece8e2] px-5 py-3">
           {relatedCats.map((c) => (
             <Link
               key={c.id}
               href={`/products?category=${c.id}`}
               onClick={onPick}
-              className="flex h-9 items-center text-[13px] text-ink/80 hover:text-ink"
+              className="rounded-lg bg-[#f3efe9] px-3 py-1.5 text-xs font-medium"
             >
-              {c.name}
+              در {c.name}
             </Link>
           ))}
         </div>
       )}
-      <div className="px-6 py-2">
+      <div className="p-3">
         {results.length > 0 ? (
           results.slice(0, 5).map((p) => (
             <Link
               key={p.id}
               href={`/products/${p.slug}`}
               onClick={onPick}
-              className="flex items-center gap-3 py-2.5"
+              className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-[#f3efe9]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.images[0]} alt="" className="h-16 w-12 object-cover" />
+              <img src={p.images[0]} alt="" className="h-[4.25rem] w-14 rounded-lg object-cover" />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px]">{p.name}</span>
-                <span className="text-[12px] text-ink/50">{formatPrice(p.price)}</span>
+                <span className="block truncate text-[13px] font-medium">{p.name}</span>
+                <span className="text-xs text-ink/50">{getCategory(p.category).name}</span>
               </span>
+              <span className="text-[13px] font-semibold text-[#C45C26]">{formatPrice(p.price)}</span>
             </Link>
           ))
         ) : (
-          <p className="py-10 text-center text-[13px] text-ink/50">نتیجه‌ای برای «{q}» نیست</p>
+          <p className="py-10 text-center text-sm text-ink/50">نتیجه‌ای برای «{q}» نیست</p>
         )}
       </div>
       {results.length > 0 && (
-        <div className="border-t border-[#eee] px-6">
+        <div className="border-t border-[#ece8e2] p-3">
           <button
             type="button"
             onClick={onSeeAll}
-            className="flex h-12 w-full items-center text-[13px] font-medium"
+            className="flex h-11 w-full items-center justify-center rounded-xl bg-[#1a1816] text-[13px] font-semibold text-white"
           >
             مشاهده همه نتایج «{q}»
           </button>
@@ -256,6 +279,7 @@ export default function SearchBox() {
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const s = useSearch();
+  const close = () => setActive(false);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -265,27 +289,27 @@ export default function SearchBox() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  const close = () => setActive(false);
-
   return (
-    <div ref={rootRef} className="relative hidden lg:block">
+    <div ref={rootRef} className="relative hidden min-w-0 flex-1 lg:block">
       <div
         className={cn(
-          "flex h-9 items-center gap-2.5 border-b bg-transparent transition-[width,border-color] duration-200 ease-out",
-          active ? "w-[26rem] border-ink" : "w-[13.5rem] border-[#d8d3cc] hover:border-ink/50"
+          "flex h-12 max-w-2xl items-center gap-3 rounded-xl border px-4 transition duration-200",
+          active
+            ? "border-[#1a1816] bg-white shadow-[0_8px_30px_rgb(26_24_22_/_0.08)]"
+            : "border-[#ece8e2] bg-[#f7f4ef] hover:border-[#d9d2c8]"
         )}
       >
-        <SearchIcon width={15} height={15} className="shrink-0 text-ink/45" strokeWidth={1.6} />
+        <SearchIcon width={20} height={20} className="shrink-0 text-ink/55" />
         <input
           ref={inputRef}
           value={s.query}
           onChange={(e) => s.setQuery(e.target.value)}
           onFocus={() => setActive(true)}
           onKeyDown={(e) => e.key === "Enter" && s.doSearch(s.query, close)}
-          placeholder="جستجو در نوا"
-          className="w-full bg-transparent text-[13px] tracking-wide outline-none placeholder:text-ink/35"
+          placeholder="جستجوی لباس، کت، پیراهن یا دسته…"
+          className="w-full bg-transparent text-sm outline-none placeholder:text-ink/40"
         />
-        {s.query && (
+        {s.query ? (
           <button
             type="button"
             onClick={() => {
@@ -295,13 +319,17 @@ export default function SearchBox() {
             aria-label="پاک کردن"
             className="text-ink/40 hover:text-ink"
           >
-            <CloseIcon width={14} height={14} />
+            <CloseIcon width={16} height={16} />
           </button>
+        ) : (
+          <span className="hidden shrink-0 rounded-md bg-white px-2 py-1 text-[11px] text-ink/35 xl:inline">
+            Enter
+          </span>
         )}
       </div>
 
       {active && (
-        <div className="animate-dropdown absolute start-0 top-[calc(100%+1rem)] z-50 w-[34rem] border border-[#eee] bg-white shadow-[0_20px_50px_rgb(26_24_22_/_0.08)]">
+        <div className="animate-dropdown absolute inset-x-0 top-[calc(100%+0.5rem)] z-50 max-w-2xl overflow-hidden rounded-2xl border border-[#ece8e2] bg-white shadow-[0_20px_50px_rgb(26_24_22_/_0.12)]">
           {s.q ? (
             <TypedPanel
               q={s.q}
@@ -347,24 +375,24 @@ export function MobileSearchScreen({
 
   return (
     <div className="fixed inset-0 z-[65] flex flex-col bg-white lg:hidden">
-      <div className="flex items-center gap-1 border-b border-[#eee] px-2 py-2">
+      <div className="flex items-center gap-2 border-b border-[#ece8e2] px-3 py-3">
         <button
           type="button"
           onClick={onClose}
           aria-label="بازگشت"
-          className="flex h-11 w-11 items-center justify-center"
+          className="flex h-12 w-12 items-center justify-center rounded-xl hover:bg-[#f3efe9]"
         >
-          <ArrowIcon width={18} height={18} className="rotate-180" strokeWidth={1.6} />
+          <ArrowIcon width={20} height={20} className="rotate-180" />
         </button>
-        <div className="flex h-11 flex-1 items-center gap-2 border-b border-ink">
-          <SearchIcon width={16} height={16} className="text-ink/40" strokeWidth={1.6} />
+        <div className="flex h-12 flex-1 items-center gap-2 rounded-xl border border-[#1a1816] bg-white px-3">
+          <SearchIcon width={18} height={18} className="text-ink/50" />
           <input
             ref={inputRef}
             value={s.query}
             onChange={(e) => s.setQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && s.doSearch(s.query, onClose)}
-            placeholder="جستجو در نوا"
-            className="w-full bg-transparent text-[15px] outline-none"
+            placeholder="جستجو در فروشگاه نوا"
+            className="w-full bg-transparent text-sm outline-none"
           />
           {s.query && (
             <button type="button" onClick={() => s.setQuery("")} aria-label="پاک کردن">

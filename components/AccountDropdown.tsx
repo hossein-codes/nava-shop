@@ -32,8 +32,9 @@ export default function AccountDropdown() {
     return (
       <Link
         href="/login"
-        className="hidden items-center text-[13px] font-medium tracking-wide text-ink/80 transition-colors hover:text-ink lg:inline-flex"
+        className="hidden h-11 items-center gap-2 rounded-xl px-3 text-[13px] font-semibold text-ink transition hover:bg-[#f3efe9] lg:inline-flex"
       >
+        <UserIcon width={18} height={18} />
         ورود / ثبت‌نام
       </Link>
     );
@@ -47,24 +48,25 @@ export default function AccountDropdown() {
         aria-label="حساب کاربری"
         aria-expanded={open}
         className={cn(
-          "flex h-9 w-9 items-center justify-center text-ink/80 transition-colors hover:text-ink",
-          open && "text-ink"
+          "flex h-11 items-center gap-2 rounded-xl px-3 text-[13px] font-semibold transition",
+          open ? "bg-[#f3efe9]" : "hover:bg-[#f3efe9]"
         )}
       >
-        <UserIcon width={18} height={18} strokeWidth={1.6} />
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1a1816] text-[11px] text-white">
+          {user.name.charAt(0)}
+        </span>
+        {user.name.split(" ")[0]}
       </button>
 
       {open && (
-        <div className="animate-dropdown absolute end-0 top-[calc(100%+0.75rem)] z-50 w-56 border border-[#eee] bg-white py-2 shadow-[0_16px_40px_rgb(26_24_22_/_0.08)]">
-          <div className="border-b border-[#eee] px-4 py-3">
-            <p className="text-[13px] font-medium">سلام، {user.name}</p>
-          </div>
+        <div className="animate-dropdown absolute end-0 top-[calc(100%+0.5rem)] z-50 w-60 overflow-hidden rounded-2xl border border-[#ece8e2] bg-white py-2 shadow-[0_16px_40px_rgb(26_24_22_/_0.12)]">
+          <p className="border-b border-[#ece8e2] px-4 py-3 text-[13px] font-semibold">سلام، {user.name}</p>
           {menuItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="flex h-10 items-center px-4 text-[13px] text-ink/80 hover:bg-[#fafafa] hover:text-ink"
+              className="flex h-10 items-center px-4 text-[13px] hover:bg-[#f3efe9]"
             >
               {item.label}
             </Link>
@@ -75,9 +77,9 @@ export default function AccountDropdown() {
               setOpen(false);
               logout();
             }}
-            className="mt-1 flex h-10 w-full items-center gap-2 border-t border-[#eee] px-4 text-[13px] text-ink/60 hover:text-ink"
+            className="mt-1 flex h-10 w-full items-center gap-2 border-t border-[#ece8e2] px-4 text-[13px] text-red-600"
           >
-            <LogoutIcon width={14} height={14} />
+            <LogoutIcon width={15} height={15} />
             خروج
           </button>
         </div>

@@ -6,7 +6,6 @@ import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type Col = { title: string; links: { label: string; href: string }[] };
-
 type Mega = {
   id: string;
   label: string;
@@ -29,19 +28,20 @@ const items: Mega[] = [
           { label: "پیراهن و بلوز", href: "/products?category=women&q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86" },
           { label: "کت", href: "/products?category=women&q=%DA%A9%D8%AA" },
           { label: "مجلسی", href: "/products?category=women&q=%D9%85%D8%AC%D9%84%D8%B3%DB%8C" },
+          { label: "همه زنانه", href: "/products?category=women" },
         ],
       },
       {
-        title: "کالکشن",
+        title: "پیشنهاد",
         links: [
-          { label: "جدیدترین زنانه", href: "/products?category=women" },
+          { label: "جدیدترین‌ها", href: "/products?category=women" },
           { label: "تخفیف زنانه", href: "/products?category=women&discount=1" },
         ],
       },
     ],
     featured: {
-      title: "پاییز زنانه",
-      text: "کت و مجلسی",
+      title: "کالکشن پاییز زنانه",
+      text: "کت و مجلسی فصل",
       href: "/products?category=women",
       image: "/images/products/camel-blazer.jpg",
     },
@@ -58,12 +58,13 @@ const items: Mega[] = [
           { label: "کت‌وشلوار", href: "/products?category=men&q=%DA%A9%D8%AA" },
           { label: "پیراهن", href: "/products?category=men&q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86" },
           { label: "سویشرت", href: "/products?category=men&q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA" },
+          { label: "همه مردانه", href: "/products?category=men" },
         ],
       },
       {
-        title: "کالکشن",
+        title: "پیشنهاد",
         links: [
-          { label: "جدیدترین مردانه", href: "/products?category=men" },
+          { label: "جدیدترین‌ها", href: "/products?category=men" },
           { label: "تخفیف مردانه", href: "/products?category=men&discount=1" },
         ],
       },
@@ -87,16 +88,13 @@ const items: Mega[] = [
           { label: "سرهمی", href: "/products?category=kids&q=%D8%B3%D8%B1%D9%87%D9%85%DB%8C" },
           { label: "کاپشن", href: "/products?category=kids&q=%DA%A9%D8%A7%D9%BE%D8%B4%D9%86" },
           { label: "شلوار", href: "/products?category=kids&q=%D8%B4%D9%84%D9%88%D8%A7%D8%B1" },
+          { label: "همه بچگانه", href: "/products?category=kids" },
         ],
-      },
-      {
-        title: "کالکشن",
-        links: [{ label: "همه بچگانه", href: "/products?category=kids" }],
       },
     ],
     featured: {
       title: "پاییز کودک",
-      text: "گرم و سبک",
+      text: "گرم و راحت",
       href: "/products?category=kids",
       image: "/images/products/kids-jacket.jpg",
     },
@@ -116,12 +114,12 @@ export default function MegaMenu() {
   };
   const closeSoon = () => {
     if (timer.current) window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setOpenId(null), 140);
+    timer.current = window.setTimeout(() => setOpenId(null), 120);
   };
 
   return (
     <div className="relative" onMouseLeave={closeSoon}>
-      <div className="container-x flex h-11 items-center gap-7">
+      <div className="container-x flex h-12 items-center gap-1">
         {items.map((item) => (
           <Link
             key={item.id}
@@ -129,41 +127,35 @@ export default function MegaMenu() {
             onMouseEnter={() => open(item.mega ? item.id : null)}
             onFocus={() => open(item.mega ? item.id : null)}
             className={cn(
-              "relative flex h-11 items-center text-[13px] font-medium tracking-wide text-ink/80 transition-colors duration-150 hover:text-ink",
-              openId === item.id && "text-ink",
-              item.id === "sale" && "text-ink/70"
+              "flex h-9 items-center rounded-lg px-3.5 text-[13px] font-semibold transition",
+              openId === item.id ? "bg-white text-ink shadow-sm" : "text-ink/75 hover:bg-white/80 hover:text-ink",
+              item.id === "sale" && "text-[#C45C26] hover:text-[#C45C26]"
             )}
           >
             {item.label}
-            <span
-              className={cn(
-                "absolute inset-x-0 bottom-0 h-px bg-ink transition-opacity duration-150",
-                openId === item.id ? "opacity-100" : "opacity-0"
-              )}
-            />
           </Link>
         ))}
       </div>
 
       <div
         className={cn(
-          "absolute inset-x-0 top-full z-50 transition-opacity duration-150",
+          "absolute inset-x-0 top-full z-50 transition duration-150",
           active ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
         )}
         onMouseEnter={() => active && open(active.id)}
       >
         {active?.columns && (
-          <div className="border-t border-[#eee] bg-white shadow-[0_24px_40px_rgb(26_24_22_/_0.08)]">
-            <div className="container-x grid grid-cols-[1fr_1fr_20rem] gap-16 py-10">
+          <div className="border-t border-[#ece8e2] bg-white shadow-[0_24px_48px_rgb(26_24_22_/_0.10)]">
+            <div className="container-x grid grid-cols-[1fr_1fr_18rem] gap-10 py-8">
               {active.columns.map((col) => (
                 <div key={col.title}>
-                  <p className="mb-4 text-[11px] font-medium tracking-[0.16em] text-ink/45">{col.title}</p>
+                  <p className="mb-3 text-xs font-bold text-ink">{col.title}</p>
                   <ul className="space-y-0.5">
                     {col.links.map((l) => (
                       <li key={l.label}>
                         <Link
                           href={l.href}
-                          className="block py-1.5 text-[13px] text-ink/80 transition-colors hover:text-ink"
+                          className="block rounded-lg px-1 py-2 text-[13px] text-ink/70 hover:bg-[#f3efe9] hover:text-ink"
                         >
                           {l.label}
                         </Link>
@@ -173,18 +165,12 @@ export default function MegaMenu() {
                 </div>
               ))}
               {active.featured && (
-                <Link href={active.featured.href} className="relative block h-56 overflow-hidden">
-                  <Image
-                    src={active.featured.image}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="320px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                    <p className="text-sm font-medium">{active.featured.title}</p>
-                    <p className="mt-1 text-[12px] text-white/70">{active.featured.text}</p>
+                <Link href={active.featured.href} className="relative h-52 overflow-hidden rounded-2xl">
+                  <Image src={active.featured.image} alt="" fill className="object-cover" sizes="288px" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                    <p className="text-sm font-bold">{active.featured.title}</p>
+                    <p className="mt-1 text-xs text-white/75">{active.featured.text}</p>
                   </div>
                 </Link>
               )}
