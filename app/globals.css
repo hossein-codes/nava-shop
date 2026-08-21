@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/* ---------- فونت وزیرمتن (خود-میزبان) ---------- */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+
+/* ---------- پالت اختصاصی برند «نوا» — مدرن و جسور ----------
+   سرمه‌ای عمیق + نارنجی زنده + سفید سرد */
+@theme {
+  --color-ink: #101b33;        /* سرمه‌ای اصلی (تیره‌ترین) */
+  --color-ink-soft: #5a6a8c;   /* خاکستری-سرمه‌ای برای متن ثانویه */
+  --color-navy-dark: #0a1122;  /* سرمه‌ای خیلی تیره (فوتر) */
+  --color-clay: #ff5a1e;       /* نارنجی زنده — رنگ اصلی برند */
+  --color-clay-dark: #e04a0c;  /* نارنجی تیره (هاور) */
+  --color-clay-bright: #ff8a3d;/* نارنجی روشن (گلویی/نشان) */
+  --color-ivory: #f5f7fb;      /* پس‌زمینه سرد روشن */
+  --color-cream: #eaeff5;      /* پنل‌های روشن */
+  --color-sand: #d5dbe7;       /* خطوط و حاشیه‌ها */
+  --color-sage: #0e9f6e;       /* سبز موفقیت */
+  --font-sans: "Vazirmatn", "Segoe UI", Tahoma, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------- استایل پایه ---------- */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--color-clay);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 2px;
+}
+
+/* اسکرول‌بار */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-sand);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-clay);
+}
+
+/* ---------- کلاس‌های کمکی ---------- */
+.container-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .container-x {
+    padding-inline: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-x {
+    padding-inline: 2rem;
+  }
+}
+
+/* دکمه‌ها — زوایای تند مدرن */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.85rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 0.8rem 1.75rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+.btn-primary:hover {
+  background-color: var(--color-clay);
+}
+
+.btn-outline {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+  background: transparent;
+}
+.btn-outline:hover {
+  background-color: var(--color-ink);
+  color: #fff;
+}
+
+.btn-clay {
+  background-color: var(--color-clay);
+  color: #fff;
+}
+.btn-clay:hover {
+  background-color: var(--color-clay-dark);
+}
+
+/* فرم‌ها */
+.input-base {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 2px solid var(--color-sand);
+  background: #fff;
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-base:focus {
+  border-color: var(--color-clay);
+  box-shadow: 0 0 0 4px rgb(255 90 30 / 0.12);
+}
+.input-base::placeholder {
+  color: #9aa5ba;
+}
+
+.label-base {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: var(--color-ink-soft);
+}
+
+/* عنوان بخش‌ها */
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 2.15rem;
+  }
+}
+
+/* نشان کوچک بالای عنوان‌ها */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--color-clay);
+}
+.kicker::before {
+  content: "";
+  width: 1.6rem;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--color-clay);
+}
+
+/* ---------- انیمیشن‌ها ---------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-float {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 90 30 / 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgb(255 90 30 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 90 30 / 0);
+  }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2.2s infinite;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-dropdown {
+  animation: dropdown 0.18s ease-out both;
+}
