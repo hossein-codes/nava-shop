@@ -21,8 +21,8 @@ export default function ProductShelf({
           مشاهده همه
         </Link>
       </div>
-      <div className="container-x grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        {products.slice(0, 6).map((p) => (
+      <div className="container-x grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {products.slice(0, 8).map((p) => (
           <ProductCard key={p.id} product={p} compact />
         ))}
       </div>

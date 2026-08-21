@@ -20,16 +20,16 @@ const groups = [
     links: [
       { href: "/products", label: "جدیدترین‌ها" },
       { href: "/products?discount=1", label: "فروش ویژه" },
-      { href: "/products?category=women", label: "زنانه" },
-      { href: "/products?category=men", label: "مردانه" },
-      { href: "/products?category=kids", label: "بچگانه" },
+      { href: "/products?category=skincare", label: "مراقبت پوست" },
+      { href: "/products?category=makeup", label: "آرایش" },
+      { href: "/products?category=fragrance", label: "عطر" },
     ],
   },
   {
     title: "خدمات مشتریان",
     links: [
       { href: "/account", label: "پیگیری سفارش" },
-      { href: "/about", label: "راهنمای خرید" },
+      { href: "/journal", label: "مجله زیبایی" },
       { href: "/about", label: "شرایط بازگشت" },
       { href: "/contact", label: "تماس با ما" },
       { href: "/about", label: "درباره نوا" },
@@ -58,7 +58,7 @@ export default function Footer() {
         <div className="lg:col-span-1">
           <p className="text-2xl font-semibold tracking-tight">نوا</p>
           <p className="mt-3 max-w-xs text-sm leading-7 text-ivory/65">
-            پوشاک باکیفیت، قیمت روشن، ارسال سریع.
+            مراقبت پوست و آرایش اصل؛ مشاوره روتین، قیمت روشن، ارسال سریع.
           </p>
           <p className="mt-6 text-sm font-medium">عضویت در خبرنامه</p>
           {status === "done" ? (
@@ -149,7 +149,7 @@ export default function Footer() {
 
       <div className="border-t border-ivory/10">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-xs text-ivory/45 sm:flex-row">
-          <p>© ۱۴۰۵ فروشگاه پوشاک نوا</p>
+          <p>© ۱۴۰۵ فروشگاه زیبایی نوا</p>
           <p>ارسال سریع · ضمانت اصالت · ۷ روز بازگشت</p>
         </div>
       </div>

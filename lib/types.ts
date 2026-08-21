@@ -1,9 +1,18 @@
 /**
- * تعریف تایپ‌های اصلی پروژه
- * همه‌ی داده‌ها (محصولات، کاربران، سفارش‌ها) بر پایه‌ی همین تایپ‌ها ساخته می‌شوند.
+ * تایپ‌های فروشگاه زیبایی نوا
  */
 
-export type CategoryId = "women" | "men" | "kids" | "accessories";
+export type CategoryId =
+  | "skincare"
+  | "makeup"
+  | "eyes"
+  | "lips"
+  | "hair"
+  | "fragrance"
+  | "sun"
+  | "natural";
+
+export type ConcernId = "dry" | "oily" | "spots" | "acne" | "sensitive" | "aging";
 
 export interface Category {
   id: CategoryId;
@@ -12,13 +21,11 @@ export interface Category {
   image: string;
 }
 
-/** یک رنگ قابل انتخاب برای محصول */
 export interface ProductColor {
   name: string;
   hex: string;
 }
 
-/** یک دیدگاه ثبت‌شده برای محصول */
 export interface Review {
   author: string;
   rating: number;
@@ -26,27 +33,31 @@ export interface Review {
   text: string;
 }
 
-/** مدل کامل محصول */
 export interface Product {
   id: string;
   slug: string;
   name: string;
+  brand: string;
   category: CategoryId;
-  price: number; // قیمت به تومان
-  oldPrice?: number; // قیمت قبل از تخفیف
+  price: number;
+  oldPrice?: number;
   images: string[];
   description: string;
-  details: string[]; // ویژگی‌های کلیدی
+  details: string[];
+  howTo: string[];
   sizes: string[];
   colors: ProductColor[];
+  variantLabel: string;
+  optionLabel: string;
+  concerns: ConcernId[];
   rating: number;
   reviewCount: number;
   stock: number;
-  tags: string[]; // «جدید» | «پرفروش» | «تخفیف» | «کم‌موجود»
+  tags: string[];
   featured?: boolean;
+  staffPick?: boolean;
 }
 
-/** یک آیتم داخل سبد خرید */
 export interface CartItem {
   productId: string;
   size: string;
@@ -54,14 +65,12 @@ export interface CartItem {
   quantity: number;
 }
 
-/** کاربر ثبت‌نام‌شده (شبیه‌سازی شده در localStorage) */
 export interface User {
   name: string;
   email: string;
   password: string;
 }
 
-/** سفارش ثبت‌شده */
 export interface Order {
   id: string;
   userEmail?: string;
@@ -87,5 +96,5 @@ export interface Order {
   };
   paymentMethod: string;
   status: string;
-  date: string; // ISO
+  date: string;
 }

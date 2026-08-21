@@ -1,316 +1,395 @@
-import type { Category, CategoryId, Product } from "./types";
+import type { Category, CategoryId, ConcernId, Product } from "./types";
 
-/**
- * دیتای استاتیک فروشگاه
- * در نسخه‌ی واقعی این داده‌ها از دیتابیس/API خوانده می‌شوند.
- */
-
-export const FREE_SHIPPING_THRESHOLD = 2_000_000; // ارسال رایگان بالای این مبلغ
-export const SHIPPING_COST = 80_000; // هزینه ارسال عادی
+export const FREE_SHIPPING_THRESHOLD = 1_200_000;
+export const SHIPPING_COST = 65_000;
 
 export const categories: Category[] = [
-  {
-    id: "women",
-    name: "زنانه",
-    subtitle: "جدیدترین کالکشن پاییز",
-    image: "/images/products/evening-dress.jpg",
-  },
-  {
-    id: "men",
-    name: "مردانه",
-    subtitle: "استایل رسمی و کژوال",
-    image: "/images/products/navy-suit.jpg",
-  },
-  {
-    id: "kids",
-    name: "بچگانه",
-    subtitle: "نرم، راحت و بامزه",
-    image: "/images/products/kids-jacket.jpg",
-  },
-  {
-    id: "accessories",
-    name: "اکسسوری",
-    subtitle: "به‌زودی",
-    image: "/images/products/leather-bag.jpg",
-  },
+  { id: "skincare", name: "مراقبت پوست", subtitle: "سرم، کرم، شوینده", image: "/images/products/silk-cream.jpg" },
+  { id: "makeup", name: "آرایش صورت", subtitle: "پایه و پوشش طبیعی", image: "/images/products/nude-foundation.jpg" },
+  { id: "eyes", name: "آرایش چشم", subtitle: "ریمل و سایه", image: "/images/products/dusk-palette.jpg" },
+  { id: "lips", name: "لب", subtitle: "رژ، روغن، درخشش", image: "/images/products/velvet-lipstick.jpg" },
+  { id: "hair", name: "مو", subtitle: "روغن و ترمیم", image: "/images/products/argan-oil.jpg" },
+  { id: "fragrance", name: "عطر", subtitle: "رایحه گلی-چوبی", image: "/images/products/nava-parfum.jpg" },
+  { id: "sun", name: "ضد آفتاب", subtitle: "حفاظت روزانه", image: "/images/products/sun-veil.jpg" },
+  { id: "natural", name: "محصولات طبیعی", subtitle: "عصاره گیاهی", image: "/images/products/rose-water.jpg" },
 ];
+
+const p = (
+  product: Product
+): Product => product;
 
 export const products: Product[] = [
-  // ---------- زنانه ----------
-  {
+  p({
     id: "p1",
-    slug: "evening-dress",
-    name: "پیراهن مجلسی بلند «مهتاب»",
-    category: "women",
-    price: 3_850_000,
-    oldPrice: 4_600_000,
-    images: ["/images/products/evening-dress.jpg"],
+    slug: "glow-serum",
+    name: "سرم ویتامین C «درخشش»",
+    brand: "لومیر",
+    category: "skincare",
+    price: 1_280_000,
+    oldPrice: 1_490_000,
+    images: ["/images/products/glow-serum.jpg"],
     description:
-      "پیراهن مجلسی بلند با پارچه‌ی حریر درجه‌یک و دوخت ظریف؛ مناسب مهمانی‌ها و مجالس رسمی. پارچه‌ی این مدل به‌گونه‌ای انتخاب شده که در حرکت، لطافت و ریزش طبیعی داشته باشد.",
-    details: [
-      "جنس: حریر ساتن ممتاز",
-      "قد: قد بلند (تا مچ پا)",
-      "آستین: بدون آستین با بند تنظیم",
-      "شست‌وشو: دستی با آب سرد",
-      "ساخت: ایران",
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "شرابی", hex: "#7f1d1d" },
-      { name: "مشکی", hex: "#1c1917" },
-      { name: "زرشکی", hex: "#9d174d" },
-    ],
-    rating: 4.7,
-    reviewCount: 124,
-    stock: 8,
+      "سرم آنتی‌اکسیدان با ۱۵٪ مشتق پایدار ویتامین C؛ برای کدر شدن صبحگاهی، لک سطحی و پوست بی‌روح. بافت آبکی است و زیر ضدآفتاب پیل نمی‌شود.",
+    details: ["حجم: ۳۰ میل", "بافت: سرم آبکی", "زمان: صبح", "فاقد پارابن", "ساخت آزمایشگاه همکار نوا"],
+    howTo: ["روی پوست تمیز و نم‌دار ۲ تا ۳ قطره بزنید.", "منتظر جذب بمانید، سپس مرطوب‌کننده و ضدآفتاب."],
+    sizes: ["۳۰ میل"],
+    colors: [{ name: "کهربایی", hex: "#c45c26" }],
+    variantLabel: "حجم",
+    optionLabel: "رنگ بافت",
+    concerns: ["spots", "aging", "dry"],
+    rating: 4.8,
+    reviewCount: 214,
+    stock: 18,
     tags: ["پرفروش", "تخفیف"],
     featured: true,
-  },
-  {
+    staffPick: true,
+  }),
+  p({
     id: "p2",
-    slug: "camel-blazer",
-    name: "کت زنانه شتری «صحرا»",
-    category: "women",
-    price: 2_980_000,
-    images: ["/images/products/camel-blazer.jpg"],
+    slug: "silk-cream",
+    name: "کرم آبرسان «ابریشم»",
+    brand: "نوا لَب",
+    category: "skincare",
+    price: 890_000,
+    images: ["/images/products/silk-cream.jpg"],
     description:
-      "کت زنانه‌ی کلاسیک با رنگ شتری گرم و برش تمیز؛ ترکیبی عالی با شلوار جین یا پارچه‌ای برای استایل اداری و روزمره.",
-    details: [
-      "جنس: کشمیر و پلی‌استر",
-      "آستر: ساتن باکیفیت",
-      "دوخت: تک‌دکمه با لبه‌ی گرد",
-      "شست‌وشو: خشک‌شویی",
-      "ساخت: ایران",
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    colors: [
-      { name: "شتری", hex: "#b08968" },
-      { name: "کرم", hex: "#e7e0d4" },
-    ],
-    rating: 4.5,
-    reviewCount: 87,
-    stock: 12,
-    tags: ["جدید"],
+      "کرم هیالورونیک چندوزن با سرامید. پوست خشک را بدون براق کردن چرب، نرم می‌کند. مناسب زیر آرایش و شب.",
+    details: ["حجم: ۵۰ میل", "بافت: کرم ابریشمی", "هیالورونیک + سرامید", "بدون عطر تند"],
+    howTo: ["صبح و شب بعد از سرم، به اندازه یک نخود روی صورت و گردن."],
+    sizes: ["۵۰ میل"],
+    colors: [{ name: "کرم", hex: "#f0e4d4" }],
+    variantLabel: "حجم",
+    optionLabel: "بافت",
+    concerns: ["dry", "sensitive", "aging"],
+    rating: 4.7,
+    reviewCount: 189,
+    stock: 24,
+    tags: ["جدید", "پرفروش"],
     featured: true,
-  },
-  {
+  }),
+  p({
     id: "p3",
-    slug: "silk-blouse",
-    name: "بلوز ابریشمی کرم «آفتاب»",
-    category: "women",
-    price: 1_450_000,
-    oldPrice: 1_700_000,
-    images: ["/images/products/silk-blouse.jpg"],
+    slug: "niacin-serum",
+    name: "سرم نیاسینامید «صافی»",
+    brand: "سِرا",
+    category: "skincare",
+    price: 760_000,
+    oldPrice: 890_000,
+    images: ["/images/products/niacin-serum.jpg"],
     description:
-      "بلوز ابریشمی با برش آزاد (اورسایز) و درخشش ملایم؛ حس لوکس و راحتی را هم‌زمان به استایل شما می‌بخشد.",
-    details: [
-      "جنس: ابریشم مصنوعی (ساتن) مرغوب",
-      "برش: آزاد و راحت",
-      "یقه: یقه‌ی گرد ساده",
-      "شست‌وشو: دستی با آب سرد",
-      "ساخت: ایران",
-    ],
-    sizes: ["S", "M", "L"],
-    colors: [
-      { name: "کرم", hex: "#f0e9dd" },
-      { name: "سفید", hex: "#ffffff" },
-      { name: "طلایی", hex: "#d4a95c" },
-    ],
-    rating: 4.3,
-    reviewCount: 56,
-    stock: 15,
+      "۱۰٪ نیاسینامید برای منافذ، چربی اضافه و رد جوش. فرمول کوتاه‌لیست، مناسب پوست مختلط و چرب.",
+    details: ["حجم: ۳۰ میل", "نیاسینامید ۱۰٪", "فاقد روغن", "pH متعادل"],
+    howTo: ["شب روی پوست خشک. اگر تازه‌کارید یک شب در میان شروع کنید."],
+    sizes: ["۳۰ میل"],
+    colors: [{ name: "شفاف", hex: "#e8efe8" }],
+    variantLabel: "حجم",
+    optionLabel: "بافت",
+    concerns: ["oily", "acne", "spots"],
+    rating: 4.6,
+    reviewCount: 156,
+    stock: 20,
     tags: ["تخفیف"],
     featured: true,
-  },
-
-  // ---------- مردانه ----------
-  {
+  }),
+  p({
     id: "p4",
-    slug: "navy-suit",
-    name: "کت‌وشلوار سرمه‌ای «سلطان»",
-    category: "men",
-    price: 6_450_000,
-    oldPrice: 7_500_000,
-    images: ["/images/products/navy-suit.jpg"],
+    slug: "gentle-foam",
+    name: "فوم شوینده «صبح»",
+    brand: "نوا لَب",
+    category: "skincare",
+    price: 320_000,
+    images: ["/images/products/gentle-foam.jpg"],
     description:
-      "کت‌وشلوار مجلسی با رنگ سرمه‌ای سلطنتی و پارچه‌ی خوش‌فرم؛ انتخاب اول برای مراسم رسمی و جلسات کاری مهم.",
-    details: [
-      "جنس: پشم و پلی‌استر ممتاز",
-      "شامل: کت + شلوار",
-      "دوخت: نیمه‌مجلسی با فرم‌دهی کامل",
-      "شست‌وشو: خشک‌شویی",
-      "ساخت: ایران",
-    ],
-    sizes: ["46", "48", "50", "52", "54"],
+      "شوینده آمینواسیدی با کف نرم. آرایش سبک را برمی‌دارد بدون اینکه پوست را کشدار کند.",
+    details: ["حجم: ۱۵۰ میل", "فاقد سولفات", "مناسب پوست حساس", "صبح و شب"],
+    howTo: ["با آب ولرم کف کنید، ۳۰ ثانیه ماساژ، آبکشی کامل."],
+    sizes: ["۱۵۰ میل"],
+    colors: [{ name: "سفید", hex: "#f7f4ef" }],
+    variantLabel: "حجم",
+    optionLabel: "بافت",
+    concerns: ["sensitive", "dry", "acne"],
+    rating: 4.5,
+    reviewCount: 98,
+    stock: 40,
+    tags: ["جدید"],
+    featured: true,
+  }),
+  p({
+    id: "p5",
+    slug: "nude-foundation",
+    name: "کرم‌پودر سبک «نود»",
+    brand: "اورکید",
+    category: "makeup",
+    price: 1_450_000,
+    images: ["/images/products/nude-foundation.jpg"],
+    description:
+      "پوشش متوسط قابل ساخت، پوست‌نما. با ضدآفتاب SPF20 داخلی. برای پوست مختلط تا خشک.",
+    details: ["حجم: ۳۰ میل", "پوشش: متوسط", "SPF ۲۰", "فاقد روغن سنگین"],
+    howTo: ["با بیوتی‌بلندر نم‌دار از وسط صورت به بیرون پخش کنید."],
+    sizes: ["۳۰ میل"],
     colors: [
-      { name: "سرمه‌ای", hex: "#1e3a5f" },
-      { name: "مشکی", hex: "#1c1917" },
+      { name: "عاجی", hex: "#f3e0c8" },
+      { name: "گندمی", hex: "#e0b48a" },
+      { name: "برنز روشن", hex: "#c48a5a" },
     ],
+    variantLabel: "حجم",
+    optionLabel: "سایه",
+    concerns: ["dry", "spots"],
+    rating: 4.6,
+    reviewCount: 132,
+    stock: 15,
+    tags: ["پرفروش"],
+    featured: true,
+    staffPick: true,
+  }),
+  p({
+    id: "p6",
+    slug: "soft-concealer",
+    name: "کانسیلر خامه‌ای «پوشش»",
+    brand: "اورکید",
+    category: "makeup",
+    price: 680_000,
+    images: ["/images/products/soft-concealer.jpg"],
+    description:
+      "کانسیلر متراکم برای زیر چشم و رد جوش. نمی‌شکند و خط ریز را تأکید نمی‌کند.",
+    details: ["حجم: ۸ میل", "پوشش کامل قابل ساخت", "زیرسازی کرمی"],
+    howTo: ["نقطه‌ای بزنید و با گرمای انگشت پخش کنید. پودر نازک برای دوام."],
+    sizes: ["۸ میل"],
+    colors: [
+      { name: "روشن", hex: "#f0dcc4" },
+      { name: "طبیعی", hex: "#e2c09a" },
+    ],
+    variantLabel: "حجم",
+    optionLabel: "سایه",
+    concerns: ["spots", "aging"],
+    rating: 4.4,
+    reviewCount: 77,
+    stock: 22,
+    tags: ["جدید"],
+  }),
+  p({
+    id: "p7",
+    slug: "lash-mascara",
+    name: "ریمل حجم‌دهنده «مژه»",
+    brand: "اورکید",
+    category: "eyes",
+    price: 540_000,
+    images: ["/images/products/lash-mascara.jpg"],
+    description:
+      "برس خمیده، حجم بدون گوله. مشکی عمیق که در طول روز پخش نمی‌شود.",
+    details: ["حجم: ۱۰ میل", "مشکی عمیق", "قابل پاک شدن با شوینده چشم"],
+    howTo: ["از ریشه به نوک، زیگزاگ ملایم. لایه دوم بعد از ۳۰ ثانیه."],
+    sizes: ["۱۰ میل"],
+    colors: [{ name: "مشکی", hex: "#1a1412" }],
+    variantLabel: "حجم",
+    optionLabel: "رنگ",
+    concerns: ["sensitive"],
+    rating: 4.5,
+    reviewCount: 164,
+    stock: 30,
+    tags: ["پرفروش"],
+    featured: true,
+  }),
+  p({
+    id: "p8",
+    slug: "dusk-palette",
+    name: "پالت سایه «غروب»",
+    brand: "اورکید",
+    category: "eyes",
+    price: 1_680_000,
+    oldPrice: 1_980_000,
+    images: ["/images/products/dusk-palette.jpg"],
+    description:
+      "نه سایه گرم: نود، رز، برنز و شرابی. پیگمنت بالا، پودر کم‌گرد.",
+    details: ["۹ رنگ", "مات و ساتن", "آینه داخلی"],
+    howTo: ["پایه نود روی پلک، برنز در خط چین، شرابی گوشه بیرونی."],
+    sizes: ["۹ رنگ"],
+    colors: [
+      { name: "غروب گرم", hex: "#b76e79" },
+      { name: "برنز", hex: "#8a5a3a" },
+    ],
+    variantLabel: "نسخه",
+    optionLabel: "تم",
+    concerns: [],
+    rating: 4.7,
+    reviewCount: 91,
+    stock: 11,
+    tags: ["تخفیف", "پرفروش"],
+    staffPick: true,
+  }),
+  p({
+    id: "p9",
+    slug: "velvet-lipstick",
+    name: "رژلب مخملی «رز»",
+    brand: "نوا لَب",
+    category: "lips",
+    price: 720_000,
+    images: ["/images/products/velvet-lipstick.jpg"],
+    description:
+      "رژ مخملی با روغن جوجوبا. رنگ غلیظ، لب را خشک نمی‌کند. امضای رنگی نوا.",
+    details: ["وزن: ۳.۵ گرم", "پرداخت: مخملی", "قابل لایه‌بندی"],
+    howTo: ["لب را با روغن نرم کنید، یک لایه نازک، بعد لایه دوم وسط لب."],
+    sizes: ["۳.۵ گرم"],
+    colors: [
+      { name: "رز نوا", hex: "#b76e79" },
+      { name: "شرابی", hex: "#7a2430" },
+      { name: "نود گرم", hex: "#c48a72" },
+    ],
+    variantLabel: "وزن",
+    optionLabel: "سایه",
+    concerns: ["dry"],
     rating: 4.8,
     reviewCount: 203,
-    stock: 6,
-    tags: ["پرفروش", "تخفیف", "کم‌موجود"],
+    stock: 16,
+    tags: ["پرفروش", "جدید"],
     featured: true,
-  },
-  {
-    id: "p5",
-    slug: "white-shirt",
-    name: "پیراهن رسمی سفید «کلاسیک»",
-    category: "men",
-    price: 980_000,
-    images: ["/images/products/white-shirt.jpg"],
+    staffPick: true,
+  }),
+  p({
+    id: "p10",
+    slug: "lip-oil",
+    name: "روغن لب «شهد»",
+    brand: "گل‌سرخ",
+    category: "lips",
+    price: 390_000,
+    images: ["/images/products/lip-oil.jpg"],
     description:
-      "پیراهن رسمی سفید با پارچه‌ی پنبه‌ای و تنفس‌پذیر؛ آیتم همیشگی و ضروری کمد هر آقایی.",
-    details: [
-      "جنس: ۹۷٪ پنبه، ۳٪ اسپندکس",
-      "یقه: یقه‌ی انگلیسی کلاسیک",
-      "دکمه: مرواریدی ضدخش",
-      "شست‌وشو: ماشینی ۳۰ درجه",
-      "ساخت: ایران",
-    ],
-    sizes: ["M", "L", "XL", "XXL"],
-    colors: [
-      { name: "سفید", hex: "#ffffff" },
-      { name: "آبی روشن", hex: "#bfd3e6" },
-    ],
-    rating: 4.6,
-    reviewCount: 148,
-    stock: 24,
-    tags: ["جدید"],
-  },
-  {
-    id: "p6",
-    slug: "grey-hoodie",
-    name: "سویشرت طوسی «کژوال»",
-    category: "men",
-    price: 890_000,
-    oldPrice: 1_050_000,
-    images: ["/images/products/grey-hoodie.jpg"],
-    description:
-      "سویشرت هودی طوسی با الیاف نرم و گرم؛ برای روزهای خنک و استایل روزمره‌ی راحت.",
-    details: [
-      "جنس: فلیس نرم (پنبه-پلی‌استر)",
-      "دارای: هود + جیب کانگورویی",
-      "برش: اسپرت و راحت",
-      "شست‌وشو: ماشینی ۳۰ درجه",
-      "ساخت: ایران",
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    colors: [
-      { name: "طوسی", hex: "#9ca3af" },
-      { name: "سرمه‌ای", hex: "#1e3a5f" },
-    ],
+      "روغن لب غیرچسبنده با درخشش شیشه‌ای. زیر رژ یا تنها. رایحه ملایم گل.",
+    details: ["حجم: ۶ میل", "بدون رنگ‌دانه سنگین", "عصاره گل محمدی"],
+    howTo: ["روز چند بار روی لب بزنید. پیش از رژ یک لایه نازک کافی است."],
+    sizes: ["۶ میل"],
+    colors: [{ name: "شهد", hex: "#e8b89a" }],
+    variantLabel: "حجم",
+    optionLabel: "رنگ",
+    concerns: ["dry", "sensitive"],
     rating: 4.4,
-    reviewCount: 92,
-    stock: 18,
-    tags: ["تخفیف"],
-  },
-
-  // ---------- بچگانه ----------
-  {
-    id: "p7",
-    slug: "kids-overall",
-    name: "ست سرهمی جین بچگانه «بازی»",
-    category: "kids",
-    price: 1_250_000,
-    images: ["/images/products/kids-overall.jpg"],
+    reviewCount: 68,
+    stock: 35,
+    tags: ["جدید"],
+  }),
+  p({
+    id: "p11",
+    slug: "argan-oil",
+    name: "روغن آرگان مو «طلا»",
+    brand: "گل‌سرخ",
+    category: "hair",
+    price: 980_000,
+    images: ["/images/products/argan-oil.jpg"],
     description:
-      "سرهمی جین بامزه با تی‌شرت زرد خردلی؛ مقاوم برای بازی‌های پرجنب‌وجوش، نرم و راحت برای پوست کودک.",
-    details: [
-      "جنس: جین نرم (تخریب‌شده)",
-      "شامل: سرهمی + تی‌شرت",
-      "بند: قابل تنظیم شانه",
-      "شست‌وشو: ماشینی ۳۰ درجه",
-      "ساخت: ایران",
-    ],
-    sizes: ["۲-۳ سال", "۴-۵ سال", "۶-۷ سال"],
-    colors: [
-      { name: "جین", hex: "#5f8fb0" },
-      { name: "زرد", hex: "#e2b13c" },
-    ],
-    rating: 4.7,
-    reviewCount: 67,
-    stock: 10,
-    tags: ["جدید", "پرفروش"],
-  },
-  {
-    id: "p8",
-    slug: "kids-jacket",
-    name: "کاپشن پافر زرد بچگانه «لبخند»",
-    category: "kids",
-    price: 1_480_000,
-    images: ["/images/products/kids-jacket.jpg"],
+      "روغن آرگان خالص برای نوک موهای آسیب‌دیده. درخشش می‌دهد بدون سنگینی ریشه.",
+    details: ["حجم: ۵۰ میل", "آرگان سردفشار", "بدون سیلیکون سنگین"],
+    howTo: ["۲ قطره روی موهای مرطوب یا خشک، از وسط به نوک. ریشه را نزنید."],
+    sizes: ["۵۰ میل"],
+    colors: [{ name: "طلایی", hex: "#c4a574" }],
+    variantLabel: "حجم",
+    optionLabel: "بافت",
+    concerns: ["dry"],
+    rating: 4.5,
+    reviewCount: 84,
+    stock: 14,
+    tags: ["پرفروش"],
+    featured: true,
+  }),
+  p({
+    id: "p12",
+    slug: "nava-parfum",
+    name: "ادوپرفیوم «یاس شب»",
+    brand: "مِیلِه",
+    category: "fragrance",
+    price: 2_450_000,
+    images: ["/images/products/nava-parfum.jpg"],
     description:
-      "کاپشن پافر شاد و گرم با رنگ زرد پررنگ؛ ضدآب و بسیار سبک، مناسب پاییز و زمستان.",
-    details: [
-      "جنس: نایلون ضدآب + الیاف گرم",
-      "دارای: کلاه جداشونده",
-      "زیپ: دولایه‌ی بادگیر",
-      "شست‌وشو: ماشینی ۳۰ درجه",
-      "ساخت: ایران",
-    ],
-    sizes: ["۲-۳ سال", "۴-۵ سال", "۶-۷ سال", "۸-۹ سال"],
-    colors: [
-      { name: "زرد", hex: "#f6c445" },
-      { name: "سبز", hex: "#3f7d5c" },
-    ],
-    rating: 4.6,
-    reviewCount: 41,
-    stock: 5,
+      "رایحه گلی-چوبی: یاس، چوب صندل و مشک نرم. پخش آرام، ماندگاری شبانه.",
+    details: ["حجم: ۵۰ میل", "غلظت: ادوپرفیوم", "خانواده: گلی چوبی"],
+    howTo: ["روی نبض گردن و مچ، بدون مالش. لباس روشن را از پاشش دور نگه دارید."],
+    sizes: ["۵۰ میل", "۱۰۰ میل"],
+    colors: [{ name: "یاس", hex: "#f4efe8" }],
+    variantLabel: "حجم",
+    optionLabel: "رایحه",
+    concerns: [],
+    rating: 4.9,
+    reviewCount: 121,
+    stock: 8,
     tags: ["پرفروش", "کم‌موجود"],
-  },
-  {
-    id: "p9",
-    slug: "kids-jeans",
-    name: "شلوار جین بچگانه «کاوشگر»",
-    category: "kids",
-    price: 720_000,
-    images: ["/images/products/kids-jeans.jpg"],
+    staffPick: true,
+  }),
+  p({
+    id: "p13",
+    slug: "sun-veil",
+    name: "ضدآفتاب «حجاب نور» SPF۵۰",
+    brand: "نوا لَب",
+    category: "sun",
+    price: 620_000,
+    oldPrice: 740_000,
+    images: ["/images/products/sun-veil.jpg"],
     description:
-      "شلوار جین راحت با زانوی تقویت‌شده؛ مناسب مدرسه و بازی، همراه با کش کمر برای راحتی بیشتر.",
-    details: [
-      "جنس: جین کشسان نرم",
-      "کمر: کش دار با دکمه",
-      "زانو: تقویت‌شده",
-      "شست‌وشو: ماشینی ۳۰ درجه",
-      "ساخت: ایران",
-    ],
-    sizes: ["۲-۳ سال", "۴-۵ سال", "۶-۷ سال", "۸-۹ سال", "۱۰-۱۱ سال"],
-    colors: [
-      { name: "جین روشن", hex: "#7ea6c4" },
-      { name: "جین تیره", hex: "#2c4a66" },
-    ],
-    rating: 4.2,
-    reviewCount: 33,
-    stock: 20,
-    tags: [],
-  },
+      "ضدآفتاب هیبرید، سفیدک نمی‌زند، زیر آرایش پیل نمی‌شود. بافت ژل-کرم.",
+    details: ["حجم: ۵۰ میل", "SPF ۵۰", "PA++++", "مقاوم در تعریق سبک"],
+    howTo: ["آخرین قدم روتین صبح. دو انگشت برای صورت و گردن. هر دو ساعت تمدید."],
+    sizes: ["۵۰ میل"],
+    colors: [{ name: "بی‌رنگ", hex: "#f7f1ea" }],
+    variantLabel: "حجم",
+    optionLabel: "پرداخت",
+    concerns: ["spots", "sensitive", "aging"],
+    rating: 4.7,
+    reviewCount: 176,
+    stock: 28,
+    tags: ["تخفیف", "پرفروش"],
+    featured: true,
+  }),
+  p({
+    id: "p14",
+    slug: "rose-water",
+    name: "گلاب خالص «گل محمدی»",
+    brand: "گل‌سرخ",
+    category: "natural",
+    price: 280_000,
+    images: ["/images/products/rose-water.jpg"],
+    description:
+      "گلاب تقطیر سنتی کاشان. تونر آرام‌بخش، تثبیت آرایش، اسپری بالش.",
+    details: ["حجم: ۲۰۰ میل", "بدون الکل افزوده", "تک‌گیاه"],
+    howTo: ["روی صورت بسته اسپری کنید یا با پنبه به‌عنوان تونر."],
+    sizes: ["۲۰۰ میل"],
+    colors: [{ name: "گل", hex: "#e8c4c8" }],
+    variantLabel: "حجم",
+    optionLabel: "رایحه",
+    concerns: ["sensitive", "dry", "acne"],
+    rating: 4.3,
+    reviewCount: 54,
+    stock: 50,
+    tags: ["جدید"],
+  }),
 ];
 
-/** دسته‌بندی بر اساس آیدی */
 export function getCategory(id: CategoryId): Category {
   return categories.find((c) => c.id === id) ?? categories[0];
 }
 
-/** یافتن محصول با اسلاگ */
+const legacySlugs: Record<string, string> = {
+  "camel-blazer": "silk-cream",
+  "evening-dress": "velvet-lipstick",
+  "navy-suit": "nava-parfum",
+};
+
 export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  const mapped = legacySlugs[slug] ?? slug;
+  return products.find((item) => item.slug === mapped);
 }
 
-/** یافتن محصول با شناسه */
 export function getProductById(id: string): Product | undefined {
-  return products.find((p) => p.id === id);
+  return products.find((item) => item.id === id);
 }
 
-/** محصولات مرتبط (هم‌دسته، به‌جز خود محصول) */
 export function getRelatedProducts(product: Product, count = 4): Product[] {
-  return products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .concat(products.filter((p) => p.category !== product.category && p.id !== product.id))
-    .slice(0, count);
+  const same = products.filter((item) => item.category === product.category && item.id !== product.id);
+  const rest = products.filter((item) => item.category !== product.category && item.id !== product.id);
+  return same.concat(rest).slice(0, count);
 }
 
-/** محصولات پیشنهادی برای صفحه اصلی */
 export function getFeaturedProducts(count = 8): Product[] {
-  return products.filter((p) => p.featured).slice(0, count);
+  return products.filter((item) => item.featured).slice(0, count);
+}
+
+export function getByConcern(id: ConcernId): Product[] {
+  return products.filter((item) => item.concerns.includes(id));
 }

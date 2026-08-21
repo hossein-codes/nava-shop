@@ -9,22 +9,22 @@ import { ArrowIcon, CloseIcon, SearchIcon } from "./Icons";
 
 const HISTORY_KEY = "nava:search-history";
 const MAX_HISTORY = 6;
-const POPULAR = ["لباس زنانه", "لباس مردانه", "کت", "پیراهن", "تخفیف‌ها", "کالکشن جدید"];
+const POPULAR = ["سرم", "ضدآفتاب", "رژلب", "کرم آبرسان", "تخفیف‌ها", "پوست خشک"];
 const POPULAR_HREFS: Record<string, string> = {
-  "لباس زنانه": "/products?category=women",
-  "لباس مردانه": "/products?category=men",
-  کت: "/products?q=%DA%A9%D8%AA",
-  پیراهن: "/products?q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86",
+  سرم: "/products?q=%D8%B3%D8%B1%D9%85",
+  ضدآفتاب: "/products?category=sun",
+  رژلب: "/products?category=lips",
+  "کرم آبرسان": "/products?q=%DA%A9%D8%B1%D9%85",
   "تخفیف‌ها": "/products?discount=1",
-  "کالکشن جدید": "/products",
+  "پوست خشک": "/products?concern=dry",
 };
 const COMPLETIONS: { trigger: string; items: string[] }[] = [
-  { trigger: "کت", items: ["کت مردانه", "کت زنانه", "کت پاییزه"] },
-  { trigger: "پیراهن", items: ["پیراهن مردانه", "پیراهن مجلسی", "پیراهن رسمی"] },
-  { trigger: "شلوار", items: ["شلوار جین", "شلوار بچگانه"] },
-  { trigger: "سویشرت", items: ["سویشرت مردانه", "سویشرت کژوال"] },
-  { trigger: "کاپشن", items: ["کاپشن بچگانه"] },
-  { trigger: "لباس", items: ["لباس زنانه", "لباس مردانه", "لباس بچگانه"] },
+  { trigger: "سرم", items: ["سرم ویتامین C", "سرم نیاسینامید"] },
+  { trigger: "کرم", items: ["کرم آبرسان", "کرم‌پودر"] },
+  { trigger: "رژ", items: ["رژلب مخملی", "روغن لب"] },
+  { trigger: "ضد", items: ["ضدآفتاب", "ضد پیری"] },
+  { trigger: "عطر", items: ["عطر یاس شب"] },
+  { trigger: "پوست", items: ["پوست خشک", "پوست چرب", "پوست حساس"] },
 ];
 
 function useSearch() {
@@ -309,7 +309,7 @@ export default function SearchBox() {
             if (e.key === "Escape") close();
             if (e.key === "Enter") s.doSearch(s.query, close);
           }}
-          placeholder="جستجوی لباس، کت، پیراهن یا دسته…"
+          placeholder="جستجوی سرم، رژلب، ضدآفتاب یا برند…"
           className="w-full bg-transparent text-sm outline-none placeholder:text-ink/40"
         />
         {s.query ? (

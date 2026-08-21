@@ -61,7 +61,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     (productId: string, size?: string, color?: string, quantity = 1) => {
       setItems((prev) => {
         const product = getProductById(productId);
-        const finalSize = size ?? product?.sizes[0] ?? "یک سایز";
+        const finalSize = size ?? product?.sizes[0] ?? "استاندارد";
         const finalColor = color ?? product?.colors[0]?.name ?? "پیش‌فرض";
         const existing = prev.find(
           (i) => i.productId === productId && i.size === finalSize && i.color === finalColor

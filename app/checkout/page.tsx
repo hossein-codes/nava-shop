@@ -334,7 +334,7 @@ export default function CheckoutPage() {
               <p className="mt-2 font-mono font-bold" dir="ltr">
                 6037-9971-2345-6789
               </p>
-              <p className="text-xs text-ink-soft">به نام: فروشگاه پوشاک نوا</p>
+              <p className="text-xs text-ink-soft">به نام: فروشگاه زیبایی نوا</p>
               <p className="mt-2 text-xs text-ink-soft">
                 پس از واریز، تصویر رسید را به واتس‌اپ پشتیبانی ارسال کنید تا سفارش شما ثبت شود.
               </p>

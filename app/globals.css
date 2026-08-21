@@ -44,27 +44,28 @@
   font-display: swap;
 }
 
-/* ---------- هویت بصری نوا (Nava Atelier) ----------
-   از تصاویر کمپین: گچ گرم، پالتو شتری، مجلسی شرابی
-   Canvas استخوانی · Ink اسپرسو · Clay مسی · Wine شرابی */
+/* ---------- هویت بصری نوا لَب (Nava Lab / Premium Beauty) ----------
+   Clean Beauty · Luxury Care
+   Canvas کرم گرم · Ink کاکائویی · امضا: رز غبارآلود · طلا · شرابی */
 @theme {
-  --color-ink: #1c1410;
-  --color-ink-soft: #6e645c;
-  --color-navy-dark: #1c1410;
-  --color-clay: #c45c26;
-  --color-clay-dark: #9a3f18;
-  --color-clay-bright: #e08a4f;
-  --color-clay-soft: #f3e4d8;
-  --color-ivory: #fbf7f1;
-  --color-cream: #efe6d9;
-  --color-sand: #e4d8c8;
-  --color-sage: #3d6b52;
+  --color-ink: #2a1c1a;
+  --color-ink-soft: #7a6b66;
+  --color-navy-dark: #2a1c1a;
+  --color-clay: #b76e79;
+  --color-clay-dark: #8f4e58;
+  --color-clay-bright: #d4929a;
+  --color-clay-soft: #f6e6e8;
+  --color-ivory: #fdf8f4;
+  --color-cream: #f3e9e1;
+  --color-sand: #e8d9ce;
+  --color-sage: #4f7a5c;
   --color-sale: #7a2430;
-  --color-brass: #c4a574;
+  --color-brass: #c6a56a;
+  --color-nude: #d4b5a0;
   --font-sans: "Vazirmatn", "Segoe UI", Tahoma, ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-1: 0 8px 28px rgb(28 20 16 / 0.07);
-  --shadow-2: 0 18px 48px rgb(28 20 16 / 0.14);
+  --shadow-1: 0 8px 28px rgb(42 28 26 / 0.07);
+  --shadow-2: 0 18px 48px rgb(42 28 26 / 0.12);
 }
 
 html {

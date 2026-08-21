@@ -35,7 +35,7 @@ export default async function ProductPage({ params }: Props) {
 
       {related.length > 0 && (
         <section className="mt-16">
-          <h2 className="section-title mb-6">با این محصول بپوشید</h2>
+          <h2 className="section-title mb-6">با این محصول کامل کن</h2>
           <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-5 lg:grid-cols-4">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} />

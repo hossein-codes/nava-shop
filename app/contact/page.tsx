@@ -110,6 +110,7 @@ export default function ContactPage() {
                 onChange={(e) => setForm({ ...form, subject: e.target.value })}
                 className="input-base"
               >
+                <option>مشاوره روتین پوست</option>
                 <option>سوال درباره محصول</option>
                 <option>پیگیری سفارش</option>
                 <option>بازگشت کالا</option>

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { categories, products } from "@/lib/products";
-import type { CategoryId } from "@/lib/types";
+import { concerns } from "@/lib/beauty";
+import type { CategoryId, ConcernId } from "@/lib/types";
 import { cn, discountPercent, formatPrice } from "@/lib/utils";
 import ProductCard from "./ProductCard";
 import Sheet from "./Sheet";
@@ -20,6 +21,8 @@ export interface InitialFilters {
   max?: number;
   sort: string;
   discountOnly: boolean;
+  concern: string;
+  brand: string;
 }
 
 const sortOptions = [
@@ -31,13 +34,14 @@ const sortOptions = [
 ];
 
 const pricePresets = [
-  { id: "p1", label: "تا ۱ میلیون", min: undefined, max: 1_000_000 },
-  { id: "p2", label: "۱ تا ۳ میلیون", min: 1_000_000, max: 3_000_000 },
-  { id: "p3", label: "بالای ۳ میلیون", min: 3_000_000, max: undefined },
+  { id: "p1", label: "تا ۵۰۰ هزار", min: undefined, max: 500_000 },
+  { id: "p2", label: "۵۰۰ هزار تا ۱.۲ میلیون", min: 500_000, max: 1_200_000 },
+  { id: "p3", label: "بالای ۱.۲ میلیون", min: 1_200_000, max: undefined },
 ];
 
 const allSizes = Array.from(new Set(products.flatMap((p) => p.sizes)));
 const allColors = Array.from(new Set(products.flatMap((p) => p.colors.map((c) => c.name))));
+const allBrands = Array.from(new Set(products.map((p) => p.brand)));
 const availableCategories = categories.filter((c) => products.some((p) => p.category === c.id));
 
 export default function ProductBrowser({ initial }: { initial: InitialFilters }) {
@@ -56,6 +60,8 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
     if (next.max) params.set("max", String(next.max));
     if (next.sort !== "newest") params.set("sort", next.sort);
     if (next.discountOnly) params.set("discount", "1");
+    if (next.concern) params.set("concern", next.concern);
+    if (next.brand) params.set("brand", next.brand);
     const qs = params.toString();
     router.replace(qs ? `/products?${qs}` : "/products", { scroll: false });
   };
@@ -85,6 +91,8 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
       max: undefined,
       sort: "newest",
       discountOnly: false,
+      concern: "",
+      brand: "",
     };
     setFilters(clean);
     updateUrl(clean);
@@ -96,8 +104,13 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
     const name = availableCategories.find((c) => c.id === filters.category)?.name ?? filters.category;
     chips.push({ key: "cat", label: name, clear: () => set({ category: "all" }) });
   }
+  if (filters.concern) {
+    const name = concerns.find((c) => c.id === filters.concern)?.title ?? filters.concern;
+    chips.push({ key: "concern", label: name, clear: () => set({ concern: "" }) });
+  }
+  if (filters.brand) chips.push({ key: "brand", label: filters.brand, clear: () => set({ brand: "" }) });
   filters.sizes.forEach((s) =>
-    chips.push({ key: `s-${s}`, label: `سایز ${s}`, clear: () => toggleSize(s) })
+    chips.push({ key: `s-${s}`, label: s, clear: () => toggleSize(s) })
   );
   filters.colors.forEach((c) => chips.push({ key: `c-${c}`, label: c, clear: () => toggleColor(c) }));
   if (filters.discountOnly)
@@ -119,6 +132,7 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
       list = list.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q) ||
           p.description.toLowerCase().includes(q) ||
           p.details.join(" ").toLowerCase().includes(q)
       );
@@ -186,7 +200,45 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
       </div>
 
       <div>
-        <p className="label-base">سایز</p>
+        <p className="label-base">نگرانی پوست</p>
+        <div className="flex flex-wrap gap-2">
+          {concerns.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => set({ concern: filters.concern === c.id ? "" : c.id })}
+              className={cn(
+                "min-h-11 rounded-xl border px-3 text-xs font-medium",
+                filters.concern === c.id ? "border-ink bg-ink text-white" : "border-sand bg-ivory"
+              )}
+            >
+              {c.title}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className="label-base">برند</p>
+        <div className="space-y-1">
+          {allBrands.map((b) => (
+            <button
+              key={b}
+              type="button"
+              onClick={() => set({ brand: filters.brand === b ? "" : b })}
+              className={cn(
+                "block w-full rounded-xl px-3 py-2.5 text-start text-sm font-medium",
+                filters.brand === b ? "bg-ink text-white" : "text-ink-soft hover:bg-cream"
+              )}
+            >
+              {b}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className="label-base">حجم / نسخه</p>
         <div className="flex flex-wrap gap-2">
           {allSizes.map((size) => (
             <button
@@ -268,9 +320,13 @@ export default function ProductBrowser({ initial }: { initial: InitialFilters })
   const title =
     filters.category !== "all"
       ? availableCategories.find((c) => c.id === filters.category)?.name
-      : filters.q
-        ? `نتایج «${filters.q}»`
-        : "همه محصولات";
+      : filters.concern
+        ? concerns.find((c) => c.id === filters.concern)?.title
+        : filters.brand
+          ? filters.brand
+        : filters.q
+          ? `نتایج «${filters.q}»`
+          : "همه محصولات";
 
   return (
     <div className="container-x mt-6">

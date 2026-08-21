@@ -20,13 +20,15 @@ export default function QuickView() {
   if (!product) return null;
 
   const selectedColor = color || product.colors[0]?.name || "";
+  const needsVolume = product.sizes.length > 1;
+  const selectedSize = size || (needsVolume ? "" : product.sizes[0] || "");
 
   const add = () => {
-    if (!size) {
-      setError("سایز را انتخاب کنید");
+    if (needsVolume && !size) {
+      setError(`${product.variantLabel} را انتخاب کنید`);
       return;
     }
-    addItem(product.id, size, selectedColor, 1);
+    addItem(product.id, selectedSize, selectedColor, 1);
     setError("");
     setSize("");
     closeQuickView();
@@ -36,28 +38,31 @@ export default function QuickView() {
   return (
     <div className="fixed inset-0 z-[65] flex items-end justify-center sm:items-center sm:p-6">
       <div className="absolute inset-0 bg-ink/45" onClick={closeQuickView} />
-      <div className="relative max-h-[92%] w-full max-w-3xl overflow-y-auto rounded-t-2xl bg-white sm:rounded-2xl">
+      <div className="relative max-h-[92%] w-full max-w-3xl overflow-y-auto rounded-t-2xl bg-ivory sm:rounded-2xl">
         <button
           type="button"
           onClick={closeQuickView}
           aria-label="بستن"
-          className="absolute top-3 end-3 z-10 flex h-11 w-11 items-center justify-center rounded-xl bg-ivory"
+          className="absolute top-3 end-3 z-10 flex h-11 w-11 items-center justify-center rounded-xl bg-cream"
         >
           <CloseIcon width={18} height={18} />
         </button>
         <div className="grid sm:grid-cols-2">
-          <div className="aspect-[3/4] bg-cream sm:aspect-auto">
+          <div className="aspect-[4/5] bg-cream sm:aspect-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover" />
           </div>
           <div className="flex flex-col p-5 sm:p-7">
+            <p className="text-[11px] font-medium text-ink-soft">{product.brand}</p>
             <h2 className="text-lg font-semibold leading-7">{product.name}</h2>
             <div className="mt-3">
               <Price price={product.price} oldPrice={product.oldPrice} />
             </div>
 
             <div className="mt-6">
-              <p className="label-base">رنگ: {selectedColor}</p>
+              <p className="label-base">
+                {product.optionLabel}: {selectedColor}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {product.colors.map((c) => (
                   <button
@@ -67,7 +72,7 @@ export default function QuickView() {
                     onClick={() => setColor(c.name)}
                     className={cn(
                       "h-11 w-11 rounded-full border-2",
-                      (color || product.colors[0].name) === c.name ? "border-ink" : "border-transparent"
+                      selectedColor === c.name ? "border-ink" : "border-transparent"
                     )}
                     style={{ backgroundColor: c.hex }}
                   />
@@ -76,7 +81,7 @@ export default function QuickView() {
             </div>
 
             <div className="mt-5">
-              <p className="label-base">سایز</p>
+              <p className="label-base">{product.variantLabel}</p>
               <div className="flex flex-wrap gap-2">
                 {product.sizes.map((s) => (
                   <button
@@ -88,7 +93,7 @@ export default function QuickView() {
                     }}
                     className={cn(
                       "min-h-11 min-w-11 rounded-xl border px-3 text-sm font-medium",
-                      size === s ? "border-ink bg-ink text-white" : "border-sand bg-white hover:border-ink"
+                      (size || selectedSize) === s ? "border-ink bg-ink text-white" : "border-sand bg-ivory hover:border-ink"
                     )}
                   >
                     {s}

@@ -44,7 +44,7 @@ export default function CartItemRow({
               {product.name}
             </Link>
             <p className="mt-1 text-xs text-ink-soft">
-              سایز {item.size} · {item.color}
+              {product.variantLabel} {item.size} · {item.color}
             </p>
           </div>
           <button

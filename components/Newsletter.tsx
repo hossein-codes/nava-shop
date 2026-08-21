@@ -20,9 +20,9 @@ export default function Newsletter() {
     <section className="container-x mt-14 mb-6 lg:mt-20 lg:mb-10">
       <div className="rounded-2xl bg-ink px-5 py-12 text-center text-ivory sm:px-12 lg:py-16">
         <p className="text-[11px] font-medium tracking-[0.2em] text-ivory/55">NEWSLETTER</p>
-        <h2 className="mt-3 text-xl font-semibold sm:text-2xl">از کالکشن بعدی جا نمانید</h2>
+        <h2 className="mt-3 text-xl font-semibold sm:text-2xl">روتین بعدی را از دست نده</h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-7 text-ivory/65">
-          فقط خبر ورود کالکشن و تخفیف واقعی. بدون اسپم.
+          راهنمای پوست، ورود کالکشن و تخفیف واقعی. بدون اسپم.
         </p>
         {status === "done" ? (
           <p className="mt-8 text-sm font-medium text-sage">عضویت ثبت شد.</p>

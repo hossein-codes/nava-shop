@@ -89,7 +89,7 @@ export default function Header() {
         )}
       >
         <div className="container-x flex h-8 items-center justify-between text-[11px] text-white/80">
-          <p>ارسال رایگان سفارش‌های بالای ۲ میلیون تومان</p>
+          <p>ارسال رایگان سفارش‌های بالای ۱٫۲ میلیون · مشاوره روتین پوست</p>
           <div className="flex items-center gap-5">
             <Link href="/account" className="hover:text-white">
               پیگیری سفارش

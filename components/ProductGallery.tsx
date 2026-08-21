@@ -23,7 +23,7 @@ export default function ProductGallery({
       <button
         type="button"
         onClick={() => setZoom(true)}
-        className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-cream"
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-ivory"
       >
         <Image
           src={current}

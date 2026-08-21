@@ -19,9 +19,9 @@ import {
   CheckIcon,
   HeartIcon,
   RefreshIcon,
-  RulerIcon,
   ShareIcon,
   ShieldIcon,
+  SparkleIcon,
   StarIcon,
   TruckIcon,
 } from "./Icons";
@@ -30,9 +30,9 @@ type TabId = "description" | "details" | "reviews";
 
 const sampleReviewNames = ["نگار محمدی", "حسین عظیمی", "الهام صادقی", "رضا کاظمی", "نازنین فرهادی"];
 const sampleReviewTexts = [
-  "کیفیت و دوخت عالی بود؛ دقیقاً همان چیزی بود که در عکس‌ها دیدم. ارسال هم سریع بود.",
-  "جنس پارچه خوب است و اندازه مطابق جدول سایز بود.",
-  "بسته‌بندی تمیز بود و رنگ دقیقاً همان انتخابی بود.",
+  "بافت سبک بود و روی پوست حساس من نسوخت. بعد از دو هفته کدری صبح کمتر شد.",
+  "رایحه ملایم است و پلمب سالم رسید. رنگ/سایه دقیقاً همان نمونه سایت بود.",
+  "مشاوره روتین کمک کرد. ارسال سریع و بسته‌بندی تمیز.",
 ];
 
 function buildSampleReviews(product: Product) {
@@ -50,7 +50,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   const { openCart } = useUi();
   const { has, toggle } = useWishlist();
 
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(product.sizes.length === 1 ? product.sizes[0] : "");
   const [color, setColor] = useState(product.colors[0]?.name ?? "");
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState<TabId>("description");
@@ -63,17 +63,18 @@ export default function ProductDetail({ product }: { product: Product }) {
   const category = getCategory(product.category);
   const wished = has(product.id);
   const lowStock = product.stock <= 6;
+  const needsVolume = product.sizes.length > 1;
 
   useEffect(() => {
     pushRecent(product.id);
   }, [product.id]);
 
   const addToCart = (goCheckout = false) => {
-    if (!size) {
+    if (needsVolume && !size) {
       setSizeError(true);
       return false;
     }
-    addItem(product.id, size, color, quantity);
+    addItem(product.id, size || product.sizes[0], color, quantity);
     if (goCheckout) router.push("/checkout");
     else openCart();
     return true;
@@ -97,7 +98,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   const tabs: { id: TabId; label: string }[] = [
     { id: "description", label: "توضیحات" },
-    { id: "details", label: "جنس و نگهداری" },
+    { id: "details", label: "ترکیبات و مشخصات" },
     { id: "reviews", label: `دیدگاه‌ها (${reviews.length.toLocaleString("fa-IR")})` },
   ];
 
@@ -119,7 +120,8 @@ export default function ProductDetail({ product }: { product: Product }) {
         <ProductGallery images={product.images} alt={product.name} />
 
         <div>
-          <Link href={`/products?category=${product.category}`} className="text-xs font-medium text-clay">
+          <p className="text-xs font-medium tracking-wide text-clay">{product.brand}</p>
+          <Link href={`/products?category=${product.category}`} className="ms-2 text-xs text-ink-soft">
             {category.name}
           </Link>
           <h1 className="mt-2 text-2xl font-semibold leading-snug lg:text-[1.75rem]">{product.name}</h1>
@@ -151,35 +153,41 @@ export default function ProductDetail({ product }: { product: Product }) {
             </p>
           </div>
 
-          <div className="mt-6">
-            <p className="label-base">رنگ: {color}</p>
-            <div className="flex flex-wrap gap-2">
-              {product.colors.map((c) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  onClick={() => setColor(c.name)}
-                  aria-label={c.name}
-                  className={cn(
-                    "h-11 w-11 rounded-full border-2",
-                    color === c.name ? "border-ink" : "border-transparent ring-1 ring-sand"
-                  )}
-                  style={{ backgroundColor: c.hex }}
-                />
-              ))}
+          {product.colors.length > 0 && (
+            <div className="mt-6">
+              <p className="label-base">
+                {product.optionLabel}: {color}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {product.colors.map((c) => (
+                  <button
+                    key={c.name}
+                    type="button"
+                    onClick={() => setColor(c.name)}
+                    aria-label={c.name}
+                    className={cn(
+                      "h-11 w-11 rounded-full border-2",
+                      color === c.name ? "border-ink" : "border-transparent ring-1 ring-sand"
+                    )}
+                    style={{ backgroundColor: c.hex }}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="mt-5">
             <div className="mb-2 flex items-center justify-between">
-              <p className="label-base !mb-0">سایز {size && <span className="text-ink">· {size}</span>}</p>
+              <p className="label-base !mb-0">
+                {product.variantLabel} {size && <span className="text-ink">· {size}</span>}
+              </p>
               <button
                 type="button"
                 onClick={() => setGuide(true)}
                 className="inline-flex h-11 items-center gap-1 text-xs font-medium text-ink-soft hover:text-ink"
               >
-                <RulerIcon width={15} height={15} />
-                راهنمای سایز
+                <SparkleIcon width={15} height={15} />
+                نحوه استفاده
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -193,7 +201,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                   }}
                   className={cn(
                     "min-h-11 min-w-12 rounded-xl border px-3 text-sm font-medium",
-                    size === s ? "border-ink bg-ink text-white" : "border-sand bg-white hover:border-ink"
+                    size === s ? "border-ink bg-ink text-white" : "border-sand bg-ivory hover:border-ink"
                   )}
                 >
                   {s}
@@ -201,7 +209,9 @@ export default function ProductDetail({ product }: { product: Product }) {
               ))}
             </div>
             {sizeError && (
-              <p className="mt-2 text-xs font-medium text-sale">برای افزودن به سبد، سایز را انتخاب کنید.</p>
+              <p className="mt-2 text-xs font-medium text-sale">
+                برای افزودن به سبد، {product.variantLabel} را انتخاب کنید.
+              </p>
             )}
           </div>
 
@@ -275,11 +285,20 @@ export default function ProductDetail({ product }: { product: Product }) {
           ))}
         </div>
 
-        <div className="bg-white py-6 lg:py-8">
+        <div className="bg-ivory/40 py-6 lg:py-8">
           {tab === "description" && (
             <div className="max-w-3xl space-y-4 text-sm leading-8 text-ink-soft">
               <p>{product.description}</p>
-              <p>در صورت عدم رضایت، تا ۷ روز پس از تحویل امکان بازگشت کالا وجود دارد.</p>
+              {product.howTo.length > 0 && (
+                <div>
+                  <p className="font-semibold text-ink">نحوه استفاده</p>
+                  <ul className="mt-2 list-disc space-y-1 pe-5">
+                    {product.howTo.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
           {tab === "details" && (
@@ -328,7 +347,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                             filled={r <= reviewForm.rating}
                             width={26}
                             height={26}
-                            className={r <= reviewForm.rating ? "text-amber-500" : "text-sand"}
+                            className={r <= reviewForm.rating ? "text-brass" : "text-sand"}
                           />
                         </button>
                       ))}
@@ -366,9 +385,8 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
       </div>
 
-      <SizeGuide open={guide} onClose={() => setGuide(false)} />
+      <SizeGuide open={guide} onClose={() => setGuide(false)} title="نحوه استفاده" steps={product.howTo} />
 
-      {/* نوار خرید موبایل */}
       <div
         className="fixed inset-x-0 bottom-0 z-40 border-t border-sand bg-ivory/95 p-3 backdrop-blur-md lg:hidden"
         style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}

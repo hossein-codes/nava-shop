@@ -22,107 +22,113 @@ type Mega = {
 
 const items: Mega[] = [
   {
-    id: "women",
-    label: "زنانه",
-    href: "/products?category=women",
+    id: "skincare",
+    label: "مراقبت پوست",
+    href: "/products?category=skincare",
     mega: true,
-    match: (_p, s) => s.includes("category=women"),
+    match: (_p, s) => s.includes("category=skincare"),
     columns: [
       {
-        title: "پوشاک",
+        title: "محصول",
         links: [
-          { label: "پیراهن مجلسی", href: "/products?category=women&q=%D9%85%D8%AC%D9%84%D8%B3%DB%8C" },
-          { label: "بلوز", href: "/products?category=women&q=%D8%A8%D9%84%D9%88%D8%B2" },
-          { label: "کت", href: "/products?category=women&q=%DA%A9%D8%AA" },
-          { label: "همه زنانه", href: "/products?category=women" },
+          { label: "سرم", href: "/products?category=skincare&q=%D8%B3%D8%B1%D9%85" },
+          { label: "کرم آبرسان", href: "/products?category=skincare&q=%DA%A9%D8%B1%D9%85" },
+          { label: "شوینده", href: "/products?category=skincare&q=%D8%B4%D9%88%DB%8C%D9%86%D8%AF%D9%87" },
+          { label: "همه مراقبت پوست", href: "/products?category=skincare" },
         ],
       },
       {
-        title: "استایل",
+        title: "نگرانی",
         links: [
-          { label: "رسمی و مجلسی", href: "/products?category=women&q=%D9%85%D8%AC%D9%84%D8%B3%DB%8C" },
-          { label: "روزمره", href: "/products?category=women" },
-          { label: "کالکشن پاییز", href: "/products?category=women" },
+          { label: "خشکی", href: "/products?concern=dry" },
+          { label: "لک و تیرگی", href: "/products?concern=spots" },
+          { label: "جوش", href: "/products?concern=acne" },
+          { label: "ضد پیری", href: "/products?concern=aging" },
         ],
       },
       {
         title: "خرید سریع",
         links: [
-          { label: "تخفیف زنانه", href: "/products?category=women&discount=1" },
-          { label: "جدیدترین زنانه", href: "/products?category=women" },
-          { label: "راهنمای سایز", href: "/about" },
+          { label: "تخفیف پوست", href: "/products?category=skincare&discount=1" },
+          { label: "روتین صبح", href: "/journal/morning-routine" },
+          { label: "راهنمای سرم", href: "/journal/choose-serum" },
         ],
       },
     ],
-    productIds: ["p2", "p1", "p3"],
+    productIds: ["p1", "p2", "p3"],
   },
   {
-    id: "men",
-    label: "مردانه",
-    href: "/products?category=men",
+    id: "makeup",
+    label: "آرایش",
+    href: "/products?category=makeup",
     mega: true,
-    match: (_p, s) => s.includes("category=men"),
+    match: (_p, s) =>
+      s.includes("category=makeup") || s.includes("category=eyes") || s.includes("category=lips"),
     columns: [
       {
-        title: "پوشاک",
+        title: "صورت و چشم",
         links: [
-          { label: "کت‌وشلوار", href: "/products?category=men&q=%DA%A9%D8%AA" },
-          { label: "پیراهن رسمی", href: "/products?category=men&q=%D9%BE%DB%8C%D8%B1%D8%A7%D9%87%D9%86" },
-          { label: "سویشرت", href: "/products?category=men&q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA" },
-          { label: "همه مردانه", href: "/products?category=men" },
+          { label: "کرم‌پودر", href: "/products?category=makeup" },
+          { label: "کانسیلر", href: "/products?q=%DA%A9%D8%A7%D9%86%D8%B3%DB%8C%D9%84%D8%B1" },
+          { label: "ریمل", href: "/products?category=eyes" },
+          { label: "سایه", href: "/products?q=%D8%B3%D8%A7%DB%8C%D9%87" },
         ],
       },
       {
-        title: "استایل",
+        title: "لب",
         links: [
-          { label: "رسمی", href: "/products?category=men&q=%DA%A9%D8%AA" },
-          { label: "کژوال", href: "/products?category=men&q=%D8%B3%D9%88%DB%8C%D8%B4%D8%B1%D8%AA" },
-          { label: "کالکشن پاییز", href: "/products?category=men" },
+          { label: "رژلب", href: "/products?category=lips" },
+          { label: "روغن لب", href: "/products?q=%D8%B1%D9%88%D8%BA%D9%86%20%D9%84%D8%A8" },
+          { label: "راهنمای رژ", href: "/journal/lipstick-guide" },
         ],
       },
       {
         title: "خرید سریع",
         links: [
-          { label: "تخفیف مردانه", href: "/products?category=men&discount=1" },
+          { label: "تخفیف آرایش", href: "/products?category=makeup&discount=1" },
           { label: "پرفروش‌ها", href: "/products?sort=best" },
-          { label: "راهنمای سایز", href: "/about" },
         ],
       },
     ],
-    productIds: ["p4", "p5", "p6"],
+    productIds: ["p5", "p8", "p9"],
   },
   {
-    id: "kids",
-    label: "بچگانه",
-    href: "/products?category=kids",
+    id: "ritual",
+    label: "عطر و مراقبت",
+    href: "/products?category=fragrance",
     mega: true,
-    match: (_p, s) => s.includes("category=kids"),
+    match: (_p, s) =>
+      s.includes("category=hair") ||
+      s.includes("category=fragrance") ||
+      s.includes("category=sun") ||
+      s.includes("category=natural"),
     columns: [
       {
-        title: "پوشاک",
+        title: "دسته",
         links: [
-          { label: "سرهمی", href: "/products?category=kids&q=%D8%B3%D8%B1%D9%87%D9%85%DB%8C" },
-          { label: "کاپشن", href: "/products?category=kids&q=%DA%A9%D8%A7%D9%BE%D8%B4%D9%86" },
-          { label: "شلوار جین", href: "/products?category=kids&q=%D8%B4%D9%84%D9%88%D8%A7%D8%B1" },
-          { label: "همه بچگانه", href: "/products?category=kids" },
+          { label: "عطر", href: "/products?category=fragrance" },
+          { label: "مو", href: "/products?category=hair" },
+          { label: "ضد آفتاب", href: "/products?category=sun" },
+          { label: "طبیعی", href: "/products?category=natural" },
         ],
       },
       {
-        title: "سن",
+        title: "برند",
         links: [
-          { label: "۲ تا ۵ سال", href: "/products?category=kids" },
-          { label: "۶ تا ۹ سال", href: "/products?category=kids" },
+          { label: "نوا لَب", href: "/products?q=%D9%86%D9%88%D8%A7" },
+          { label: "مِیلِه", href: "/products?q=%D9%85%DB%8C%D9%84%D9%87" },
+          { label: "گل‌سرخ", href: "/products?q=%DA%AF%D9%84" },
         ],
       },
       {
         title: "خرید سریع",
         links: [
-          { label: "جدیدترین‌ها", href: "/products?category=kids" },
-          { label: "شرایط بازگشت", href: "/about" },
+          { label: "جدیدترین‌ها", href: "/products" },
+          { label: "مجله نوا", href: "/journal" },
         ],
       },
     ],
-    productIds: ["p8", "p7", "p9"],
+    productIds: ["p12", "p13", "p11"],
   },
   { id: "new", label: "جدیدترین", href: "/products" },
   { id: "best", label: "پرفروش", href: "/products?sort=best", match: (_p, s) => s.includes("sort=best") },
@@ -196,8 +202,8 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
           );
         })}
         <div className="ms-auto hidden items-center gap-1 text-[13px] font-medium text-ink/55 xl:flex">
-          <Link href="/about" className="rounded-lg px-3 py-2 hover:text-ink">
-            راهنمای خرید
+          <Link href="/journal" className="rounded-lg px-3 py-2 hover:text-ink">
+            مجله زیبایی
           </Link>
           <Link href="/account" className="rounded-lg px-3 py-2 hover:text-ink">
             پیگیری سفارش
@@ -273,7 +279,7 @@ export default function MegaMenu({ onOpenChange }: { onOpenChange?: (open: boole
             </div>
             <div className="border-t border-sand bg-cream">
               <div className="container-x flex items-center justify-between py-3 text-[13px]">
-                <p className="text-ink/50">ارسال رایگان بالای ۲ میلیون · ۷ روز بازگشت</p>
+                <p className="text-ink/50">ارسال رایگان بالای ۱٫۲ میلیون · ضمانت اصالت</p>
                 <Link href={active.href} className="font-semibold text-clay hover:underline">
                   مشاهده همه {active.label}
                 </Link>

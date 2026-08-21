@@ -9,40 +9,40 @@ import { ArrowIcon } from "./Icons";
 const slides = [
   {
     src: "/images/home/hero-slide-1.jpg",
-    href: "/products",
-    kicker: "کالکشن پاییز ۱۴۰۵",
-    title: "استایل جدید، نسخه تو",
-    cta: "مشاهده کالکشن",
+    href: "/products?category=skincare",
+    kicker: "مراقبت پوست",
+    title: "درخشش از روتین درست",
+    cta: "خرید مراقبت پوست",
   },
   {
     src: "/images/home/hero-slide-2.jpg",
-    href: "/products?category=women",
-    kicker: "زنانه",
-    title: "مجلسی و روزمره",
-    cta: "خرید زنانه",
+    href: "/products?category=makeup",
+    kicker: "آرایش صورت و لب",
+    title: "رنگ، بدون ماسک",
+    cta: "خرید آرایش",
   },
   {
     src: "/images/home/hero-slide-3.jpg",
-    href: "/products?category=men",
-    kicker: "مردانه",
-    title: "رسمی، بدون حاشیه",
-    cta: "خرید مردانه",
+    href: "/products",
+    kicker: "روتین روزانه",
+    title: "چهار قدم تا پوست آرام",
+    cta: "شروع روتین",
   },
 ];
 
 const promos = [
   {
     src: "/images/home/promo-coat.jpg",
-    href: "/products/camel-blazer",
+    href: "/products/glow-serum",
     kicker: "پرفروش هفته",
-    title: "کت شتری صحرا",
-    cta: "خرید محصول",
+    title: "سرم درخشش ویتامین C",
+    cta: "خرید سرم",
   },
   {
     src: "/images/home/promo-sale.jpg",
     href: "/products?discount=1",
     kicker: "تا ۲۰٪ تخفیف",
-    title: "فروش ویژه پاییز",
+    title: "فروش ویژه زیبایی",
     cta: "دیدن تخفیف‌ها",
   },
 ];

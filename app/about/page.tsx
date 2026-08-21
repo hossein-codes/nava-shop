@@ -4,35 +4,35 @@ import { CheckIcon, ShieldIcon, SparkleIcon, TruckIcon, WalletIcon } from "@/com
 
 export const metadata: Metadata = {
   title: "درباره ما",
-  description: "داستان فروشگاه پوشاک نوا؛ از ایده تا امروز.",
+  description: "داستان فروشگاه زیبایی نوا؛ مراقبت پوست و آرایش با ضمانت اصالت.",
 };
 
 const values = [
   {
     icon: SparkleIcon,
-    title: "کیفیت بی‌حاشیه",
-    text: "همه‌ی محصولات نوا قبل از عرضه چند مرحله کنترل کیفیت می‌شوند.",
+    title: "مشاوره، نه فشار فروش",
+    text: "روتین را بر اساس پوست می‌چینیم. پنج محصول وقتی دو تا کافی است، پیشنهاد نمی‌شود.",
   },
   {
     icon: TruckIcon,
-    title: "ارسال سریع",
-    text: "سفارش‌های تهران در ۲۴ ساعت و شهرستان‌ها حداکثر ۷۲ ساعت ارسال می‌شوند.",
+    title: "ارسال سریع و خنک",
+    text: "فرمولاسیون حساس با بسته‌بندی محافظ. تهران معمولاً فردای سفارش.",
   },
   {
     icon: ShieldIcon,
     title: "ضمانت اصالت",
-    text: "در صورت نارضایتی، تا ۷ روز امکان بازگشت بدون قید و شرط دارید.",
+    text: "پلمب کارخانه. اگر پلمب باز نشده باشد تا ۷ روز بازگشت دارید.",
   },
   {
     icon: WalletIcon,
-    title: "قیمت منصفانه",
-    text: "با حذف واسطه‌ها، بهترین قیمت را مستقیم از تولیدکننده دریافت می‌کنید.",
+    title: "قیمت روشن",
+    text: "تخفیف نمایشی نداریم. درصد روی قیمت واقعی است.",
   },
 ];
 
 const stats = [
-  { value: "+۱۲هزار", label: "مشتری راضی" },
-  { value: "+۴۵۰۰", label: "سفارش موفق" },
+  { value: "+۱۸هزار", label: "مشتری روتین" },
+  { value: "+۹۰۰۰", label: "سفارش موفق" },
   { value: "۴.۸", label: "امتیاز رضایت" },
   { value: "۷", label: "سال تجربه" },
 ];
@@ -40,57 +40,49 @@ const stats = [
 export default function AboutPage() {
   return (
     <div className="container-x mt-8">
-      {/* معرفی */}
       <section className="grid items-center gap-10 lg:grid-cols-2">
         <div>
           <p className="text-sm font-bold text-clay">داستان ما</p>
           <h1 className="section-title mt-2">
-            نوا؛ جایی که استایلِ تو <span className="text-clay">معنا</span> پیدا می‌کنه
+            نوا؛ جایی که پوست <span className="text-clay">در اولویت</span> است
           </h1>
           <div className="mt-5 space-y-4 text-sm leading-8 text-ink-soft">
             <p>
-              فروشگاه پوشاک نوا در سال ۱۳۹۸ با یک هدف ساده شروع به کار کرد: رساندن پوشاک
-              باکیفیت و به‌روز با قیمت منصفانه به دست همه‌ی مردم ایران.
+              نوا لَب از ۱۳۹۸ به‌جای ویترین شلوغ، روی چند فرمول درست تمرکز کرد: سرم، آبرسان، ضدآفتاب
+              و رنگ‌هایی که روی پوست مدیترانه‌ای طبیعی می‌نشینند.
             </p>
             <p>
-              ما با همکاری مستقیم با تولیدکنندگان برتر داخلی، واسطه‌ها را حذف کردیم تا هم کیفیت
-              بالاتر برود و هم قیمت پایین‌تر. امروز نوا میزبان هزاران مشتری وفادار در سراسر
-              کشور است.
+              با آزمایشگاه‌های همکار در ایران و اروپا کار می‌کنیم. هر محصول قبل از عرضه روی حساسیت،
+              بافت و پلمب کنترل می‌شود.
             </p>
             <p>
-              تیم نوا متشکل از طراحان، تولیدکنندگان و پشتیبانانی است که عاشق لباس و استایل
-              هستند و هر روز برای تجربه‌ی بهتر خرید شما تلاش می‌کنند.
+              تیم مشاوره پوست شنبه تا پنجشنبه پاسخ می‌دهد. هدف‌مان این است که کمتر بخرید، بهتر بخرید.
             </p>
           </div>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link href="/products" className="btn btn-primary">
               مشاهده محصولات
             </Link>
-            <Link href="/contact" className="btn btn-outline">
-              تماس با ما
+            <Link href="/journal" className="btn btn-outline">
+              مجله زیبایی
             </Link>
           </div>
         </div>
 
-        {/* اعداد */}
         <div className="grid grid-cols-2 gap-4">
           {stats.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-3xl border border-sand/60 bg-white p-6 text-center shadow-sm"
-            >
+            <div key={s.label} className="rounded-3xl border border-sand bg-ivory p-6 text-center">
               <p className="text-3xl font-black text-clay">{s.value}</p>
               <p className="mt-1 text-sm font-bold text-ink-soft">{s.label}</p>
             </div>
           ))}
           <div className="col-span-2 overflow-hidden rounded-3xl bg-ink p-6 text-center text-ivory">
-            <p className="text-lg font-black">«لباس خوب، حال خوب می‌آورد.»</p>
-            <p className="mt-1 text-xs text-ivory/60">— تیم نوا</p>
+            <p className="text-lg font-black">«پوست خوب، آرایش کم می‌خواهد.»</p>
+            <p className="mt-1 text-xs text-ivory/60">— تیم نوا لَب</p>
           </div>
         </div>
       </section>
 
-      {/* ارزش‌ها */}
       <section className="mt-16">
         <div className="mb-8 text-center">
           <p className="text-sm font-bold text-clay">چرا نوا؟</p>
@@ -98,11 +90,8 @@ export default function AboutPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((v) => (
-            <div
-              key={v.title}
-              className="rounded-3xl border border-sand/60 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-cream text-clay">
+            <div key={v.title} className="rounded-3xl border border-sand bg-ivory p-6">
+              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-clay-soft text-clay">
                 <v.icon width={22} height={22} />
               </span>
               <p className="font-extrabold">{v.title}</p>
@@ -112,8 +101,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* سوالات متداول */}
-      <section className="mx-auto mt-16 max-w-3xl">
+      <section className="mx-auto mt-16 max-w-3xl pb-12">
         <div className="mb-8 text-center">
           <h2 className="section-title">سوالات متداول</h2>
         </div>
@@ -121,25 +109,22 @@ export default function AboutPage() {
           {[
             {
               q: "مدت زمان ارسال سفارش چقدر است؟",
-              a: "سفارش‌های تهران معمولاً در ۲۴ ساعت کاری و شهرستان‌ها بین ۲ تا ۵ روز کاری تحویل داده می‌شوند. سفارش‌های بالای ۲ میلیون تومان ارسال رایگان دارند.",
+              a: "سفارش‌های تهران معمولاً فردای کاری و شهرستان‌ها بین ۲ تا ۵ روز. بالای ۱٫۲ میلیون تومان ارسال رایگان است.",
             },
             {
-              q: "اگر سایز یا رنگ مناسب نبود چه کنم؟",
-              a: "تا ۷ روز پس از تحویل، امکان بازگشت کالا بدون قید و شرط وجود دارد. کافیست با پشتیبانی تماس بگیرید تا مراحل بازگشت را انجام دهید.",
+              q: "اگر محصول مناسب پوستم نبود چه کنم؟",
+              a: "تا ۷ روز اگر پلمب باز نشده باشد بازگشت دارید. برای راهنمایی روتین قبل از باز کردن با پشتیبانی تماس بگیرید.",
             },
             {
-              q: "روش‌های پرداخت چیست؟",
-              a: "پرداخت آنلاین از طریق درگاه امن بانکی، کارت به کارت و پرداخت در محل (برای برخی شهرها) فعال است.",
+              q: "آیا محصولات اصل هستند؟",
+              a: "بله. پلمب کارخانه و کد رهگیری. ادعای «اورجینال بازار» بدون فاکتور نداریم.",
             },
             {
-              q: "آیا امکان تعویض سایز وجود دارد؟",
-              a: "بله، در صورت موجود بودن سایز دلخواه، تعویض سایز به‌صورت رایگان انجام می‌شود.",
+              q: "چطور سرم مناسب را انتخاب کنم؟",
+              a: "از بخش «مشکل پوستت چیست؟» شروع کنید یا مطلب راهنمای سرم را در مجله بخوانید.",
             },
           ].map((item) => (
-            <details
-              key={item.q}
-              className="group rounded-2xl border border-sand/60 bg-white p-5 open:shadow-sm"
-            >
+            <details key={item.q} className="group rounded-2xl border border-sand bg-ivory p-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-extrabold">
                 <span className="flex items-center gap-2">
                   <CheckIcon width={16} height={16} className="shrink-0 text-clay" />
